@@ -44,17 +44,35 @@ class _HomeState extends State<Home> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Allow Location Access'),
-        content: const Text('Do you want to allow location access?'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        title: const Center(
+            child:
+                Text('Allow Location Access', style: TextStyle(fontSize: 14))),
+        content: const SizedBox(
+          height: 50,
+          child: Center(
+            child: Text(
+              'Do you want to allow location access? Allowing access will help us give you real-time, high quality services such as filling station with good litre measurement, ',
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ),
         actions: [
-          TextButton(
-            onPressed: () => _onPermissionDenied(),
-            child: const Text('No'),
-          ),
-          TextButton(
-            onPressed: () => _onPermissionGranted(),
-            child: const Text('Yes'),
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextButton(
+                onPressed: () => _onPermissionGranted(),
+                child: const Text('Yes'),
+              ),
+              TextButton(
+                onPressed: () => _onPermissionDenied(),
+                child: const Text('No'),
+              ),
+            ],
+          )
         ],
       ),
     );
@@ -118,25 +136,65 @@ class _HomeState extends State<Home> {
             child: Column(
               children: <Widget>[
                 SizedBox(height: mtop),
-                const Text(
-                  "Welcome to Fuel Dey",
-                  style: TextStyle(color: Colors.green, fontSize: 20),
+                const Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Welcome to Fuel Dey",
+                    style: TextStyle(color: Colors.green, fontSize: 20),
+                  ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                if (_hasPermission == true && _currentPosition == null)
+                  const SizedBox(
+                    width: 15,
+                    height: 15,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ),
+                  ),
+                if (_hasPermission == true && _currentPosition == null)
+                  const Text("Fetching location..."),
                 if (_hasPermission == true && _currentPosition != null)
-                  Text(
-                    "Latitude: ${_currentPosition?.latitude}",
-                    style:
-                        const TextStyle(color: Colors.deepOrange, fontSize: 16),
+                  Row(
+                    children: [
+                      const Text(
+                        "Latitude: ",
+                        style:
+                            TextStyle(color: Colors.deepOrange, fontSize: 16),
+                      ),
+                      Text("${_currentPosition?.latitude}"),
+                    ],
                   ),
                 if (_hasPermission == true && _currentPosition != null)
-                  Text(
-                    "Longitude: ${_currentPosition?.longitude}",
-                    style: const TextStyle(color: Colors.green, fontSize: 16),
+                  Row(
+                    children: [
+                      const Text(
+                        "Longitude: ",
+                        style:
+                            TextStyle(color: Colors.deepOrange, fontSize: 16),
+                      ),
+                      Text("${_currentPosition?.longitude}"),
+                    ],
                   ),
                 if (_hasPermission == true && _currentPosition != null)
-                  Text(
-                    "Address: $_address",
-                    style: const TextStyle(color: Colors.green, fontSize: 16),
+                  Row(
+                    children: [
+                      const Text(
+                        "Address: ",
+                        style:
+                            TextStyle(color: Colors.deepOrange, fontSize: 16),
+                      ),
+                      Flexible(
+                        child: Text(
+                          _address!,
+                          style: const TextStyle(fontSize: 16),
+                          overflow: TextOverflow.visible,
+                          softWrap: true,
+                        ),
+                      ),
+                    ],
                   ),
               ],
             ),
