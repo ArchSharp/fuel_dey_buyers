@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     String address =
-        "${placemarks[0].postalCode} ${placemarks[0].street} ${placemarks[0].street} ${placemarks[0].locality} ${placemarks[0].country}";
+        "${placemarks[0].street} ${placemarks[0].locality} state ${placemarks[0].country}, postal code ${placemarks[0].postalCode} ";
 
     //print("Placemarks: " + placemarks.toString());
 
@@ -111,19 +111,35 @@ class _HomeState extends State<Home> {
     double mtop = deviceHeight * 0.45;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: mtop),
-              Center(
-                child: Text(
-                  "Welcome to Fuel Dey Latitude: ${_currentPosition?.latitude}, Longitude: ${_currentPosition?.longitude}, Address: ${_address}",
-                  style: const TextStyle(color: Colors.green, fontSize: 20),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: mtop),
+                const Text(
+                  "Welcome to Fuel Dey",
+                  style: TextStyle(color: Colors.green, fontSize: 20),
                 ),
-              ),
-            ],
+                if (_hasPermission == true && _currentPosition != null)
+                  Text(
+                    "Latitude: ${_currentPosition?.latitude}",
+                    style:
+                        const TextStyle(color: Colors.deepOrange, fontSize: 16),
+                  ),
+                if (_hasPermission == true && _currentPosition != null)
+                  Text(
+                    "Longitude: ${_currentPosition?.longitude}",
+                    style: const TextStyle(color: Colors.green, fontSize: 16),
+                  ),
+                if (_hasPermission == true && _currentPosition != null)
+                  Text(
+                    "Address: $_address",
+                    style: const TextStyle(color: Colors.green, fontSize: 16),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
