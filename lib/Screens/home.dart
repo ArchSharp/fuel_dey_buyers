@@ -46,17 +46,18 @@ class _HomeState extends State<Home> {
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         title: const Center(
-            child:
-                Text('Allow Location Access', style: TextStyle(fontSize: 14))),
-        content: const SizedBox(
-          height: 50,
-          child: Center(
-            child: Text(
-              'Do you want to allow location access? Allowing access will help us give you real-time, high quality services such as filling station with good litre measurement, ',
-              style: TextStyle(
-                fontSize: 12,
+          child: Text('Allow Location Access', style: TextStyle(fontSize: 14)),
+        ),
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(
+                'Do you want to allow location access? Allowing access will help us give you real-time, high quality services such as filling station with good litre measurement, ',
+                style: TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
+            ],
           ),
         ),
         actions: [
