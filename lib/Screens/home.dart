@@ -111,8 +111,10 @@ class _HomeState extends State<Home> {
         desiredAccuracy: LocationAccuracy.high);
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    Placemark place = placemarks[0];
     String address =
-        "${placemarks[0].street} ${placemarks[0].locality} state ${placemarks[0].country}, postal code ${placemarks[0].postalCode} ";
+        "${place.street} ${place.locality} state ${place.country}, postal code ${place.postalCode}";
 
     //print("Placemarks: " + placemarks.toString());
 

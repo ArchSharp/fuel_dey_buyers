@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fuel_dey_buyers/Screens/home.dart';
+import 'package:fuel_dey_buyers/Screens/Splash/logo_splash.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -17,7 +17,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Future.delayed(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => const LogoSplash()),
       );
     });
 

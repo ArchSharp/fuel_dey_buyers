@@ -1,3 +1,6 @@
 App icon generator: https://icon.kitchen/ 
 
 run "flutter pub run flutter_launcher_icons" anytime i change the app icon
+
+
+https://www.quora.com/Why-does-the-Uber-app-pinpoint-the-wrong-location-on-its-map
