@@ -3,6 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/reset_password.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/app_loading.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/onboarding.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/welcome.dart';
@@ -46,6 +53,14 @@ class MyApp extends StatelessWidget {
         Home.routeName: (ctx) => const Home(),
         Onboarding.routeName: (ctx) => const Onboarding(),
         Welcome.routeName: (ctx) => const Welcome(),
+        VendorSignup.routeName: (ctx) => const VendorSignup(),
+        VendorSignin.routeName: (ctx) => const VendorSignin(),
+        CommuterSignup.routeName: (ctx) => const CommuterSignup(),
+        CommuterSignin.routeName: (ctx) => const CommuterSignin(),
+        CommuterForgotpassword.routeName: (ctx) =>
+            const CommuterForgotpassword(),
+        VerifyEmail.routeName: (ctx) => const VerifyEmail(),
+        ResetPassword.routeName: (ctx) => const ResetPassword(),
       },
     );
   }
