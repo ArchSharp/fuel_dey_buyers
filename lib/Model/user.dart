@@ -72,6 +72,47 @@ class UserSignInPayload {
   }
 }
 
+class VendorSignUpPayload {
+  String stationname;
+  String address;
+  String state;
+  String lga;
+  String phone;
+  String password;
+
+  VendorSignUpPayload({
+    required this.stationname,
+    required this.address,
+    required this.state,
+    required this.lga,
+    required this.phone,
+    required this.password,
+  });
+
+  // Convert UserPayload to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      "stationname": stationname,
+      "address": address,
+      "state": state,
+      "lga": lga,
+      "phonenumber": phone,
+      "password": password,
+    };
+  }
+
+  // Create UserPayload from JSON
+  factory VendorSignUpPayload.fromJson(Map<String, dynamic> json) {
+    return VendorSignUpPayload(
+      stationname: json['stationname'],
+      address: json['address'],
+      state: json['state'],
+      lga: json['lga'],
+      phone: json['phone'],
+      password: json['password'],
+    );
+  }
+}
 // void main() {
 //   // Sample payload data
 //   String email = 'john.doe@example.com';

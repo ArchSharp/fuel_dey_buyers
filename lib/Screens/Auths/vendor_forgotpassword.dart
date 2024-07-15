@@ -3,20 +3,19 @@ import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/vendor_forgotpassword.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
-class VendorSignin extends StatefulWidget {
-  const VendorSignin({super.key});
-  static const routeName = '/vendor_signin';
+class VendorForgotpassword extends StatefulWidget {
+  const VendorForgotpassword({super.key});
+  static const routeName = '/vendor_forgotpassword';
 
   @override
-  State<VendorSignin> createState() => _VendorSigninState();
+  State<VendorForgotpassword> createState() => _VendorForgotpasswordState();
 }
 
-class _VendorSigninState extends State<VendorSignin> {
+class _VendorForgotpasswordState extends State<VendorForgotpassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController dateController = TextEditingController();
   String email = '';
@@ -80,20 +79,10 @@ class _VendorSigninState extends State<VendorSignin> {
   }
 
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  bool _revealPassword = false;
 
   final Map<String, String?> _errors = {
     'email': null,
-    'password': null,
   };
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _revealPassword = !_revealPassword;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +109,7 @@ class _VendorSigninState extends State<VendorSignin> {
                 const Padding(
                   padding: EdgeInsets.all(0),
                   child: Text(
-                    "Welcome back",
+                    "Forgot Password?",
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 32,
@@ -130,9 +119,11 @@ class _VendorSigninState extends State<VendorSignin> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  "Welcome back! We missed you. Log in to continue where you left off.",
+                  "No worries! Just enter your email, and we'll help you reset it in no time.",
                   style: TextStyle(fontSize: 16),
                 ),
+                // Image.asset('assets/images/Ayib.jpg',
+                //     width: imageWidth, height: 250),
                 const SizedBox(height: 20),
                 const Text(
                   "Email",
@@ -145,44 +136,23 @@ class _VendorSigninState extends State<VendorSignin> {
                   error: _errors['email'],
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  "Password",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                _buildPasswordField(
-                  controller: _passwordController,
-                  label: 'Password',
-                  obscureText: !_revealPassword,
-                  onChanged: (value) {
-                    setState(() {
-                      // Perform any additional logic when the password changes
-                    });
-                  },
-                  onToggleVisibility: _togglePasswordVisibility,
-                  error: _errors['password'],
-                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Align(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.center,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(
-                            VendorForgotpassword.routeName,
-                            arguments: 'Passing data from SignIn');
+                        // Navigator.of(context).pushNamed(
+                        //     CommuterForgotpassword.routeName,
+                        //     arguments: 'Passing data from SignIn');
                       },
                       child: const Text(
-                        "Forgot Password?",
+                        "Try another way",
                         style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -200,32 +170,9 @@ class _VendorSigninState extends State<VendorSignin> {
                     ),
                   ),
                   child: const Text(
-                    "Sign In",
+                    "Reset Password",
                     style: TextStyle(color: Colors.white),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      'Don’t have an account?',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(VendorSignup.routeName,
-                            arguments: 'Passing data from SignIn');
-                      },
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
@@ -258,53 +205,24 @@ class _VendorSigninState extends State<VendorSignin> {
     );
   }
 
-  Widget _buildPasswordField({
-    required TextEditingController controller,
-    required String label,
-    required bool obscureText,
-    required Function(String) onChanged,
-    required Function() onToggleVisibility,
-    required error,
-  }) {
-    return TextField(
-      controller: controller,
-      textInputAction: TextInputAction.next,
-      onChanged: onChanged,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        errorText: error,
-        hintText: "Enter $label",
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(style: BorderStyle.solid),
-        ),
-        suffixIcon: GestureDetector(
-          onTap: onToggleVisibility,
-          child: Icon(
-            obscureText ? Icons.visibility_off : Icons.visibility,
-          ),
-        ),
-      ),
-    );
-  }
-
   void _validateInputs() {
     setState(() {
       _errors['email'] =
           _emailController.text.isEmpty ? 'Please enter your email' : null;
-      _errors['password'] = _passwordController.text.isEmpty
-          ? 'Please enter your password'
-          : null;
     });
 
     if (_errors.values.every((error) => error == null)) {
       myNotificationBar(context, 'Form submitted', 'success');
+      Navigator.of(context).pushNamed(
+        VerifyEmail.routeName,
+        arguments: 'Passing data from SignIn',
+      );
     }
   }
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 }

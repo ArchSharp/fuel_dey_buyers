@@ -7,6 +7,7 @@ import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/reset_password.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/verify_email.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
         Welcome.routeName: (ctx) => const Welcome(),
         VendorSignup.routeName: (ctx) => const VendorSignup(),
         VendorSignin.routeName: (ctx) => const VendorSignin(),
+        VendorForgotpassword.routeName: (ctx) => const VendorForgotpassword(),
         CommuterSignup.routeName: (ctx) => const CommuterSignup(),
         CommuterSignin.routeName: (ctx) => const CommuterSignin(),
         CommuterForgotpassword.routeName: (ctx) =>

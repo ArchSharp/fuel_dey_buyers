@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/reset_password.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
@@ -27,6 +26,19 @@ class _VerifyEmailState extends State<VerifyEmail> {
     // Implement your OTP verification logic here
     print('Verifying OTP: $otp');
 
+    if (otp.isEmpty || otp.length < 6) {
+      String msg = otp.isNotEmpty && otp.length < 6
+          ? 'OTP must be six digits'
+          : 'OTP must be provided';
+      myNotificationBar(context, msg, "error");
+      return;
+    } else {
+      Navigator.of(context).pushNamed(
+        ResetPassword.routeName,
+        arguments: 'Passing data from SignIn',
+      );
+    }
+
     setState(() {
       isLoading = true;
     });
@@ -37,8 +49,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
       Tuple2<int, String> result = await verifyEmailFn(email, otp);
       if (context.mounted) {
         if (result.item1 == 1) {
-          Navigator.of(context).pushNamed(CommuterSignin.routeName,
-              arguments: 'Passing data from SignIn');
+          Navigator.of(context).pushNamed(
+            ResetPassword.routeName,
+            arguments: 'Passing data from SignIn',
+          );
           myNotificationBar(context, result.item2, "success");
         } else if (result.item1 == 2) {
           setState(() {
@@ -64,11 +78,16 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
-    // double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
     double mtop = deviceHeight * 0.03;
     // double exploreBtnWidth = deviceWidth - 40;
+    double otpBoxWidth = 45;
+    if (deviceWidth < 502) {
+      print("device width: $deviceWidth");
+      otpBoxWidth = (13.33 / 100) * deviceWidth;
+    }
 
     return Scaffold(
       // appBar: AppBar(
@@ -77,7 +96,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: mtop),
             const Padding(
@@ -103,7 +122,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(
                 6,
-                (index) => buildDigitField(controllers[index], index),
+                (index) =>
+                    buildDigitField(controllers[index], index, otpBoxWidth),
               ),
             ),
             const SizedBox(height: 8),
@@ -130,10 +150,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(
-                  ResetPassword.routeName,
-                  arguments: 'Passing data from SignIn',
-                );
+                verifyOTP();
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 55),
@@ -153,10 +170,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
     );
   }
 
-  Widget buildDigitField(TextEditingController controller, int index) {
+  Widget buildDigitField(
+      TextEditingController controller, int index, double size) {
     return Container(
-      width: 45,
-      height: 45,
+      width: size,
+      height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         border: Border.all(width: 2),

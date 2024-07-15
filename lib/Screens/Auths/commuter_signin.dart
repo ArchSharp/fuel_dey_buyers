@@ -133,8 +133,6 @@ class _CommuterSigninState extends State<CommuterSignin> {
                   "Welcome back! We missed you. Log in to continue where you left off.",
                   style: TextStyle(fontSize: 16),
                 ),
-                // Image.asset('assets/images/Ayib.jpg',
-                //     width: imageWidth, height: 250),
                 const SizedBox(height: 20),
                 const Text(
                   "Email",

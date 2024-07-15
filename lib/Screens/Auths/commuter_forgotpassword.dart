@@ -160,10 +160,7 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(
-                      VerifyEmail.routeName,
-                      arguments: 'Passing data from SignIn',
-                    );
+                    _validateInputs();
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 55),
@@ -216,6 +213,10 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
 
     if (_errors.values.every((error) => error == null)) {
       myNotificationBar(context, 'Form submitted', 'success');
+      Navigator.of(context).pushNamed(
+        VerifyEmail.routeName,
+        arguments: 'Passing data from SignIn',
+      );
     }
   }
 

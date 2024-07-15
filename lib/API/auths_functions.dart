@@ -83,6 +83,42 @@ Future<Tuple2<int, String>> signupFn(UserPayload payload) async {
   return result;
 }
 
+Future<Tuple2<int, String>> vendorsignupFn(VendorSignUpPayload payload) async {
+  String apiUrl = '$baseUrl/api/NewUser';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_API_KEY",
+  };
+
+  // print(payload);
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.post(Uri.parse(apiUrl),
+        headers: headers, body: json.encode(payload.toJson()));
+
+    final Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 201) {
+      // print(data);
+      result = const Tuple2(1, "Account created succesfully");
+    } else {
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      // print('check error: $data');
+      if (data['error'].toString().contains("parsing time")) {
+        result = const Tuple2(2, 'There is error in date');
+      } else {
+        result = Tuple2(3, data['body']);
+      }
+    }
+  } catch (e) {
+    // Handle exceptions
+    // print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
 Future<Tuple2<int, String>> verifyEmailFn(email, otp) async {
   String apiUrl = '$baseUrl/api/VerifyEmail';
   final Map<String, String> headers = {
