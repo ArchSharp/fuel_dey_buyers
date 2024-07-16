@@ -130,10 +130,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double deviceWidth = MediaQuery.of(context).size.width;
+    // double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
-    double mtop = deviceHeight * 0.45;
+    // double mtop = deviceHeight * 0.45;
 
     return Scaffold(
       body: Stack(
@@ -141,8 +141,8 @@ class _HomeState extends State<Home> {
           MainWidget(),
           Positioned.fill(
             child: DraggableScrollableSheet(
-              initialChildSize: 0.4, // Initial size of widget A
-              minChildSize: 0.4, // Minimum size of widget A
+              initialChildSize: 0.3, // Initial size of widget A
+              minChildSize: 0.3, // Minimum size of widget A
               maxChildSize: 0.7, // Maximum size of widget A
               builder:
                   (BuildContext context, ScrollController scrollController) {
@@ -153,7 +153,8 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.all(0),
                       children: <Widget>[
                         Container(
-                          height: 1000, // Example height to allow scrolling
+                          height: deviceHeight *
+                              0.7, // Example height to allow scrolling
                           decoration: const BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.only(
