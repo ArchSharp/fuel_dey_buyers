@@ -18,7 +18,13 @@ class CommuterSignup extends StatefulWidget {
 
 class _CommuterSignupState extends State<CommuterSignup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController dateController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _middleNameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _universityController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   String email = '';
   String firstname = '';
   String lastname = '';
@@ -39,16 +45,13 @@ class _CommuterSignupState extends State<CommuterSignup> {
     });
 
     // Create an instance of UserPayload
-    UserPayload userPayload = UserPayload(
+    CommuterPayload userPayload = CommuterPayload(
       email: email,
       password: password,
-      dateOfBirth: dateofbirth
-          .toString()
-          .replaceAll(RegExp(r' 00:00:00.000'), 'T00:00:00+00:00'),
       firstname: firstname,
       lastname: lastname,
-      middleName: mname,
-      phoneNumber: phoneNumber,
+      middlename: mname,
+      phonenumber: phoneNumber,
     );
 
     try {
@@ -89,26 +92,46 @@ class _CommuterSignupState extends State<CommuterSignup> {
   void initState() {
     super.initState();
     // Initialize the text controller with the initial date
-    dateController.text =
-        dateofbirth?.toString().replaceAll(RegExp(r' 00:00:00.000'), '') ?? '';
+    _initializeTextControllers();
   }
 
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _middleNameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _universityController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  void _initializeTextControllers() {
+    _lastNameController.addListener(() {
+      _clearErrorIfTextPresent('lastname', _lastNameController);
+    });
+    _firstNameController.addListener(() {
+      _clearErrorIfTextPresent('firstname', _firstNameController);
+    });
+    _middleNameController.addListener(() {
+      _clearErrorIfTextPresent('middlename', _middleNameController);
+    });
+    _emailController.addListener(() {
+      _clearErrorIfTextPresent('email', _emailController);
+    });
+    _phoneController.addListener(() {
+      _clearErrorIfTextPresent('phone', _phoneController);
+    });
+    _passwordController.addListener(() {
+      _clearErrorIfTextPresent('password', _passwordController);
+    });
+  }
+
+  void _clearErrorIfTextPresent(
+      String field, TextEditingController controller) {
+    if (controller.text.isNotEmpty && _errors[field] != null) {
+      setState(() {
+        _errors[field] = null;
+      });
+    }
+  }
 
   bool _revealPassword = false;
   bool _isAgreeTermsCondition = false;
 
   final Map<String, String?> _errors = {
-    'lastName': null,
-    'firstName': null,
-    'middleName': null,
+    'lastname': null,
+    'firstname': null,
+    'middlename': null,
     'phone': null,
     'address': null,
     'email': null,
@@ -170,7 +193,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
                 _buildTextField(
                   controller: _lastNameController,
                   label: 'Last Name / Surname',
-                  error: _errors['lastName'],
+                  error: _errors['lastname'],
                 ),
                 const SizedBox(height: 8),
                 const Text(
@@ -181,7 +204,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
                 _buildTextField(
                   controller: _firstNameController,
                   label: 'First Name',
-                  error: _errors['firstName'],
+                  error: _errors['firstname'],
                 ),
                 const SizedBox(height: 8),
                 const Text(
@@ -192,7 +215,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
                 _buildTextField(
                   controller: _middleNameController,
                   label: 'Middle Name',
-                  error: _errors['middleName'],
+                  error: _errors['middlename'],
                 ),
                 const SizedBox(height: 8),
                 const Text(
@@ -424,13 +447,13 @@ class _CommuterSignupState extends State<CommuterSignup> {
 
   void _validateInputs() {
     setState(() {
-      _errors['lastName'] = _lastNameController.text.isEmpty
+      _errors['lastname'] = _lastNameController.text.isEmpty
           ? 'Please enter your last name'
           : null;
-      _errors['firstName'] = _firstNameController.text.isEmpty
+      _errors['firstname'] = _firstNameController.text.isEmpty
           ? 'Please enter your first name'
           : null;
-      _errors['middleName'] = _middleNameController.text.isEmpty
+      _errors['middlename'] = _middleNameController.text.isEmpty
           ? 'Please enter your middle name'
           : null;
       _errors['phone'] = _phoneController.text.isEmpty
@@ -457,7 +480,6 @@ class _CommuterSignupState extends State<CommuterSignup> {
     _middleNameController.dispose();
     _phoneController.dispose();
     _universityController.dispose();
-    _addressController.dispose();
     _emailController.dispose();
     super.dispose();
   }

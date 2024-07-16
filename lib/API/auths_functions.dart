@@ -47,7 +47,7 @@ Future<Tuple2<int, String>> signinFn(UserSignInPayload payload) async {
   return result;
 }
 
-Future<Tuple2<int, String>> signupFn(UserPayload payload) async {
+Future<Tuple2<int, String>> signupFn(CommuterPayload payload) async {
   String apiUrl = '$baseUrl/api/NewUser';
   final Map<String, String> headers = {
     "Content-Type": "application/json",

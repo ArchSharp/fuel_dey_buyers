@@ -1,22 +1,20 @@
 // import 'dart:convert';
 
-class UserPayload {
+class CommuterPayload {
   String email;
   String password;
-  String dateOfBirth;
   String firstname;
   String lastname;
-  String middleName;
-  String phoneNumber;
+  String middlename;
+  String phonenumber;
 
-  UserPayload({
+  CommuterPayload({
     required this.email,
     required this.password,
-    required this.dateOfBirth,
     required this.firstname,
     required this.lastname,
-    required this.middleName,
-    required this.phoneNumber,
+    required this.middlename,
+    required this.phonenumber,
   });
 
   // Convert UserPayload to JSON
@@ -24,24 +22,22 @@ class UserPayload {
     return {
       "email": email,
       "password": password,
-      "date_of_birth": dateOfBirth,
       "firstname": firstname,
       "lastname": lastname,
-      "middle_name": middleName,
-      "phone_number": phoneNumber,
+      "middle_name": middlename,
+      "phone_number": phonenumber,
     };
   }
 
   // Create UserPayload from JSON
-  factory UserPayload.fromJson(Map<String, dynamic> json) {
-    return UserPayload(
+  factory CommuterPayload.fromJson(Map<String, dynamic> json) {
+    return CommuterPayload(
       email: json['email'],
       password: json['password'],
-      dateOfBirth: json['date_of_birth'],
       firstname: json['firstname'],
       lastname: json['lastname'],
-      middleName: json['middle_name'],
-      phoneNumber: json['phone_number'],
+      middlename: json['middle_name'],
+      phonenumber: json['phone_number'],
     );
   }
 }
@@ -98,7 +94,7 @@ class VendorSignUpPayload {
       "address": address,
       "state": state,
       "lga": lga,
-      "email":email,
+      "email": email,
       "phonenumber": phone,
       "password": password,
     };
@@ -111,7 +107,7 @@ class VendorSignUpPayload {
       address: json['address'],
       state: json['state'],
       lga: json['lga'],
-      email:json['email'],
+      email: json['email'],
       phone: json['phone'],
       password: json['password'],
     );
