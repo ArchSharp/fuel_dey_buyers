@@ -6,15 +6,15 @@ import 'package:fuel_dey_buyers/Screens/Auths/reset_password.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
-class VerifyEmail extends StatefulWidget {
-  const VerifyEmail({super.key});
-  static const routeName = '/verify_email';
+class CommuterVerifyEmail extends StatefulWidget {
+  const CommuterVerifyEmail({super.key});
+  static const routeName = '/commuter_verify_email';
 
   @override
-  State<VerifyEmail> createState() => _VerifyEmailState();
+  State<CommuterVerifyEmail> createState() => _VerifyEmailState();
 }
 
-class _VerifyEmailState extends State<VerifyEmail> {
+class _VerifyEmailState extends State<CommuterVerifyEmail> {
   late Tuple2<int, String> result;
   late List<TextEditingController> controllers;
   int currentIndex = 0;
@@ -112,7 +112,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
             ),
             const SizedBox(height: 20),
             const Text(
-              "We sent a 4-digit code verification to mail. Enter the code to continue.",
+              "We sent a 6-digit code verification to your mail. Enter the code to continue.",
               style: TextStyle(fontSize: 16),
             ),
             // Image.asset('assets/images/Ayib.jpg',

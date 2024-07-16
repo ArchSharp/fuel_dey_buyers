@@ -97,11 +97,11 @@ class _CommuterSigninState extends State<CommuterSignin> {
 
   @override
   Widget build(BuildContext context) {
-    // double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
     double mtop = deviceHeight * 0.03;
-    // double exploreBtnWidth = deviceWidth - 40;
+    double exploreBtnWidth = deviceWidth - 40;
 
     return Scaffold(
       // appBar: AppBar(
@@ -204,7 +204,126 @@ class _CommuterSigninState extends State<CommuterSignin> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          height:
+                              1, // Adjust the height as needed for the divider
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.grey,
+                                Colors.black,
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          "or",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height:
+                              1, // Adjust the height as needed for the divider
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.grey,
+                                Colors.black,
+                              ],
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, CommuterSignup.routeName);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(exploreBtnWidth, 55),
+                    // backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    side: const BorderSide(width: 1),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/icons/google_icon.png',
+                        // fit: BoxFit.contain,
+                        height: 35,
+                        width: 35,
+                      ),
+                      const SizedBox(width: 15),
+                      const Text(
+                        "Sign In with Google",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, CommuterSignup.routeName);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(exploreBtnWidth, 55),
+                    // backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    side: const BorderSide(width: 1),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.apple,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                      SizedBox(width: 15),
+                      Text(
+                        "Sign In with Apple",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

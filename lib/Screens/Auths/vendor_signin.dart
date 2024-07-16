@@ -3,6 +3,7 @@ import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
@@ -26,6 +27,7 @@ class _VendorSigninState extends State<VendorSignin> {
   bool isButtonClicked = false;
   String errorText = '';
   bool isLoading = false;
+  int _previousTextLength = 0;
   late Tuple2<int, String> result;
 
   Future<void> handleSignUp() async {
@@ -73,14 +75,11 @@ class _VendorSigninState extends State<VendorSignin> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // Initialize the text controller with the initial date
-  }
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _keyboardTypeNotifier =
+      ValueNotifier<TextInputType>(TextInputType.text);
+  final _emailFocusNode = FocusNode();
 
   bool _revealPassword = false;
 
@@ -95,13 +94,32 @@ class _VendorSigninState extends State<VendorSignin> {
     });
   }
 
+  // bool _isFirstCharacterNumber(String text) {
+  //   if (text.isEmpty) return false;
+
+  //   // Check if the first character is a letter or number
+  //   final firstChar = text[0];
+  //   final alphabetRegExp = RegExp(r'[A-Za-z]');
+  //   // final numberRegExp = RegExp(r'[0-9]');
+
+  //   // return alphabetRegExp.hasMatch(firstChar) || numberRegExp.hasMatch(firstChar);
+  //   return alphabetRegExp.hasMatch(firstChar);
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the text controller with the initial date
+    _emailController.addListener(_updateKeyboardType);
+  }
+
   @override
   Widget build(BuildContext context) {
-    // double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
     double mtop = deviceHeight * 0.03;
-    // double exploreBtnWidth = deviceWidth - 40;
+    double exploreBtnWidth = deviceWidth - 40;
 
     return Scaffold(
       // appBar: AppBar(
@@ -135,14 +153,21 @@ class _VendorSigninState extends State<VendorSignin> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  "Email",
+                  "Email or Phone Number",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 const SizedBox(height: 5),
-                _buildTextField(
-                  controller: _emailController,
-                  label: 'Email',
-                  error: _errors['email'],
+                ValueListenableBuilder<TextInputType>(
+                  valueListenable: _keyboardTypeNotifier,
+                  builder: (context, keyboardType, child) {
+                    return _buildTextField(
+                      controller: _emailController,
+                      label: 'e.g. abc@gmail.com or 08102723...',
+                      error: _errors['email'],
+                      keyboardType: keyboardType,
+                      focusNode: _emailFocusNode,
+                    );
+                  },
                 ),
                 const SizedBox(height: 8),
                 const Text(
@@ -204,7 +229,126 @@ class _VendorSigninState extends State<VendorSignin> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          height:
+                              1, // Adjust the height as needed for the divider
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.grey,
+                                Colors.black,
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          "or",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height:
+                              1, // Adjust the height as needed for the divider
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.grey,
+                                Colors.black,
+                              ],
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, CommuterSignup.routeName);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(exploreBtnWidth, 55),
+                    // backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    side: const BorderSide(width: 1),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/icons/google_icon.png',
+                        // fit: BoxFit.contain,
+                        height: 35,
+                        width: 35,
+                      ),
+                      const SizedBox(width: 15),
+                      const Text(
+                        "Sign In with Google",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, VendorSignup.routeName);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(exploreBtnWidth, 55),
+                    // backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    side: const BorderSide(width: 1),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.apple,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                      SizedBox(width: 15),
+                      Text(
+                        "Sign In with Apple",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -238,14 +382,15 @@ class _VendorSigninState extends State<VendorSignin> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
-    TextInputType keyboardType = TextInputType.text,
-    required error,
+    required String? error,
+    required TextInputType keyboardType,
+    required FocusNode focusNode,
   }) {
     return TextField(
       style: const TextStyle(fontSize: 14),
       controller: controller,
+      focusNode: focusNode,
       decoration: InputDecoration(
-        // labelText: label,
         hintText: "Enter $label",
         errorText: error,
         errorStyle: const TextStyle(color: Colors.red),
@@ -289,8 +434,9 @@ class _VendorSigninState extends State<VendorSignin> {
 
   void _validateInputs() {
     setState(() {
-      _errors['email'] =
-          _emailController.text.isEmpty ? 'Please enter your email' : null;
+      _errors['email'] = _emailController.text.isEmpty
+          ? 'Please enter your email or phone number'
+          : null;
       _errors['password'] = _passwordController.text.isEmpty
           ? 'Please enter your password'
           : null;
@@ -305,6 +451,48 @@ class _VendorSigninState extends State<VendorSignin> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _emailController.removeListener(_updateKeyboardType);
     super.dispose();
+  }
+
+  void _updateKeyboardType() {
+    if (_emailController.text.isEmpty) {
+      if (_keyboardTypeNotifier.value != TextInputType.text) {
+        _keyboardTypeNotifier.value = TextInputType.text;
+        _rebuildTextFieldWithNewKeyboardType();
+      }
+    } else {
+      final firstChar = _emailController.text[0];
+      final emailLength = _emailController.text.length;
+      final isNumber = RegExp(r'[0-9]').hasMatch(firstChar);
+      final newKeyboardType =
+          isNumber ? TextInputType.phone : TextInputType.text;
+
+      // Only rebuild the text field if the text length increases and the keyboard type changes
+      if (emailLength <= 1) {
+        if (_emailController.text.length > _previousTextLength) {
+          if (_keyboardTypeNotifier.value != newKeyboardType) {
+            _keyboardTypeNotifier.value = newKeyboardType;
+            _rebuildTextFieldWithNewKeyboardType();
+          }
+        } else if (_emailController.text.length <= _previousTextLength) {
+          // Update keyboard type without rebuilding if the length decreases
+          _keyboardTypeNotifier.value = newKeyboardType;
+        }
+      }
+    }
+
+    // Update the previous text length
+    _previousTextLength = _emailController.text.length;
+  }
+
+  void _rebuildTextFieldWithNewKeyboardType() {
+    // Temporarily lose focus
+    _emailFocusNode.unfocus();
+    // Set focus again
+    Future.delayed(const Duration(milliseconds: 100), () {
+      FocusScope.of(context).requestFocus(_emailFocusNode);
+    });
   }
 }

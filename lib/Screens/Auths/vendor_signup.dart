@@ -18,11 +18,11 @@ class VendorSignup extends StatefulWidget {
 
 class _VendorSignupState extends State<VendorSignup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController dateController = TextEditingController();
   String stationname = '';
   String address = '';
   String state = '';
   String lga = '';
+  String email = '';
   String phone = "";
   String password = '';
 
@@ -43,6 +43,7 @@ class _VendorSignupState extends State<VendorSignup> {
       address: address,
       state: state,
       lga: lga,
+      email: email,
       phone: phone,
       password: password,
     );
@@ -85,6 +86,7 @@ class _VendorSignupState extends State<VendorSignup> {
   void initState() {
     super.initState();
     // Initialize the text controller with the initial date
+    _initializeTextControllers();
   }
 
   final TextEditingController _stationNameController = TextEditingController();
@@ -93,6 +95,40 @@ class _VendorSignupState extends State<VendorSignup> {
   final TextEditingController _lgaController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
+  void _initializeTextControllers() {
+    _stationNameController.addListener(() {
+      _clearErrorIfTextPresent('stationname', _stationNameController);
+    });
+    _addressController.addListener(() {
+      _clearErrorIfTextPresent('address', _addressController);
+    });
+    _stateController.addListener(() {
+      _clearErrorIfTextPresent('state', _stateController);
+    });
+    _lgaController.addListener(() {
+      _clearErrorIfTextPresent('lga', _lgaController);
+    });
+    _emailController.addListener(() {
+      _clearErrorIfTextPresent('email', _emailController);
+    });
+    _phoneController.addListener(() {
+      _clearErrorIfTextPresent('phone', _phoneController);
+    });
+    _passwordController.addListener(() {
+      _clearErrorIfTextPresent('password', _passwordController);
+    });
+  }
+
+  void _clearErrorIfTextPresent(
+      String field, TextEditingController controller) {
+    if (controller.text.isNotEmpty && _errors[field] != null) {
+      setState(() {
+        _errors[field] = null;
+      });
+    }
+  }
 
   bool _revealPassword = false;
   bool _isAgreeTermsCondition = false;
@@ -195,6 +231,17 @@ class _VendorSignupState extends State<VendorSignup> {
                   controller: _lgaController,
                   label: 'LGA',
                   error: _errors['lga'],
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  "Email",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                const SizedBox(height: 5),
+                _buildTextField(
+                  controller: _emailController,
+                  label: 'Email',
+                  error: _errors['email'],
                 ),
                 const SizedBox(height: 8),
                 const Text(
@@ -423,6 +470,9 @@ class _VendorSignupState extends State<VendorSignup> {
           _stateController.text.isEmpty ? 'Please enter your state' : null;
       _errors['lga'] =
           _lgaController.text.isEmpty ? 'Please enter your lga' : null;
+      _errors['email'] = _addressController.text.isEmpty
+          ? 'Please enter your email address'
+          : null;
       _errors['phone'] = _phoneController.text.isEmpty
           ? 'Please enter your phone number'
           : null;
@@ -442,6 +492,7 @@ class _VendorSignupState extends State<VendorSignup> {
     _addressController.dispose();
     _stateController.dispose();
     _lgaController.dispose();
+    _emailController.dispose();
     _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();

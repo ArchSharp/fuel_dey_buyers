@@ -10,11 +10,12 @@ import 'package:fuel_dey_buyers/Screens/Auths/reset_password.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/verify_email.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_verify_email.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/app_loading.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/onboarding.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/welcome.dart';
-import 'package:fuel_dey_buyers/Screens/home.dart';
+import 'package:fuel_dey_buyers/Screens/Main/home.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
@@ -57,11 +58,12 @@ class MyApp extends StatelessWidget {
         VendorSignup.routeName: (ctx) => const VendorSignup(),
         VendorSignin.routeName: (ctx) => const VendorSignin(),
         VendorForgotpassword.routeName: (ctx) => const VendorForgotpassword(),
+        VendorVerifyEmail.routeName: (ctx) => const VendorVerifyEmail(),
         CommuterSignup.routeName: (ctx) => const CommuterSignup(),
         CommuterSignin.routeName: (ctx) => const CommuterSignin(),
         CommuterForgotpassword.routeName: (ctx) =>
             const CommuterForgotpassword(),
-        VerifyEmail.routeName: (ctx) => const VerifyEmail(),
+        CommuterVerifyEmail.routeName: (ctx) => const CommuterVerifyEmail(),
         ResetPassword.routeName: (ctx) => const ResetPassword(),
       },
     );

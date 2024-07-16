@@ -3,7 +3,7 @@ import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/verify_email.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
@@ -214,7 +214,7 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
     if (_errors.values.every((error) => error == null)) {
       myNotificationBar(context, 'Form submitted', 'success');
       Navigator.of(context).pushNamed(
-        VerifyEmail.routeName,
+        CommuterVerifyEmail.routeName,
         arguments: 'Passing data from SignIn',
       );
     }

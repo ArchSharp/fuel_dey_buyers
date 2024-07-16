@@ -77,6 +77,7 @@ class VendorSignUpPayload {
   String address;
   String state;
   String lga;
+  String email;
   String phone;
   String password;
 
@@ -85,6 +86,7 @@ class VendorSignUpPayload {
     required this.address,
     required this.state,
     required this.lga,
+    required this.email,
     required this.phone,
     required this.password,
   });
@@ -96,6 +98,7 @@ class VendorSignUpPayload {
       "address": address,
       "state": state,
       "lga": lga,
+      "email":email,
       "phonenumber": phone,
       "password": password,
     };
@@ -108,6 +111,7 @@ class VendorSignUpPayload {
       address: json['address'],
       state: json['state'],
       lga: json['lga'],
+      email:json['email'],
       phone: json['phone'],
       password: json['password'],
     );

@@ -3,7 +3,7 @@ import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/verify_email.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
@@ -76,13 +76,34 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
   void initState() {
     super.initState();
     // Initialize the text controller with the initial date
+    _initializeTextControllers();
   }
 
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   final Map<String, String?> _errors = {
     'email': null,
+    'phone': null,
   };
+
+  void _initializeTextControllers() {
+    _phoneController.addListener(() {
+      _clearErrorIfTextPresent('phone', _phoneController);
+    });
+    _emailController.addListener(() {
+      _clearErrorIfTextPresent('email', _emailController);
+    });
+  }
+
+  void _clearErrorIfTextPresent(
+      String field, TextEditingController controller) {
+    if (controller.text.isNotEmpty && _errors[field] != null) {
+      setState(() {
+        _errors[field] = null;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,15 +146,48 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
                 // Image.asset('assets/images/Ayib.jpg',
                 //     width: imageWidth, height: 250),
                 const SizedBox(height: 20),
+                // const Text(
+                //   "Email",
+                //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                // ),
+                // const SizedBox(height: 5),
+                // _buildTextField(
+                //   controller: _emailController,
+                //   label: 'Email',
+                //   error: _errors['email'],
+                // ),
                 const Text(
-                  "Email",
+                  "Phone Number",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 const SizedBox(height: 5),
-                _buildTextField(
-                  controller: _emailController,
-                  label: 'Email',
-                  error: _errors['email'],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 65,
+                      child: TextFormField(
+                        initialValue: '+234',
+                        readOnly: true, // Make the field non-editable
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(style: BorderStyle.solid),
+                          ),
+                        ),
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: _buildTextField(
+                        controller: _phoneController,
+                        label: 'Phone Number',
+                        keyboardType: TextInputType.phone,
+                        error: _errors['phone'],
+                      ),
+                    )
+                  ],
                 ),
                 const SizedBox(height: 8),
                 Padding(
@@ -207,14 +261,18 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
 
   void _validateInputs() {
     setState(() {
-      _errors['email'] =
-          _emailController.text.isEmpty ? 'Please enter your email' : null;
+      // _errors['email'] =
+      //     _emailController.text.isEmpty ? 'Please enter your email' : null;
+
+      _errors['phone'] = _phoneController.text.isEmpty
+          ? 'Please enter your phone number'
+          : null;
     });
 
     if (_errors.values.every((error) => error == null)) {
       myNotificationBar(context, 'Form submitted', 'success');
       Navigator.of(context).pushNamed(
-        VerifyEmail.routeName,
+        VendorVerifyEmail.routeName,
         arguments: 'Passing data from SignIn',
       );
     }
@@ -223,6 +281,7 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
   @override
   void dispose() {
     _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 }

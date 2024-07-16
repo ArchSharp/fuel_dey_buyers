@@ -76,7 +76,8 @@ class Welcome extends StatelessWidget {
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 16.0, horizontal: 30),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
