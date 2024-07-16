@@ -5,6 +5,7 @@ import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
+import 'package:fuel_dey_buyers/Screens/Main/home.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
@@ -73,12 +74,6 @@ class _CommuterSigninState extends State<CommuterSignin> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // Initialize the text controller with the initial date
-  }
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -93,6 +88,31 @@ class _CommuterSigninState extends State<CommuterSignin> {
     setState(() {
       _revealPassword = !_revealPassword;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the text controller with the initial date
+    _initializeTextControllers();
+  }
+
+  void _initializeTextControllers() {
+    _emailController.addListener(() {
+      _clearErrorIfTextPresent('email', _emailController);
+    });
+    _passwordController.addListener(() {
+      _clearErrorIfTextPresent('password', _passwordController);
+    });
+  }
+
+  void _clearErrorIfTextPresent(
+      String field, TextEditingController controller) {
+    if (controller.text.isNotEmpty && _errors[field] != null) {
+      setState(() {
+        _errors[field] = null;
+      });
+    }
   }
 
   @override
@@ -238,8 +258,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                       ),
                       Expanded(
                         child: Container(
-                          height:
-                              1, // Adjust the height as needed for the divider
+                          height: 1,
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
@@ -418,6 +437,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
 
     if (_errors.values.every((error) => error == null)) {
       myNotificationBar(context, 'Form submitted', 'success');
+      Navigator.pushReplacementNamed(context, Home.routeName);
     }
   }
 

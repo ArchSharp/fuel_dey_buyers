@@ -6,6 +6,7 @@ import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
+import 'package:fuel_dey_buyers/Screens/Main/home.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
@@ -111,6 +112,25 @@ class _VendorSigninState extends State<VendorSignin> {
     super.initState();
     // Initialize the text controller with the initial date
     _emailController.addListener(_updateKeyboardType);
+    _initializeTextControllers();
+  }
+
+  void _initializeTextControllers() {
+    _emailController.addListener(() {
+      _clearErrorIfTextPresent('email', _emailController);
+    });
+    _passwordController.addListener(() {
+      _clearErrorIfTextPresent('password', _passwordController);
+    });
+  }
+
+  void _clearErrorIfTextPresent(
+      String field, TextEditingController controller) {
+    if (controller.text.isNotEmpty && _errors[field] != null) {
+      setState(() {
+        _errors[field] = null;
+      });
+    }
   }
 
   @override
@@ -444,6 +464,7 @@ class _VendorSigninState extends State<VendorSignin> {
 
     if (_errors.values.every((error) => error == null)) {
       myNotificationBar(context, 'Form submitted', 'success');
+      Navigator.pushReplacementNamed(context, Home.routeName);
     }
   }
 
