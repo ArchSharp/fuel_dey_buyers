@@ -12,6 +12,7 @@ import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
+import 'package:fuel_dey_buyers/Screens/Main/search.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/app_loading.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/onboarding.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/welcome.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
             const CommuterForgotpassword(),
         CommuterVerifyEmail.routeName: (ctx) => const CommuterVerifyEmail(),
         ResetPassword.routeName: (ctx) => const ResetPassword(),
+        Search.routeName: (ctx) => const Search(),
       },
     );
   }

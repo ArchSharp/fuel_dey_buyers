@@ -207,17 +207,17 @@ class _CommuterSignupState extends State<CommuterSignup> {
                   error: _errors['firstname'],
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  "Middle Name",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-                const SizedBox(height: 5),
-                _buildTextField(
-                  controller: _middleNameController,
-                  label: 'Middle Name',
-                  error: _errors['middlename'],
-                ),
-                const SizedBox(height: 8),
+                // const Text(
+                //   "Middle Name",
+                //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                // ),
+                // const SizedBox(height: 5),
+                // _buildTextField(
+                //   controller: _middleNameController,
+                //   label: 'Middle Name',
+                //   error: _errors['middlename'],
+                // ),
+                // const SizedBox(height: 8),
                 const Text(
                   "Email",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
