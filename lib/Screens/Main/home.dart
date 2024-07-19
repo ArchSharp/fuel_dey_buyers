@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/Screens/Main/main_home.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/bottom_navbar.dart';
+import 'package:fuel_dey_buyers/Screens/SupportingScreens/commuter_settings.dart';
+import 'package:fuel_dey_buyers/Screens/SupportingScreens/notifications.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -24,7 +26,11 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: _navbarIndex == 0
           ? const MainHome()
-          : const Center(child: Text("data")),
+          : _navbarIndex == 2
+              ? const Notifications()
+              : _navbarIndex == 3
+                  ? const CommuterSettings()
+                  : const Center(child: Text("data")),
       bottomNavigationBar: BottomNavbar(onIndexChanged: _updateNavbarIndex),
     );
   }

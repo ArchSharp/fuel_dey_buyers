@@ -23,7 +23,6 @@ class _MainHomeState extends State<MainHome> {
   bool? _hasPermission;
   String? _address;
   int _homeIndex = 1;
-  int _navbarIndex = 0;
 
   void _updateHomeIndex(int newIndex) {
     setState(() {

@@ -33,8 +33,10 @@ class _OnTappedStationState extends State<OnTappedStation> {
     // double deviceWidth = MediaQuery.of(context).size.width - 32;
     double deviceHeight = MediaQuery.of(context).size.height;
     double safeHeight = widget.currentScrolHeight;
-    double adjustedHeight =
-        (deviceHeight - (0.05 * deviceHeight)) * widget.currentScrolHeight;
+    safeHeight = safeHeight == 0.3 ? 0.5 : safeHeight;
+    double adjustedHeight = (deviceHeight - (0.05 * deviceHeight)) * safeHeight;
+
+    // print("safe height: $safeHeight");
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
