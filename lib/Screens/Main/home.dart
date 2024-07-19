@@ -1,7 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Main/search.dart';
+import 'package:fuel_dey_buyers/Screens/SupportingScreens/all_near_fuel_stations.dart';
+import 'package:fuel_dey_buyers/Screens/SupportingScreens/directions.dart';
+import 'package:fuel_dey_buyers/Screens/SupportingScreens/on_tapped_station.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -32,11 +37,28 @@ class _HomeState extends State<Home> {
 
   final TextEditingController _searchController = TextEditingController();
   // final _searchFocusNode = FocusNode();
+  final DraggableScrollableController _scrollableController =
+      DraggableScrollableController();
+  final ValueNotifier<double> _heightPercentageNotifier =
+      ValueNotifier<double>(0.3);
 
   @override
   void initState() {
     super.initState();
     _checkPermission();
+    _scrollableController.addListener(() {
+      _heightPercentageNotifier.value = _scrollableController.size;
+      // _searchController.text = _scrollableController.size.toString();
+    });
+  }
+// {print(_heightPercentageNotifier.value);}
+
+  @override
+  void dispose() {
+    _scrollableController.removeListener(() {});
+    _scrollableController.dispose();
+    _heightPercentageNotifier.dispose();
+    super.dispose();
   }
 
   Future<void> _checkPermission() async {
@@ -173,6 +195,7 @@ class _HomeState extends State<Home> {
               ),
               child: TextField(
                 controller: _searchController,
+
                 // focusNode: _searchFocusNode,
                 onTap: () {
                   Navigator.of(context).pushNamed(Search.routeName,
@@ -191,12 +214,16 @@ class _HomeState extends State<Home> {
           ),
           Positioned.fill(
             child: DraggableScrollableSheet(
+              controller: _scrollableController,
               initialChildSize:
                   _homeIndex == 0 ? 0.3 : 0.5, // Initial size of widget A
               minChildSize:
                   _homeIndex == 0 ? 0.3 : 0.5, // Minimum size of widget A
-              maxChildSize:
-                  _homeIndex == 0 ? 0.7 : 0.5, // Maximum size of widget A
+              maxChildSize: _homeIndex == 0
+                  ? 0.7
+                  : _homeIndex == 1
+                      ? 0.8
+                      : 0.5, // Maximum size of widget A
               builder:
                   (BuildContext context, ScrollController scrollController) {
                 return Stack(
@@ -208,8 +235,10 @@ class _HomeState extends State<Home> {
                         Container(
                           height: _homeIndex == 0
                               ? deviceHeight * 0.7
-                              : deviceHeight *
-                                  0.5, // Example height to allow scrolling
+                              : _homeIndex == 1
+                                  ? 0.8 * deviceHeight
+                                  : deviceHeight *
+                                      0.5, // Example height to allow scrolling
                           decoration: const BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.only(
@@ -219,15 +248,21 @@ class _HomeState extends State<Home> {
                           child: _homeIndex == 0
                               ? const AllNearFuelStations()
                               : _homeIndex == 1
-                                  ? OnTappedStation(
-                                      stationName: 'Oando Fuel Station',
-                                      location: 'Eti-Osa, Lagos, Nigeria',
-                                      estimatedTime: '8 mins',
-                                      distance: '2 km',
-                                      icon: Icons.access_time_outlined,
-                                      isFuelAvailable: true,
-                                      onIndexChanged: _updateHomeIndex,
-                                    )
+                                  ? ValueListenableBuilder<double>(
+                                      valueListenable:
+                                          _heightPercentageNotifier,
+                                      builder: (context, height, child) {
+                                        return OnTappedStation(
+                                          stationName: 'Oando Fuel Station',
+                                          location: 'Eti-Osa, Lagos, Nigeria',
+                                          estimatedTime: '8 mins',
+                                          distance: '2 km',
+                                          icon: Icons.access_time_outlined,
+                                          isFuelAvailable: true,
+                                          onIndexChanged: _updateHomeIndex,
+                                          currentScrolHeight: height,
+                                        );
+                                      })
                                   : Directions(
                                       onIndexChanged: _updateHomeIndex,
                                     ),
@@ -239,792 +274,25 @@ class _HomeState extends State<Home> {
                       top: 10,
                       left: 0,
                       right: 0,
-                      child: Center(
-                        child: Container(
-                          height: 5,
-                          width: 40,
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                          ),
-                        ),
-                      ),
+                      child: ValueListenableBuilder<double>(
+                          valueListenable: _heightPercentageNotifier,
+                          builder: (context, value, child) {
+                            return Center(
+                              child: Container(
+                                height: 5,
+                                width: 40,
+                                decoration: const BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(100),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
                     ),
                   ],
                 );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Directions extends StatelessWidget {
-  final ValueChanged<int> onIndexChanged;
-
-  const Directions({
-    super.key,
-    required this.onIndexChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 30),
-                    const Text(
-                      "Directions",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 26,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            color: const Color(0xFF2C2D2F),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: IconButton(
-                            padding: const EdgeInsets.all(0),
-                            iconSize: 16,
-                            onPressed: () {},
-                            icon: const Icon(Icons.directions_car),
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(width: 15),
-                        Container(
-                          width: 40,
-                          height: 26,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            color: const Color(0xFF2C2D2F),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: IconButton(
-                            padding: const EdgeInsets.all(0),
-                            iconSize: 16,
-                            onPressed: () {},
-                            icon: const Icon(Icons.directions_walk),
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF2C2D2F),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    padding: const EdgeInsets.all(0),
-                    iconSize: 16,
-                    onPressed: () {
-                      onIndexChanged(1);
-                    },
-                    icon: const Icon(Icons.close),
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '8 min',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' (1 km)',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Text(
-                  "Best route",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF2C2D2F),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Transform.rotate(
-                    angle: 50 * (3.141592653589793 / 180),
-                    child: const Icon(
-                      Icons.navigation_outlined,
-                      color: Color(0xFFC9C9C9),
-                      size: 16,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Icon(
-                  Icons.circle,
-                  size: 4,
-                  color: Colors.black,
-                ),
-                const Icon(
-                  Icons.circle,
-                  size: 4,
-                  color: Colors.black,
-                ),
-                const Icon(
-                  Icons.circle,
-                  size: 4,
-                  color: Colors.black,
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF2C2D2F),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    padding: const EdgeInsets.all(0),
-                    iconSize: 16,
-                    onPressed: () {
-                      onIndexChanged(1);
-                    },
-                    icon: const Icon(Icons.place),
-                    color: const Color(0xFFC9C9C9),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Icon(
-                  Icons.circle,
-                  size: 4,
-                  color: Colors.black,
-                ),
-                const Icon(
-                  Icons.circle,
-                  size: 4,
-                  color: Colors.black,
-                ),
-                const Icon(
-                  Icons.circle,
-                  size: 4,
-                  color: Colors.black,
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF2C2D2F),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    padding: const EdgeInsets.all(0),
-                    iconSize: 16,
-                    onPressed: () {
-                      onIndexChanged(1);
-                    },
-                    icon: const Icon(Icons.add),
-                    color: const Color(0xFFC9C9C9),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class AllNearFuelStations extends StatelessWidget {
-  const AllNearFuelStations({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 25),
-            Padding(
-              padding: EdgeInsets.all(0),
-              child: Text(
-                'Fuel Stations Near you',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 17),
-            NearStation(
-              stationName: 'Oando Fuel Station',
-              location: 'Eti-Osa, Lagos, Nigeria',
-              estimatedTime: '8 mins away',
-              distance: '2 km',
-              icon: Icons.access_time_outlined,
-              isFuelAvailable: true,
-            ),
-            SizedBox(height: 15),
-            NearStation(
-              stationName: 'Mobil Fuel Station',
-              location: 'Apapa, Lagos, Nigeria',
-              estimatedTime: '24 mins away',
-              distance: '6 km',
-              icon: Icons.access_time_outlined,
-              isFuelAvailable: false,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class OnTappedStation extends StatelessWidget {
-  final String stationName;
-  final String location;
-  final String estimatedTime;
-  final String distance;
-  final IconData icon;
-  final bool isFuelAvailable;
-  final ValueChanged<int> onIndexChanged;
-
-  const OnTappedStation({
-    super.key,
-    required this.stationName,
-    required this.location,
-    required this.estimatedTime,
-    required this.distance,
-    required this.icon,
-    required this.isFuelAvailable,
-    required this.onIndexChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    // double deviceWidth = MediaQuery.of(context).size.width - 32;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 25),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              // border: Border.all(
-              //   color: Colors.black,
-              //   width: 2,
-              // ),
-            ),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // mainAxisSize : MainAxisSize.min,
-              children: [
-                Column(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.circle, // or Icons.brightness_1
-                          size: 10.0, // You can adjust the size as needed
-                          color: Colors
-                              .black, // You can change the color as needed
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          stationName,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Oando Fuel Station',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                const Spacer(),
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF2C2D2F),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    iconSize: 14,
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(
-                      Icons.ios_share_outlined,
-                      color: Color(0xFFC1C1C1),
-                    ),
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, '/commuter_signup');
-                    },
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF2C2D2F),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    iconSize: 14,
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(
-                      Icons.favorite_outline_outlined,
-                      color: Color(0xFFC1C1C1),
-                    ),
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, '/commuter_signup');
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Divider(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              // border: Border.all(
-              //   color: Colors.black,
-              //   width: 2,
-              // ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    const Text(
-                      "Distance",
-                      style: TextStyle(fontSize: 10),
-                    ),
-                    Text(
-                      distance,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      icon,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      estimatedTime,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          const Divider(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              // border: Border.all(
-              //   color: Colors.black,
-              //   width: 2,
-              // ),
-            ),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  iconSize: 20,
-                  padding: EdgeInsets.zero,
-                  icon: const Icon(
-                    Icons.location_on_outlined,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/commuter_signup');
-                  },
-                ),
-                Text(
-                  location,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                )
-              ],
-            ),
-          ),
-          const Divider(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              // border: Border.all(
-              //   color: Colors.black,
-              //   width: 2,
-              // ),
-            ),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  iconSize: 20,
-                  padding: EdgeInsets.zero,
-                  icon: const Icon(
-                    Icons.local_gas_station_outlined,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/commuter_signup');
-                  },
-                ),
-                const Text(
-                  "Fuel Type Available:",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              // border: Border.all(
-              //   color: Colors.black,
-              //   width: 2,
-              // ),
-            ),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, CommuterSignup.routeName);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(69, 32),
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  child: const Text(
-                    "Petrol",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, CommuterSignup.routeName);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(69, 32),
-                    backgroundColor: const Color(0xFFC1C1C1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  child: const Text(
-                    "Gas",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, CommuterSignup.routeName);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(69, 32),
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  child: const Text(
-                    "Diesel",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              // border: Border.all(
-              //   color: Colors.black,
-              //   width: 2,
-              // ),
-            ),
-            child: ElevatedButton(
-              onPressed: () {
-                onIndexChanged(2);
-              },
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 52),
-                backgroundColor: const Color(0xFF2C2D2F),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Navigate",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  const SizedBox(width: 10),
-                  Transform.rotate(
-                    angle: 50 * (3.141592653589793 / 180),
-                    child: const Icon(
-                      Icons.navigation_outlined,
-                      color: Color(0xFFC9C9C9),
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class NearStation extends StatelessWidget {
-  final String stationName;
-  final String location;
-  final String estimatedTime;
-  final String distance;
-  final IconData icon;
-  final bool isFuelAvailable;
-
-  const NearStation({
-    super.key,
-    required this.stationName,
-    required this.location,
-    required this.estimatedTime,
-    required this.distance,
-    required this.icon,
-    required this.isFuelAvailable,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      // padding: const EdgeInsets.symmetric(
-      //   horizontal: 8.0,
-      // ),
-      height: 70,
-      decoration: BoxDecoration(
-        color: isFuelAvailable ? const Color(0xFFC9C9C9) : Colors.grey[600],
-        // border: Border.all(
-        //   color: Colors.black,
-        //   width: 2,
-        // ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                "EST. TIME",
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              Text(
-                distance,
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  Icon(
-                    icon,
-                    size: 16,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    estimatedTime,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-          Container(
-            height: 20,
-            width: 2,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.grey,
-                  Colors.black,
-                ],
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
-              ),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                stationName,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              Text(
-                location,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          // const Spacer(),
-          Container(
-            width: 30,
-            height: 30,
-            decoration: const BoxDecoration(
-              color: Color(0xFFD9D9D9),
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              iconSize: 14,
-              padding: EdgeInsets.zero,
-              icon: const RotatedBox(
-                quarterTurns: 2,
-                child: Icon(
-                  Icons.subdirectory_arrow_left,
-                  color: Color(0xFF9A9898),
-                  size: 20,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, CommuterSignup.routeName);
               },
             ),
           ),
