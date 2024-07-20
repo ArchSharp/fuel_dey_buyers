@@ -356,7 +356,7 @@ class _VendorSignupState extends State<VendorSignup> {
                           ],
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),

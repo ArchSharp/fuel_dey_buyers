@@ -209,15 +209,13 @@ class _MainHomeState extends State<MainHome> {
         Positioned.fill(
           child: DraggableScrollableSheet(
             controller: _scrollableController,
-            initialChildSize:
-                _homeIndex == 0 ? 0.3 : 0.5, // Initial size of widget A
-            minChildSize:
-                _homeIndex == 0 ? 0.3 : 0.5, // Minimum size of widget A
+            initialChildSize: _homeIndex == 0 ? 0.3 : 0.5,
+            minChildSize: _homeIndex == 0 ? 0.3 : 0.5,
             maxChildSize: _homeIndex == 0
                 ? 0.7
                 : _homeIndex == 1
                     ? 0.8
-                    : 0.5, // Maximum size of widget A
+                    : 0.5,
             builder: (BuildContext context, ScrollController scrollController) {
               return Stack(
                 children: [
@@ -230,8 +228,7 @@ class _MainHomeState extends State<MainHome> {
                             ? deviceHeight * 0.7
                             : _homeIndex == 1
                                 ? 0.8 * deviceHeight
-                                : deviceHeight *
-                                    0.5, // Example height to allow scrolling
+                                : deviceHeight * 0.5,
                         decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(

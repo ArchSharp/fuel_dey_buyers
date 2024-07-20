@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/Screens/Main/main_home.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/bottom_navbar.dart';
-import 'package:fuel_dey_buyers/Screens/SupportingScreens/commuter_settings.dart';
-import 'package:fuel_dey_buyers/Screens/SupportingScreens/notifications.dart';
+import 'package:fuel_dey_buyers/Screens/Main/commuter_settings.dart';
+import 'package:fuel_dey_buyers/Screens/Main/notifications.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
