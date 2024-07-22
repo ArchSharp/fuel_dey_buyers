@@ -29,9 +29,9 @@ class LogoSplash extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 50),
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigator.pushReplacementNamed(
-                    //     context, Onboarding.routeName);
-                    Navigator.pushReplacementNamed(context, Home.routeName);
+                    Navigator.pushReplacementNamed(
+                        context, Onboarding.routeName);
+                    // Navigator.pushReplacementNamed(context, Home.routeName);
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(exploreBtnWidth, 55),

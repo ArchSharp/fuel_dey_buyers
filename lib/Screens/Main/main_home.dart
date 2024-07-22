@@ -22,7 +22,7 @@ class _MainHomeState extends State<MainHome> {
   Position? _currentPosition;
   bool? _hasPermission;
   String? _address;
-  int _homeIndex = 1;
+  int _homeIndex = 0;
 
   void _updateHomeIndex(int newIndex) {
     setState(() {
@@ -169,7 +169,7 @@ class _MainHomeState extends State<MainHome> {
 
     return Stack(
       children: [
-        const MainWidget(),
+        MainWidget(onIndexChanged: _updateHomeIndex),
         Positioned(
           top: mtop,
           left: 20,
@@ -206,92 +206,34 @@ class _MainHomeState extends State<MainHome> {
             ),
           ),
         ),
-        Positioned.fill(
-          child: DraggableScrollableSheet(
-            controller: _scrollableController,
-            initialChildSize: _homeIndex == 0 ? 0.3 : 0.5,
-            minChildSize: _homeIndex == 0 ? 0.3 : 0.5,
-            maxChildSize: _homeIndex == 0
-                ? 0.7
-                : _homeIndex == 1
-                    ? 0.8
-                    : 0.5,
-            builder: (BuildContext context, ScrollController scrollController) {
-              return Stack(
-                children: [
-                  ListView(
-                    controller: scrollController,
-                    padding: const EdgeInsets.all(0),
-                    children: <Widget>[
-                      Container(
-                        height: _homeIndex == 0
-                            ? deviceHeight * 0.7
-                            : _homeIndex == 1
-                                ? 0.8 * deviceHeight
-                                : deviceHeight * 0.5,
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
-                            )),
-                        child: _homeIndex == 0
-                            ? const AllNearFuelStations()
-                            : _homeIndex == 1
-                                ? ValueListenableBuilder<double>(
-                                    valueListenable: _heightPercentageNotifier,
-                                    builder: (context, height, child) {
-                                      return OnTappedStation(
-                                        stationName: 'Oando Fuel Station',
-                                        location: 'Eti-Osa, Lagos, Nigeria',
-                                        estimatedTime: '8 mins',
-                                        distance: '2 km',
-                                        icon: Icons.access_time_outlined,
-                                        isFuelAvailable: true,
-                                        onIndexChanged: _updateHomeIndex,
-                                        currentScrolHeight: height,
-                                      );
-                                    })
-                                : Directions(
-                                    onIndexChanged: _updateHomeIndex,
-                                  ),
-                      ),
-                    ],
+        // const Spacer(),
+        _homeIndex == 0
+            ? const AllNearFuelStations()
+            : _homeIndex == 1
+                ? OnTappedStation(
+                    stationName: 'Oando Fuel Station',
+                    location: 'Eti-Osa, Lagos, Nigeria',
+                    estimatedTime: '8 mins',
+                    distance: '2 km',
+                    icon: Icons.access_time_outlined,
+                    isFuelAvailable: true,
+                    onIndexChanged: _updateHomeIndex,
+                  )
+                : Directions(
+                    onIndexChanged: _updateHomeIndex,
                   ),
-                  // Draggable Indicator
-                  Positioned(
-                    top: 10,
-                    left: 0,
-                    right: 0,
-                    child: ValueListenableBuilder<double>(
-                        valueListenable: _heightPercentageNotifier,
-                        builder: (context, value, child) {
-                          return Center(
-                            child: Container(
-                              height: 5,
-                              width: 40,
-                              decoration: const BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(100),
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
       ],
     );
   }
 }
 
 class MainWidget extends StatefulWidget {
-  const MainWidget({super.key});
+  final ValueChanged<int> onIndexChanged;
+
+  const MainWidget({
+    super.key,
+    required this.onIndexChanged,
+  });
 
   @override
   State<MainWidget> createState() => _MainWidgetState();
@@ -311,16 +253,37 @@ class _MainWidgetState extends State<MainWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey[600],
-      child: GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: _center,
-          zoom: 11.0,
-        ),
-        markers: _makers.values.toSet(),
-      ),
+    return GestureDetector(
+      onTap: () {
+        print("Map is tapped");
+        setState(() {
+          widget.onIndexChanged(1);
+        });
+      },
+      onDoubleTap: () {
+        setState(() {
+          print("Map is double tapped");
+          setState(() {
+            widget.onIndexChanged(0);
+          });
+        });
+      },
+      child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.orange[600],
+          child: const Center(
+            child: Text("Map is here"),
+          )
+          // GoogleMap(
+          //   onMapCreated: _onMapCreated,
+          //   initialCameraPosition: CameraPosition(
+          //     target: _center,
+          //     zoom: 11.0,
+          //   ),
+          //   markers: _makers.values.toSet(),
+          // ),
+          ),
     );
   }
 
