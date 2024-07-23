@@ -348,6 +348,7 @@ class _VendorSignupState extends State<VendorSignup> {
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
@@ -366,6 +367,7 @@ class _VendorSignupState extends State<VendorSignup> {
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
@@ -392,14 +394,16 @@ class _VendorSignupState extends State<VendorSignup> {
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 55),
-                          backgroundColor: Colors.black,
+                          backgroundColor: const Color(0xFFDEB20A),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
                         child: const Text(
                           "Sign Up",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),

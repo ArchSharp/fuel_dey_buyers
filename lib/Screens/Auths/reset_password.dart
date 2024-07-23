@@ -166,9 +166,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                   children: <Widget>[
                     Checkbox(
                       value: _isAgreeTermsCondition,
-                      checkColor: Colors.white,
-                      activeColor:
-                          _isAgreeTermsCondition ? Colors.black : Colors.white,
+                      checkColor: Colors.black,
+                      activeColor: _isAgreeTermsCondition
+                          ? const Color(0xFFDEB20A)
+                          : Colors.white,
                       onChanged: (bool? value) {
                         // Handle the state change here
                         setState(() {
@@ -191,9 +192,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                   children: <Widget>[
                     Checkbox(
                       value: _isAgreeTermsCondition,
-                      checkColor: Colors.white,
-                      activeColor:
-                          _isAgreeTermsCondition ? Colors.black : Colors.white,
+                      checkColor: Colors.black,
+                      activeColor: _isAgreeTermsCondition
+                          ? const Color(0xFFDEB20A)
+                          : Colors.white,
                       onChanged: (bool? value) {
                         // Handle the state change here
                         setState(() {
@@ -216,14 +218,14 @@ class _ResetPasswordState extends State<ResetPassword> {
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 55),
-                    backgroundColor: Colors.black,
+                    backgroundColor: const Color(0xFFDEB20A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   child: const Text(
                     "Done",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ],

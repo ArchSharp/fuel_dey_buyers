@@ -18,20 +18,30 @@ class Welcome extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          SizedBox(height: deviceHeight * 0.4),
+          SizedBox(
+            height: deviceHeight * 0.45,
+            child: Center(
+              child: Image.asset(
+                'assets/images/welcome2.png',
+                // fit: BoxFit.contain,
+                width: deviceWidth - 90,
+                height: deviceHeight * 0.3,
+              ),
+            ),
+          ),
           Container(
-            height: deviceHeight * 0.6,
+            height: deviceHeight * 0.55,
             width: deviceWidth,
             // color: Colors.grey,
             decoration: const BoxDecoration(
-              color: Color.fromRGBO(128, 128, 128, 0.5),
+              color: Color(0XFFDEB20A),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(40),
                 topRight: Radius.circular(40),
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
+              padding: const EdgeInsets.fromLTRB(20, 15, 20, 40),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,14 +75,15 @@ class Welcome extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         fixedSize: Size(exploreBtnWidth, 55),
-                        backgroundColor: Colors.black,
+                        backgroundColor:
+                            const Color(0xFFFFFDF4), //Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
                       child: const Text(
                         "Sign Up as a Commuter",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                     const Padding(
@@ -111,14 +122,15 @@ class Welcome extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         fixedSize: Size(exploreBtnWidth, 55),
-                        backgroundColor: Colors.black,
+                        backgroundColor:
+                            const Color(0xFFFFFDF4), //Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
                       child: const Text(
                         "Sign Up as a Vendor",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   ],

@@ -154,14 +154,16 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 55),
-                backgroundColor: Colors.black,
+                backgroundColor: const Color(0xFFDEB20A),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
               child: const Text(
                 "Confirm",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: Colors.black,
+                ),
               ),
             ),
           ],

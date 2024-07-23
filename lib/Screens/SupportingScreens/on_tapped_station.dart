@@ -500,9 +500,18 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                 ),
-                                child: const Text(
-                                  "Petrol",
-                                  style: TextStyle(color: Colors.white),
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      "Petrol",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    if (height >= 0.55)
+                                      const Text(
+                                        "# 700",
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -518,9 +527,18 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                 ),
-                                child: const Text(
-                                  "Gas",
-                                  style: TextStyle(color: Colors.black),
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      "Gas",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    if (height >= 0.55)
+                                      const Text(
+                                        "# 1100",
+                                        style: TextStyle(color: Colors.black),
+                                      )
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -536,9 +554,20 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                 ),
-                                child: const Text(
-                                  "Diesel",
-                                  style: TextStyle(color: Colors.white),
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      "Diesel",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    if (height >= 0.55)
+                                      const Text(
+                                        "# 1700",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                  ],
                                 ),
                               ),
                             ],

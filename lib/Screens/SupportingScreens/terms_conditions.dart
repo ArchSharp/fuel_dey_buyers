@@ -342,7 +342,7 @@ class _TermsConditionsState extends State<TermsConditions> {
             style: ElevatedButton.styleFrom(
               fixedSize: Size(deviceWidth - 32, 52),
               padding: const EdgeInsets.all(0),
-              backgroundColor: const Color(0xFF2C2D2F),
+              backgroundColor: const Color(0xFFDEB20A),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
@@ -351,7 +351,7 @@ class _TermsConditionsState extends State<TermsConditions> {
               "Accept",
               style: TextStyle(
                 fontSize: 16,
-                color: Color(0xFFC9C9C9),
+                color: Colors.black,
               ),
             ),
           ),

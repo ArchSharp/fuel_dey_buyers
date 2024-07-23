@@ -240,14 +240,16 @@ class _VendorSigninState extends State<VendorSignin> {
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 55),
-                    backgroundColor: Colors.black,
+                    backgroundColor: const Color(0xFFDEB20A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   child: const Text(
                     "Sign In",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 30),

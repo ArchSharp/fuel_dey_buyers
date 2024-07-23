@@ -201,7 +201,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                         "Forgot Password?",
                         style: TextStyle(
                             fontSize: 12,
-                            color: Colors.black,
+                            color: Colors.blue,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -214,14 +214,16 @@ class _CommuterSigninState extends State<CommuterSignin> {
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 55),
-                    backgroundColor: Colors.black,
+                    backgroundColor: const Color(0xFFDEB20A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   child: const Text(
                     "Sign In",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 30),
