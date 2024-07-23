@@ -13,6 +13,7 @@ import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Main/search.dart';
+import 'package:fuel_dey_buyers/Screens/Main/vendor_home.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/app_loading.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/onboarding.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/welcome.dart';
@@ -22,12 +23,17 @@ import 'package:google_fonts/google_fonts.dart';
 void main() async {
   await dotenv.load(fileName: ".env");
 
-  runApp(
-    StoreProvider(
-      store: store,
-      child: const MyApp(),
-    ),
-  );
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(
+      StoreProvider(
+        store: store,
+        child: const MyApp(),
+      ),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -67,6 +73,7 @@ class MyApp extends StatelessWidget {
         CommuterVerifyEmail.routeName: (ctx) => const CommuterVerifyEmail(),
         ResetPassword.routeName: (ctx) => const ResetPassword(),
         Search.routeName: (ctx) => const Search(),
+        VendorHome.routeName: (ctx) => const VendorHome(),
       },
     );
   }

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class BottomNavbar extends StatefulWidget {
+class VendorNavbar extends StatefulWidget {
   final ValueChanged<int> onIndexChanged;
 
-  const BottomNavbar({
+  const VendorNavbar({
     super.key,
     required this.onIndexChanged,
   });
 
   @override
-  State<BottomNavbar> createState() => _BottomNavbarState();
+  State<VendorNavbar> createState() => _VendorNavbarState();
 }
 
-class _BottomNavbarState extends State<BottomNavbar> {
+class _VendorNavbarState extends State<VendorNavbar> {
   int _currentIndex = 0;
 
   @override
@@ -28,28 +28,28 @@ class _BottomNavbarState extends State<BottomNavbar> {
           ),
           label: 'Home',
         ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(
+        //     _currentIndex == 1
+        //         ? Icons.bookmark_sharp
+        //         : Icons.bookmark_border_sharp,
+        //     color: _currentIndex == 1 ? const Color(0xFF2C2D2F) : Colors.grey,
+        //   ),
+        //   label: 'Favorite',
+        // ),
         BottomNavigationBarItem(
           icon: Icon(
             _currentIndex == 1
-                ? Icons.bookmark_sharp
-                : Icons.bookmark_border_sharp,
-            color: _currentIndex == 1 ? const Color(0xFF2C2D2F) : Colors.grey,
-          ),
-          label: 'Favorite',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            _currentIndex == 2
                 ? Icons.notifications
                 : Icons.notifications_outlined,
-            color: _currentIndex == 2 ? const Color(0xFF2C2D2F) : Colors.grey,
+            color: _currentIndex == 1 ? const Color(0xFF2C2D2F) : Colors.grey,
           ),
-          label: 'Notification',
+          label: 'Saved',
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            _currentIndex == 3 ? Icons.settings_sharp : Icons.settings_outlined,
-            color: _currentIndex == 3 ? const Color(0xFF2C2D2F) : Colors.grey,
+            _currentIndex == 2 ? Icons.settings_sharp : Icons.settings_outlined,
+            color: _currentIndex == 2 ? const Color(0xFF2C2D2F) : Colors.grey,
           ),
           label: 'Setting',
         ),

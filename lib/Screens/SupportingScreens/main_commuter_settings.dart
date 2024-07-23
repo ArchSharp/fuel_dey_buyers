@@ -31,11 +31,13 @@ class MainCommuterSettings extends StatelessWidget {
                 CircleAvatar(
                   radius: 82.5,
                   backgroundColor: Colors.grey[300],
-                  child: const Icon(
-                    Icons.help,
-                    color: Colors.white, // Icon color
-                    size: 30, // Icon size
-                  ),
+                  backgroundImage:
+                      const AssetImage('assets/images/commuter.png'),
+                  // child: const Icon(
+                  //   Icons.help,
+                  //   color: Colors.white, // Icon color
+                  //   size: 30, // Icon size
+                  // ),
                 ),
                 Positioned(
                   top: 10,

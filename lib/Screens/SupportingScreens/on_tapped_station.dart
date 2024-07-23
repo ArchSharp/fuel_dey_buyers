@@ -61,15 +61,17 @@ class _OnTappedStationState extends State<OnTappedStation> {
     double maxHeight = 0.8;
 
     return DraggableScrollableSheet(
-        controller: _scrollableController,
-        initialChildSize: initialHeight,
-        minChildSize: minHeight,
-        maxChildSize: maxHeight,
-        builder: (BuildContext context, ScrollController scrollController) {
-          return ValueListenableBuilder<double>(
-              valueListenable: _heightPercentageNotifier,
-              builder: (context, height, child) {
-                return Container(
+      controller: _scrollableController,
+      initialChildSize: initialHeight,
+      minChildSize: minHeight,
+      maxChildSize: maxHeight,
+      builder: (BuildContext context, ScrollController scrollController) {
+        return ValueListenableBuilder<double>(
+          valueListenable: _heightPercentageNotifier,
+          builder: (context, height, child) {
+            return Stack(
+              children: [
+                Container(
                   height: maxHeight * deviceHeight,
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   decoration: const BoxDecoration(
@@ -787,8 +789,26 @@ class _OnTappedStationState extends State<OnTappedStation> {
                       ],
                     ),
                   ),
-                );
-              });
-        });
+                ),
+                const Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: SizedBox(
+                      width: 40,
+                      child: Divider(
+                        color: Colors.grey,
+                        thickness: 5,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }

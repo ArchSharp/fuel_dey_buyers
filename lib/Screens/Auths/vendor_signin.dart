@@ -7,6 +7,7 @@ import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Main/home.dart';
+import 'package:fuel_dey_buyers/Screens/Main/vendor_home.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
@@ -464,7 +465,7 @@ class _VendorSigninState extends State<VendorSignin> {
 
     if (_errors.values.every((error) => error == null)) {
       myNotificationBar(context, 'Form submitted', 'success');
-      Navigator.pushReplacementNamed(context, Home.routeName);
+      Navigator.pushReplacementNamed(context, VendorHome.routeName);
     }
   }
 
