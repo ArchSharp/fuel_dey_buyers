@@ -20,6 +20,7 @@ class MainHome extends StatefulWidget {
 
 class _MainHomeState extends State<MainHome> {
   Position? _currentPosition;
+  Placemark? _userPlace;
   bool? _hasPermission;
   String? _address;
   int _homeIndex = 0;
@@ -154,6 +155,7 @@ class _MainHomeState extends State<MainHome> {
     setState(() {
       _currentPosition = position;
       _address = address;
+      _userPlace = place;
     });
   }
 
@@ -166,6 +168,10 @@ class _MainHomeState extends State<MainHome> {
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
     double mtop = deviceHeight * 0.07;
+
+    // if (_hasPermission == true && _currentPosition != null) {
+    //   print("current position: $_userPlace");
+    // }
 
     return Stack(
       children: [
@@ -191,10 +197,10 @@ class _MainHomeState extends State<MainHome> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Hello Yemi",
                         style: TextStyle(
                             color: Color(0xFF2C2D2F),
@@ -203,22 +209,35 @@ class _MainHomeState extends State<MainHome> {
                       ),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.circle,
                             color: Color(0xFFA9E27C),
                             size: 10,
                           ),
-                          SizedBox(width: 10),
-                          Text(
-                            "Lekki",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                              color: Color(0xFF2C2D2F),
+                          const SizedBox(width: 10),
+                          if (_hasPermission == true &&
+                              _currentPosition == null)
+                            const SizedBox(
+                              width: 10,
+                              height: 10,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1,
+                              ),
                             ),
-                          ),
+                          if (_hasPermission == true &&
+                              _currentPosition != null)
+                            Text(
+                              _userPlace != null
+                                  ? _userPlace!.subAdministrativeArea!
+                                  : "",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                color: Color(0xFF2C2D2F),
+                              ),
+                            ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                   CircleAvatar(
