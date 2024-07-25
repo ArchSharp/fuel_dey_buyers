@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class NotificationCard extends StatelessWidget {
+class CommuterNotificationCard extends StatelessWidget {
   final String title;
   final String location;
   final String distance;
@@ -8,7 +8,7 @@ class NotificationCard extends StatelessWidget {
   final double imgWidth;
   final double imgHeight;
 
-  const NotificationCard({
+  const CommuterNotificationCard({
     super.key,
     required this.title,
     required this.location,

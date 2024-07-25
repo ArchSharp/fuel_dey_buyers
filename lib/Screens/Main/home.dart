@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/Screens/Main/main_home.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/commuter_navbar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/commuter_settings.dart';
-import 'package:fuel_dey_buyers/Screens/SupportingScreens/notifications.dart';
+import 'package:fuel_dey_buyers/Screens/SupportingScreens/commuter_notifications.dart';
 import 'package:fuel_dey_buyers/Screens/Main/saved.dart';
 
 class Home extends StatefulWidget {
@@ -31,7 +31,7 @@ class _HomeState extends State<Home> {
             : _navbarIndex == 1
                 ? const Saved()
                 : _navbarIndex == 2
-                    ? const Notifications()
+                    ? const CommuterNotifications()
                     : const CommuterSettings(),
       ),
       bottomNavigationBar: CommuterNavbar(onIndexChanged: _updateNavbarIndex),

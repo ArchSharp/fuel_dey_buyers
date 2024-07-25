@@ -270,7 +270,7 @@ class _MainHomeState extends State<MainHome> {
           ),
         // const Spacer(),
         _homeIndex == 0
-            ? const AllNearFuelStations()
+            ? AllNearFuelStations(onIndexChanged: _updateHomeIndex)
             : _homeIndex == 1
                 ? OnTappedStation(
                     stationName: 'Oando Fuel Station',
@@ -319,14 +319,14 @@ class _MainWidgetState extends State<MainWidget> {
       onTap: () {
         print("Map is tapped");
         setState(() {
-          widget.onIndexChanged(1);
+          widget.onIndexChanged(0);
         });
       },
       onDoubleTap: () {
         setState(() {
           print("Map is double tapped");
           setState(() {
-            widget.onIndexChanged(0);
+            // widget.onIndexChanged(0);
           });
         });
       },

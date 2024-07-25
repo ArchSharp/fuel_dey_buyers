@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class StarRatings extends StatelessWidget {
   final double rating;
   final int starCount;
+  final double starSize;
 
   const StarRatings({
     super.key,
     this.rating = 0.0,
     this.starCount = 5,
+    this.starSize = 32,
   });
 
   @override
@@ -16,22 +18,22 @@ class StarRatings extends StatelessWidget {
     for (int i = 0; i < starCount; i++) {
       Icon icon;
       if (i < rating.floor()) {
-        icon = const Icon(
+        icon = Icon(
           Icons.star_rounded,
-          color: Color(0xFFECB920),
-          size: 27,
+          color: const Color(0xFFECB920),
+          size: starSize,
         );
       } else if (i < rating && rating % 1 != 0) {
-        icon = const Icon(
+        icon = Icon(
           Icons.star_half_rounded,
-          color: Color(0xFFECB920),
-          size: 27,
+          color: const Color(0xFFECB920),
+          size: starSize,
         );
       } else {
-        icon = const Icon(
+        icon = Icon(
           Icons.star_border_rounded,
-          color: Color(0xFF2C2D2F),
-          size: 27,
+          color: const Color(0xFF2C2D2F),
+          size: starSize,
         );
       }
       stars.add(icon);

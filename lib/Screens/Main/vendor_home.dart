@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/Screens/Main/main_vendor_home.dart';
+import 'package:fuel_dey_buyers/Screens/Main/vendor_notification.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/vendor_navbar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/vendor_settings.dart';
 
@@ -24,7 +25,11 @@ class _VendorHomeState extends State<VendorHome> {
   Widget build(BuildContext context) {
     // print("_navbarIndex: $_navbarIndex");
     return Scaffold(
-      body: _navbarIndex == 0 ? const MainVendorHome() : const VendorSettings(),
+      body: _navbarIndex == 0
+          ? const MainVendorHome()
+          : _navbarIndex == 1
+              ? const VendorNotification()
+              : const VendorSettings(),
       bottomNavigationBar: VendorNavbar(onIndexChanged: _updateNavbarIndex),
     );
   }

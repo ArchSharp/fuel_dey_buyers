@@ -15,20 +15,22 @@ class _MainVendorHomeState extends State<MainVendorHome> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
+    required int? maxLines,
     TextInputType keyboardType = TextInputType.text,
     required error,
   }) {
     return TextField(
       style: const TextStyle(fontSize: 14),
       controller: controller,
+      maxLines: maxLines,
       decoration: InputDecoration(
         // prefixIcon: const Icon(
         //   Icons.attach_money,
         //   size: 16,
         // ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
         // labelText: label,
-        hintText: "₦ $label",
+        hintText: label,
         labelStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
@@ -47,6 +49,7 @@ class _MainVendorHomeState extends State<MainVendorHome> {
   final TextEditingController _dieselController = TextEditingController();
   final TextEditingController _petrolController = TextEditingController();
   final TextEditingController _gasController = TextEditingController();
+  final TextEditingController _detailsController = TextEditingController();
 
   final Map<String, String?> _errors = {
     'diesel': null,
@@ -153,7 +156,7 @@ class _MainVendorHomeState extends State<MainVendorHome> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -165,13 +168,15 @@ class _MainVendorHomeState extends State<MainVendorHome> {
                   width: 80,
                   height: 39,
                   child: _buildTextField(
-                      controller: _dieselController,
-                      error: _errors['diesel'],
-                      label: ""),
+                    controller: _dieselController,
+                    error: _errors['diesel'],
+                    label: "₦",
+                    maxLines: 1,
+                  ),
                 )
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -183,13 +188,15 @@ class _MainVendorHomeState extends State<MainVendorHome> {
                   width: 80,
                   height: 39,
                   child: _buildTextField(
-                      controller: _petrolController,
-                      error: _errors['petrol'],
-                      label: ""),
+                    controller: _petrolController,
+                    error: _errors['petrol'],
+                    label: "₦",
+                    maxLines: 1,
+                  ),
                 )
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -201,13 +208,15 @@ class _MainVendorHomeState extends State<MainVendorHome> {
                   width: 80,
                   height: 39,
                   child: _buildTextField(
-                      controller: _gasController,
-                      error: _errors['gas'],
-                      label: ""),
+                    controller: _gasController,
+                    error: _errors['gas'],
+                    label: "₦",
+                    maxLines: 1,
+                  ),
                 )
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             Align(
               alignment: Alignment.center,
               child: ElevatedButton(
@@ -229,6 +238,25 @@ class _MainVendorHomeState extends State<MainVendorHome> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            const Text(
+              "Details about station",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF2C2D2F),
+              ),
+            ),
+            const SizedBox(height: 5),
+            SizedBox(
+              height: 132,
+              child: _buildTextField(
+                controller: _detailsController,
+                error: _errors['gas'],
+                label: "",
+                maxLines: 8,
               ),
             ),
           ],

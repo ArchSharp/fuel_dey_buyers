@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/near_station.dart';
 
 class AllNearFuelStations extends StatefulWidget {
+  final ValueChanged<int> onIndexChanged;
+
   const AllNearFuelStations({
     super.key,
+    required this.onIndexChanged,
   });
 
   @override
@@ -64,18 +67,18 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
                     ),
                     child: SingleChildScrollView(
                       controller: scrollController,
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 25),
-                          Text(
+                          const SizedBox(height: 25),
+                          const Text(
                             'Fuel Stations Near you',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 17),
+                          const SizedBox(height: 17),
                           NearStation(
                             stationName: 'Oando Fuel Station',
                             location: 'Eti-Osa, Lagos, Nigeria',
@@ -83,8 +86,9 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
                             distance: '2 km',
                             icon: Icons.access_time_outlined,
                             isFuelAvailable: true,
+                            onIndexChanged: widget.onIndexChanged,
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           NearStation(
                             stationName: 'Mobil Fuel Station',
                             location: 'Apapa, Lagos, Nigeria',
@@ -92,6 +96,7 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
                             distance: '6 km',
                             icon: Icons.access_time_outlined,
                             isFuelAvailable: false,
+                            onIndexChanged: widget.onIndexChanged,
                           ),
                         ],
                       ),

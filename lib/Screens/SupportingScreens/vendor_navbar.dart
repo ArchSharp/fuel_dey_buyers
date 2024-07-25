@@ -44,7 +44,7 @@ class _VendorNavbarState extends State<VendorNavbar> {
                 : Icons.notifications_outlined,
             color: _currentIndex == 1 ? const Color(0xFFECB920) : Colors.grey,
           ),
-          label: 'Saved',
+          label: 'Notification',
         ),
         BottomNavigationBarItem(
           icon: Icon(
@@ -54,6 +54,8 @@ class _VendorNavbarState extends State<VendorNavbar> {
           label: 'Setting',
         ),
       ],
+      selectedItemColor: const Color(0xFFECB920),
+      unselectedItemColor: const Color(0xFF2C2D2F),
       selectedLabelStyle: const TextStyle(
           color: Color(0xFFECB920), fontSize: 10, fontWeight: FontWeight.w600),
       unselectedLabelStyle: const TextStyle(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
+import 'package:fuel_dey_buyers/Screens/SupportingScreens/ratings_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/star_ratings.dart';
 
 class OnTappedStation extends StatefulWidget {
@@ -584,6 +585,46 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),
+                              ),
+                              const SizedBox(height: 10),
+                              const Row(
+                                children: [
+                                  SizedBox(
+                                    width: 68,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "3.9",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF2C2D2F),
+                                          ),
+                                        ),
+                                        StarRatings(rating: 3.9, starSize: 12),
+                                        Text(
+                                          "(79)",
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color(0xFFC9C9C9),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  RatingsBar(
+                                    ratings: [1, 0.6, 0.8, 0.4, 0.2],
+                                    tips: [
+                                      '35 people gave 5 star',
+                                      '20 people gave 4 star',
+                                      '13 people gave 3 star',
+                                      '11 people gave 2 star',
+                                      '4 people gave 1 star',
+                                    ],
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 10),
                               const Row(

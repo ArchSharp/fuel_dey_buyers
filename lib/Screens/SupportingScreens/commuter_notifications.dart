@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:fuel_dey_buyers/Screens/SupportingScreens/notification_card.dart';
+import 'package:fuel_dey_buyers/Screens/SupportingScreens/commuter_notification_card.dart';
 
-class Notifications extends StatefulWidget {
-  const Notifications({super.key});
+class CommuterNotifications extends StatefulWidget {
+  const CommuterNotifications({super.key});
 
   @override
-  State<Notifications> createState() => _NotificationsState();
+  State<CommuterNotifications> createState() => _CommuterNotificationsState();
 }
 
-class _NotificationsState extends State<Notifications> {
+class _CommuterNotificationsState extends State<CommuterNotifications> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -53,7 +53,7 @@ class _NotificationsState extends State<Notifications> {
               ),
             ),
             const SizedBox(height: 15),
-            const NotificationCard(
+            const CommuterNotificationCard(
               title: "Available Total Fuel Station",
               location: "Eti-Osa, Lagos, Nigeria",
               distance: "20 Km",
@@ -62,7 +62,7 @@ class _NotificationsState extends State<Notifications> {
               imgHeight: 44,
             ),
             const SizedBox(height: 15),
-            const NotificationCard(
+            const CommuterNotificationCard(
               title: "Available Total Fuel Station",
               location: "Eti-Osa, Lagos, Nigeria",
               distance: "5 Km",
@@ -71,7 +71,7 @@ class _NotificationsState extends State<Notifications> {
               imgHeight: 44,
             ),
             const SizedBox(height: 15),
-            const NotificationCard(
+            const CommuterNotificationCard(
               title: "Available Total Fuel Station",
               location: "Eti-Osa, Lagos, Nigeria",
               distance: "2 Km",

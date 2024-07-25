@@ -8,6 +8,7 @@ class NearStation extends StatelessWidget {
   final String distance;
   final IconData icon;
   final bool isFuelAvailable;
+  final ValueChanged<int> onIndexChanged;
 
   const NearStation({
     super.key,
@@ -17,6 +18,7 @@ class NearStation extends StatelessWidget {
     required this.distance,
     required this.icon,
     required this.isFuelAvailable,
+    required this.onIndexChanged,
   });
 
   @override
@@ -135,8 +137,7 @@ class NearStation extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, CommuterSignup.routeName);
+                onIndexChanged(1);
               },
             ),
           ),
