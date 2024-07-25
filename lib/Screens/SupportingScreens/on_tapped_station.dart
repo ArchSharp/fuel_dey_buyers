@@ -801,25 +801,31 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               ),
                               const SizedBox(height: 5),
                               const Divider(),
-                              const Row(
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.access_time_outlined,
                                     size: 18,
                                   ),
-                                  SizedBox(width: 6),
-                                  Text(
+                                  const SizedBox(width: 6),
+                                  const Text(
                                     "Your visits and Maps activity",
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
+                                  const Spacer(),
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_right,
+                                    ),
+                                  )
                                 ],
                               ),
-
-                              // const SizedBox(height: 50)
                             ],
                           ),
                         const SizedBox(height: 15),
