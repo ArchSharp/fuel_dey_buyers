@@ -216,7 +216,7 @@ class _MainVendorHomeState extends State<MainVendorHome> {
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(116, 40),
-                  backgroundColor: Colors.black,
+                  backgroundColor: const Color(0xFFECB920),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
@@ -224,7 +224,7 @@ class _MainVendorHomeState extends State<MainVendorHome> {
                 child: const Text(
                   "Update Changes",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFF2C2D2F),
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -256,7 +256,7 @@ class CustomSwitch extends StatelessWidget {
         height: 20.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.0),
-          color: value ? Colors.green : Colors.grey,
+          color: value ? const Color(0xFF018D5C) : Colors.grey,
         ),
         child: Stack(
           children: [

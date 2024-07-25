@@ -29,7 +29,7 @@ class _MainFavoritesState extends State<MainFavorites> {
       children: [
         MainWidget(onIndexChanged: widget.onIndexChanged),
         Positioned(
-          top: mtop,
+          top: mtop * 0.5,
           left: 20,
           // right: 20,
           child: Container(
@@ -37,7 +37,7 @@ class _MainFavoritesState extends State<MainFavorites> {
             width: 30,
             height: 30,
             decoration: const BoxDecoration(
-              color: Color(0xFF2C2D2F),
+              color: Color(0xFF018D5C),
               shape: BoxShape.circle,
             ),
             child: IconButton(
@@ -45,7 +45,7 @@ class _MainFavoritesState extends State<MainFavorites> {
               padding: EdgeInsets.zero,
               icon: const Icon(
                 Icons.keyboard_arrow_left,
-                color: Color(0xFFC1C1C1),
+                color: Colors.white,
               ),
               onPressed: () {
                 widget.onIndexChanged(0);

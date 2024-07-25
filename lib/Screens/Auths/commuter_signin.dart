@@ -200,9 +200,10 @@ class _CommuterSigninState extends State<CommuterSignin> {
                       child: const Text(
                         "Forgot Password?",
                         style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold),
+                          fontSize: 12,
+                          color: Color(0xFF018D5C),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

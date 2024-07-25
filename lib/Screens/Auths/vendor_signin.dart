@@ -227,7 +227,7 @@ class _VendorSigninState extends State<VendorSignin> {
                         "Forgot Password?",
                         style: TextStyle(
                             fontSize: 12,
-                            color: Colors.black,
+                            color: Color(0xFF018D5C),
                             fontWeight: FontWeight.bold),
                       ),
                     ),

@@ -87,7 +87,7 @@ class _FavoritesState extends State<Favorites> {
                                   width: 20,
                                   height: 20,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF2C2D2F),
+                                    color: Color(0xFFECB920),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -95,7 +95,7 @@ class _FavoritesState extends State<Favorites> {
                                     padding: EdgeInsets.zero,
                                     icon: const Icon(
                                       Icons.favorite_outline_outlined,
-                                      color: Color(0xFFC1C1C1),
+                                      color: Color(0xFF2C2D2F),
                                     ),
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
@@ -127,7 +127,7 @@ class _FavoritesState extends State<Favorites> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(78, 32),
-                                    backgroundColor: const Color(0xFF2C2D2F),
+                                    backgroundColor: const Color(0xFFECB920),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -141,12 +141,13 @@ class _FavoritesState extends State<Favorites> {
                                       Icon(
                                         Icons.edit,
                                         size: 18,
-                                        color: Color(0xFFF8F8F8),
+                                        color: Color(0xFF2C2D2F),
                                       ),
                                       Text(
                                         "Edit",
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 12),
+                                            color: Color(0xFF2C2D2F),
+                                            fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -159,7 +160,7 @@ class _FavoritesState extends State<Favorites> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(96, 32),
-                                    backgroundColor: const Color(0xFF2C2D2F),
+                                    backgroundColor: const Color(0xFF018D5C),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -211,7 +212,7 @@ class _FavoritesState extends State<Favorites> {
                                   width: 28,
                                   height: 28,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF2C2D2F),
+                                    color: Color(0xFFECB920),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -219,7 +220,7 @@ class _FavoritesState extends State<Favorites> {
                                     padding: EdgeInsets.zero,
                                     icon: const Icon(
                                       Icons.favorite_outline_outlined,
-                                      color: Color(0xFFC1C1C1),
+                                      color: Color(0xFF2C2D2F),
                                     ),
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
@@ -255,7 +256,7 @@ class _FavoritesState extends State<Favorites> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(54, 32),
-                                    backgroundColor: const Color(0xFF2C2D2F),
+                                    backgroundColor: const Color(0xFF018D5C),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -296,7 +297,7 @@ class _FavoritesState extends State<Favorites> {
                                   width: 28,
                                   height: 28,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF2C2D2F),
+                                    color: Color(0xFFECB920),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -304,7 +305,7 @@ class _FavoritesState extends State<Favorites> {
                                     padding: EdgeInsets.zero,
                                     icon: const Icon(
                                       Icons.favorite_outline_outlined,
-                                      color: Color(0xFFC1C1C1),
+                                      color: Color(0xFF2C2D2F),
                                     ),
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
@@ -340,7 +341,7 @@ class _FavoritesState extends State<Favorites> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(54, 32),
-                                    backgroundColor: const Color(0xFF2C2D2F),
+                                    backgroundColor: const Color(0xFF018D5C),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -381,7 +382,7 @@ class _FavoritesState extends State<Favorites> {
                                   width: 28,
                                   height: 28,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF2C2D2F),
+                                    color: Color(0xFFECB920),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -389,7 +390,7 @@ class _FavoritesState extends State<Favorites> {
                                     padding: EdgeInsets.zero,
                                     icon: const Icon(
                                       Icons.favorite_outline_outlined,
-                                      color: Color(0xFFC1C1C1),
+                                      color: Color(0xFF2C2D2F),
                                     ),
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
@@ -425,7 +426,7 @@ class _FavoritesState extends State<Favorites> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(54, 32),
-                                    backgroundColor: const Color(0xFF2C2D2F),
+                                    backgroundColor: const Color(0xFF018D5C),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -466,7 +467,7 @@ class _FavoritesState extends State<Favorites> {
                                   width: 28,
                                   height: 28,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF2C2D2F),
+                                    color: Color(0xFFECB920),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -474,7 +475,7 @@ class _FavoritesState extends State<Favorites> {
                                     padding: EdgeInsets.zero,
                                     icon: const Icon(
                                       Icons.favorite_outline_outlined,
-                                      color: Color(0xFFC1C1C1),
+                                      color: Color(0xFF2C2D2F),
                                     ),
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
@@ -510,7 +511,7 @@ class _FavoritesState extends State<Favorites> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(54, 32),
-                                    backgroundColor: const Color(0xFF2C2D2F),
+                                    backgroundColor: const Color(0xFF018D5C),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -551,7 +552,7 @@ class _FavoritesState extends State<Favorites> {
                                   width: 28,
                                   height: 28,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF2C2D2F),
+                                    color: Color(0xFFECB920),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -559,7 +560,7 @@ class _FavoritesState extends State<Favorites> {
                                     padding: EdgeInsets.zero,
                                     icon: const Icon(
                                       Icons.favorite_outline_outlined,
-                                      color: Color(0xFFC1C1C1),
+                                      color: Color(0xFF2C2D2F),
                                     ),
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
@@ -595,7 +596,7 @@ class _FavoritesState extends State<Favorites> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(54, 32),
-                                    backgroundColor: const Color(0xFF2C2D2F),
+                                    backgroundColor: const Color(0xFF018D5C),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -636,7 +637,7 @@ class _FavoritesState extends State<Favorites> {
                                   width: 28,
                                   height: 28,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF2C2D2F),
+                                    color: Color(0xFFECB920),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -644,7 +645,7 @@ class _FavoritesState extends State<Favorites> {
                                     padding: EdgeInsets.zero,
                                     icon: const Icon(
                                       Icons.favorite_outline_outlined,
-                                      color: Color(0xFFC1C1C1),
+                                      color: Color(0xFF2C2D2F),
                                     ),
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
@@ -680,7 +681,7 @@ class _FavoritesState extends State<Favorites> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(54, 32),
-                                    backgroundColor: const Color(0xFF2C2D2F),
+                                    backgroundColor: const Color(0xFF018D5C),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -721,7 +722,7 @@ class _FavoritesState extends State<Favorites> {
                                   width: 28,
                                   height: 28,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF2C2D2F),
+                                    color: Color(0xFFECB920),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
@@ -729,7 +730,7 @@ class _FavoritesState extends State<Favorites> {
                                     padding: EdgeInsets.zero,
                                     icon: const Icon(
                                       Icons.favorite_outline_outlined,
-                                      color: Color(0xFFC1C1C1),
+                                      color: Color(0xFF2C2D2F),
                                     ),
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
@@ -765,7 +766,7 @@ class _FavoritesState extends State<Favorites> {
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(54, 32),
-                                    backgroundColor: const Color(0xFF2C2D2F),
+                                    backgroundColor: const Color(0xFF018D5C),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),

@@ -324,15 +324,17 @@ class _VendorSignupState extends State<VendorSignup> {
                         children: <Widget>[
                           Checkbox(
                             value: _isAgreeTermsCondition,
-                            checkColor: Colors.white,
-                            activeColor: _isAgreeTermsCondition
-                                ? Colors.black
-                                : Colors.white,
+                            checkColor: const Color(0xFF018D5C),
+                            activeColor: Colors.white,
+                            side: BorderSide(
+                              width: 2,
+                              color: _isAgreeTermsCondition
+                                  ? const Color(0xFF018D5C)
+                                  : Colors.grey.shade500,
+                            ),
                             onChanged: (bool? value) {
-                              // Handle the state change here
                               setState(() {
-                                _isAgreeTermsCondition =
-                                    !_isAgreeTermsCondition;
+                                _isAgreeTermsCondition = value ?? false;
                               });
                             },
                           ),
@@ -348,7 +350,7 @@ class _VendorSignupState extends State<VendorSignup> {
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.blue,
+                                      color: Color(0xFF018D5C),
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
@@ -367,7 +369,7 @@ class _VendorSignupState extends State<VendorSignup> {
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.blue,
+                                      color: Color(0xFF018D5C),
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
@@ -394,7 +396,8 @@ class _VendorSignupState extends State<VendorSignup> {
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 55),
-                          backgroundColor: const Color(0xFFDEB20A),
+                          backgroundColor: const Color(0xFFDEB20A)
+                              .withOpacity(_isAgreeTermsCondition ? 1 : 0.3),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
                           ),

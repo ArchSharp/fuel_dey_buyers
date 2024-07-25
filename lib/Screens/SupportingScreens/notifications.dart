@@ -26,7 +26,10 @@ class _NotificationsState extends State<Notifications> {
               child: Text(
                 "Notification",
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFECB920)),
               ),
             ),
             const SizedBox(height: 5),

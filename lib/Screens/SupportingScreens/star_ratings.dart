@@ -18,13 +18,13 @@ class StarRatings extends StatelessWidget {
       if (i < rating.floor()) {
         icon = const Icon(
           Icons.star_rounded,
-          color: Color(0xFF2C2D2F),
+          color: Color(0xFFECB920),
           size: 27,
         );
       } else if (i < rating && rating % 1 != 0) {
         icon = const Icon(
           Icons.star_half_rounded,
-          color: Color(0xFF2C2D2F),
+          color: Color(0xFFECB920),
           size: 27,
         );
       } else {

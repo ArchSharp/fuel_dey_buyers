@@ -107,10 +107,8 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     children: [
                                       const Icon(
                                         Icons.circle, // or Icons.brightness_1
-                                        size:
-                                            10.0, // You can adjust the size as needed
-                                        color: Colors
-                                            .black, // You can change the color as needed
+                                        size: 10.0,
+                                        color: Color(0xFFA9E27C),
                                       ),
                                       const SizedBox(width: 10),
                                       Text(
@@ -144,7 +142,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 width: 30,
                                 height: 30,
                                 decoration: const BoxDecoration(
-                                  color: Color(0xFF2C2D2F),
+                                  color: Color(0xFF018D5C),
                                   shape: BoxShape.circle,
                                 ),
                                 child: IconButton(
@@ -152,7 +150,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                   padding: EdgeInsets.zero,
                                   icon: const Icon(
                                     Icons.ios_share_outlined,
-                                    color: Color(0xFFC1C1C1),
+                                    color: Colors.white,
                                   ),
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
@@ -165,7 +163,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 width: 30,
                                 height: 30,
                                 decoration: const BoxDecoration(
-                                  color: Color(0xFF2C2D2F),
+                                  color: Color(0xFF018D5C),
                                   shape: BoxShape.circle,
                                 ),
                                 child: IconButton(
@@ -173,7 +171,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                   padding: EdgeInsets.zero,
                                   icon: const Icon(
                                     Icons.favorite_outline_outlined,
-                                    color: Color(0xFFC1C1C1),
+                                    color: Colors.white,
                                   ),
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
@@ -495,7 +493,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(69, 32),
-                                  backgroundColor: Colors.black,
+                                  backgroundColor: const Color(0xFF018D5C),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
                                   ),
@@ -522,7 +520,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(69, 32),
-                                  backgroundColor: const Color(0xFFC1C1C1),
+                                  backgroundColor: const Color(0xFFE15623),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
                                   ),
@@ -531,12 +529,12 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                   children: [
                                     const Text(
                                       "Gas",
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                     if (height >= 0.55)
                                       const Text(
                                         "# 1100",
-                                        style: TextStyle(color: Colors.black),
+                                        style: TextStyle(color: Colors.white),
                                       )
                                   ],
                                 ),
@@ -549,7 +547,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(69, 32),
-                                  backgroundColor: Colors.black,
+                                  backgroundColor: const Color(0xFF018D5C),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
                                   ),
@@ -790,7 +788,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                           },
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(double.infinity, 52),
-                            backgroundColor: const Color(0xFF2C2D2F),
+                            backgroundColor: const Color(0xFF018D5C),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
                             ),
@@ -807,7 +805,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 angle: 50 * (3.141592653589793 / 180),
                                 child: const Icon(
                                   Icons.navigation_outlined,
-                                  color: Color(0xFFC9C9C9),
+                                  color: Colors.white,
                                   size: 30,
                                 ),
                               ),

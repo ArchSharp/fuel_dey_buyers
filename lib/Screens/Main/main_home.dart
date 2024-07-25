@@ -170,42 +170,104 @@ class _MainHomeState extends State<MainHome> {
     return Stack(
       children: [
         MainWidget(onIndexChanged: _updateHomeIndex),
-        Positioned(
-          top: mtop,
-          left: 20,
-          right: 20,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  offset: Offset(0, 2),
-                ),
-              ],
+        if (_homeIndex == 0)
+          Positioned(
+            top: 0, //mtop,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(0),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hello Yemi",
+                        style: TextStyle(
+                            color: Color(0xFF2C2D2F),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            color: Color(0xFFA9E27C),
+                            size: 10,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Lekki",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: Color(0xFF2C2D2F),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.grey[300],
+                    backgroundImage:
+                        const AssetImage('assets/images/commuter.png'),
+                  ),
+                ],
+              ),
             ),
-            child: TextField(
-              controller: _searchController,
+          ),
+        if (_homeIndex != 0)
+          Positioned(
+            top: mtop * 0.3,
+            left: 20,
+            right: 20,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: TextField(
+                controller: _searchController,
 
-              // focusNode: _searchFocusNode,
-              onTap: () {
-                Navigator.of(context).pushNamed(Search.routeName,
-                    arguments: 'Passing data from SignIn');
-              },
-              decoration: InputDecoration(
-                hintText: 'e.g Oando...',
-                border: InputBorder.none,
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {},
+                // focusNode: _searchFocusNode,
+                onTap: () {
+                  Navigator.of(context).pushNamed(Search.routeName,
+                      arguments: 'Passing data from SignIn');
+                },
+                decoration: InputDecoration(
+                  hintText: 'e.g Oando...',
+                  border: InputBorder.none,
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {},
+                  ),
                 ),
               ),
             ),
           ),
-        ),
         // const Spacer(),
         _homeIndex == 0
             ? const AllNearFuelStations()

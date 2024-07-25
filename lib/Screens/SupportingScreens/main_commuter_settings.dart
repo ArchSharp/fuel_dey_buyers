@@ -47,7 +47,7 @@ class MainCommuterSettings extends StatelessWidget {
                     height: 44,
                     padding: const EdgeInsets.all(0),
                     decoration: const BoxDecoration(
-                      color: Color(0xFF2C2D2F),
+                      color: Color(0xFFECB920),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -55,7 +55,7 @@ class MainCommuterSettings extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       icon: const Icon(
                         Icons.photo_camera_outlined,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                       onPressed: () {
                         Navigator.pushReplacementNamed(
@@ -121,7 +121,7 @@ class MainCommuterSettings extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.all(0),
             fixedSize: const Size(78, 32),
-            backgroundColor: const Color(0xFF2C2D2F),
+            backgroundColor: const Color(0xFFECB920),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
             ),
@@ -133,11 +133,14 @@ class MainCommuterSettings extends StatelessWidget {
               Icon(
                 Icons.edit,
                 size: 18,
-                color: Color(0xFFF8F8F8),
+                color: Color(0xFF2C2D2F),
               ),
               Text(
                 "Edit",
-                style: TextStyle(color: Colors.white, fontSize: 12),
+                style: TextStyle(
+                  color: Color(0xFF2C2D2F),
+                  fontSize: 12,
+                ),
               ),
             ],
           ),

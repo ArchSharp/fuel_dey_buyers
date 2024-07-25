@@ -204,7 +204,7 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
                         "Try another way",
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.black,
+                          color: Color(0xFF018D5C),
                           fontWeight: FontWeight.bold,
                         ),
                       ),

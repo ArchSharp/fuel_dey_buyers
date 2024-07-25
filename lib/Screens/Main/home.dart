@@ -25,13 +25,15 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _navbarIndex == 0
-          ? const MainHome()
-          : _navbarIndex == 1
-              ? const Saved()
-              : _navbarIndex == 2
-                  ? const Notifications()
-                  : const CommuterSettings(),
+      body: SafeArea(
+        child: _navbarIndex == 0
+            ? const MainHome()
+            : _navbarIndex == 1
+                ? const Saved()
+                : _navbarIndex == 2
+                    ? const Notifications()
+                    : const CommuterSettings(),
+      ),
       bottomNavigationBar: CommuterNavbar(onIndexChanged: _updateNavbarIndex),
     );
   }

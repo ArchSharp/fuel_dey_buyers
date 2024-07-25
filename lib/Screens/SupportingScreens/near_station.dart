@@ -28,7 +28,9 @@ class NearStation extends StatelessWidget {
       // ),
       height: 70,
       decoration: BoxDecoration(
-        color: isFuelAvailable ? const Color(0xFFC9C9C9) : Colors.grey[600],
+        color: isFuelAvailable
+            ? const Color(0xFF018D5C)
+            : const Color(0xFF018D5C).withOpacity(0.5),
         // border: Border.all(
         //   color: Colors.black,
         //   width: 2,
@@ -46,6 +48,7 @@ class NearStation extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
+                  color: Colors.white,
                 ),
               ),
               Text(
@@ -53,6 +56,7 @@ class NearStation extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
               Row(
@@ -60,6 +64,7 @@ class NearStation extends StatelessWidget {
                   Icon(
                     icon,
                     size: 16,
+                    color: Colors.white,
                   ),
                   const SizedBox(width: 5),
                   Text(
@@ -67,6 +72,7 @@ class NearStation extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
+                      color: Colors.white,
                     ),
                   )
                 ],
@@ -96,6 +102,7 @@ class NearStation extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
+                  color: Colors.white,
                 ),
               ),
               Text(
@@ -103,6 +110,7 @@ class NearStation extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
             ],
@@ -112,7 +120,7 @@ class NearStation extends StatelessWidget {
             width: 30,
             height: 30,
             decoration: const BoxDecoration(
-              color: Color(0xFFD9D9D9),
+              color: Colors.white,
               shape: BoxShape.circle,
             ),
             child: IconButton(
@@ -122,7 +130,7 @@ class NearStation extends StatelessWidget {
                 quarterTurns: 2,
                 child: Icon(
                   Icons.subdirectory_arrow_left,
-                  color: Color(0xFF9A9898),
+                  color: Color(0xFF018D5C),
                   size: 20,
                 ),
               ),

@@ -108,7 +108,7 @@ class _DirectionsState extends State<Directions> {
                                           height: 26,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
-                                            color: const Color(0xFF2C2D2F),
+                                            color: const Color(0xFF018D5C),
                                             borderRadius:
                                                 BorderRadius.circular(4),
                                           ),
@@ -127,7 +127,7 @@ class _DirectionsState extends State<Directions> {
                                           height: 26,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
-                                            color: const Color(0xFF2C2D2F),
+                                            color: const Color(0xFF018D5C),
                                             borderRadius:
                                                 BorderRadius.circular(4),
                                           ),
@@ -266,7 +266,7 @@ class _DirectionsState extends State<Directions> {
                                                       decoration:
                                                           const BoxDecoration(
                                                         color:
-                                                            Color(0xFF2C2D2F),
+                                                            Color(0xFF018D5C),
                                                         shape: BoxShape.circle,
                                                       ),
                                                       child: index == 0

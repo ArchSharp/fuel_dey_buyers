@@ -85,12 +85,14 @@ class _SearchState extends State<Search> {
                       Icon(
                         Icons.location_on_outlined,
                         size: 16,
+                        color: Color(0xFF018D5C),
                       ),
                       Text(
                         "2 km",
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
+                          color: Color(0xFF018D5C),
                         ),
                       ),
                     ],

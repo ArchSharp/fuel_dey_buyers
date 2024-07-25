@@ -37,6 +37,7 @@ class _SavedState extends State<Saved> {
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
+                          color: Color(0xFFECB920),
                         ),
                       ),
                       ElevatedButton(
@@ -46,7 +47,7 @@ class _SavedState extends State<Saved> {
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(0),
                           fixedSize: const Size(79, 32),
-                          backgroundColor: const Color(0xFF2C2D2F),
+                          backgroundColor: const Color(0xFFECB920),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -65,23 +66,29 @@ class _SavedState extends State<Saved> {
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                    decoration: const BoxDecoration(color: Color(0xFFE7E3E3)),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFECB920).withOpacity(0.6),
+                    ),
                     child: Row(
                       children: [
                         Container(
                           padding: const EdgeInsets.all(0),
                           width: 28,
                           height: 28,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF2C2D2F),
+                          decoration: BoxDecoration(
+                            // color: Color(0xFF2C2D2F),
                             shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 1,
+                              color: const Color(0xFF2C2D2F),
+                            ),
                           ),
                           child: IconButton(
                             iconSize: 20,
                             padding: EdgeInsets.zero,
                             icon: const Icon(
                               Icons.home_outlined,
-                              color: Color(0xFFC1C1C1),
+                              color: Color(0xFF2C2D2F),
                             ),
                             onPressed: () {
                               Navigator.pushReplacementNamed(
@@ -118,7 +125,10 @@ class _SavedState extends State<Saved> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     children: <Widget>[
-                      const Icon(Icons.favorite_outline),
+                      const Icon(
+                        Icons.favorite_outline,
+                        color: Color(0xFF018D5C),
+                      ),
                       const SizedBox(width: 12),
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,7 +188,10 @@ class _SavedState extends State<Saved> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     children: <Widget>[
-                      const Icon(Icons.outlined_flag),
+                      const Icon(
+                        Icons.outlined_flag,
+                        color: Color(0xFFE15623),
+                      ),
                       const SizedBox(width: 12),
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -236,7 +249,10 @@ class _SavedState extends State<Saved> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     children: <Widget>[
-                      const Icon(Icons.label_outline_rounded),
+                      const Icon(
+                        Icons.label_outline_rounded,
+                        color: Color(0xFF5F7044),
+                      ),
                       const SizedBox(width: 12),
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,7 +310,10 @@ class _SavedState extends State<Saved> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     children: <Widget>[
-                      const Icon(Icons.star_outline_rounded),
+                      const Icon(
+                        Icons.star_outline_rounded,
+                        color: Color(0xFFD19525),
+                      ),
                       const SizedBox(width: 12),
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,15 +379,19 @@ class _SavedState extends State<Saved> {
                             width: 30,
                             height: 30,
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(width: 1)),
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 1,
+                                color: const Color(0xFF018D5C),
+                              ),
+                            ),
                             child: IconButton(
                               iconSize: 14,
                               padding: EdgeInsets.zero,
                               icon: const Icon(
                                 Icons.timeline_outlined,
-                                color: Colors.black,
+                                color: Color(0xFF018D5C),
                               ),
                               onPressed: () {
                                 Navigator.pushReplacementNamed(
@@ -394,15 +417,19 @@ class _SavedState extends State<Saved> {
                             width: 30,
                             height: 30,
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(width: 1)),
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 1,
+                                color: const Color(0xFF018D5C),
+                              ),
+                            ),
                             child: IconButton(
                               iconSize: 14,
                               padding: EdgeInsets.zero,
                               icon: const Icon(
                                 Icons.map_outlined,
-                                color: Colors.black,
+                                color: Color(0xFF018D5C),
                               ),
                               onPressed: () {
                                 Navigator.pushReplacementNamed(
