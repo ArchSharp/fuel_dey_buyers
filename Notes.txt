@@ -237,3 +237,20 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+
+I added below to build.graddle file that is directly inside android folder in order to build the apk by running "flutter build apk"
+
+buildscript {
+    ext.kotlin_version = '1.9.0' // Set the Kotlin version here
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.0.2" // Ensure this matches your required Gradle plugin version
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // Add other classpath dependencies here if needed
+    }
+}
