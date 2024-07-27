@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/ratings_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/star_ratings.dart';
 
