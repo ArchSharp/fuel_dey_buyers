@@ -27,14 +27,17 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: SafeArea(
         child: _navbarIndex == 0
-            ? const MainHome()
+            ? MainHome(onIndexChanged: _updateNavbarIndex)
             : _navbarIndex == 1
                 ? const Saved()
                 : _navbarIndex == 2
                     ? const CommuterNotifications()
                     : const CommuterSettings(),
       ),
-      bottomNavigationBar: CommuterNavbar(onIndexChanged: _updateNavbarIndex),
+      bottomNavigationBar: CommuterNavbar(
+        currentIndex: _navbarIndex,
+        onIndexChanged: _updateNavbarIndex,
+      ),
     );
   }
 }

@@ -12,7 +12,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 const LatLng currentLocation = LatLng(25.1193, 55.3773);
 
 class MainHome extends StatefulWidget {
-  const MainHome({super.key});
+  final ValueChanged<int> onIndexChanged;
+  const MainHome({
+    super.key,
+    required this.onIndexChanged,
+  });
 
   @override
   State<MainHome> createState() => _MainHomeState();
@@ -240,11 +244,16 @@ class _MainHomeState extends State<MainHome> {
                       ),
                     ],
                   ),
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.grey[300],
-                    backgroundImage:
-                        const AssetImage('assets/images/commuter.png'),
+                  GestureDetector(
+                    onTap: () {
+                      widget.onIndexChanged(3);
+                    },
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.grey[300],
+                      backgroundImage:
+                          const AssetImage('assets/images/commuter.png'),
+                    ),
                   ),
                 ],
               ),

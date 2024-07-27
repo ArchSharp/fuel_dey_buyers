@@ -488,10 +488,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                             children: [
                               // const SizedBox(width: 10),
                               ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, CommuterSignup.routeName);
-                                },
+                                onPressed: () {},
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(69, 32),
                                   backgroundColor: const Color(0xFF018D5C),
@@ -515,10 +512,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               ),
                               const SizedBox(width: 10),
                               ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, CommuterSignup.routeName);
-                                },
+                                onPressed: () {},
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(69, 32),
                                   backgroundColor: const Color(0xFFE15623),
@@ -542,10 +536,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               ),
                               const SizedBox(width: 10),
                               ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, CommuterSignup.routeName);
-                                },
+                                onPressed: () {},
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(69, 32),
                                   backgroundColor: const Color(0xFF018D5C),
@@ -796,7 +787,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  StarRatings(rating: 3.5),
+                                  StarRatings(rating: 4),
                                 ],
                               ),
                               const SizedBox(height: 5),

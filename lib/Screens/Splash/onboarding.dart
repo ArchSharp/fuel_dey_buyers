@@ -64,128 +64,145 @@ class _OnboardingState extends State<Onboarding> {
             child: Container(
               color: const Color(0XFFDEB20A),
               // height: deviceHeight / 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+              child: Stack(
+                // mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  // SizedBox(
+                  // height: _currentPage < 2
+                  //     ? deviceHeight * 0.18
+                  //     : deviceHeight * 0.20,
+                  // child:
                   SizedBox(
-                    height: _currentPage < 2
-                        ? deviceHeight * 0.15
-                        : deviceHeight * 0.18,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentPage = index;
-                        });
-                      },
-                      itemCount: _contents.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Column(
-                            children: [
-                              Text(
-                                _contents[index].title,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                    height: deviceHeight * 0.4 - 100,
+                    child: Center(
+                      child: PageView.builder(
+                        controller: _pageController,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _currentPage = index;
+                          });
+                        },
+                        itemCount: _contents.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _contents[index].title,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                _contents[index].description,
-                                style: const TextStyle(fontSize: 16),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                                Text(
+                                  _contents[index].description,
+                                  style: const TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(_contents.length, (index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentPage == index
-                              ? Colors.black
-                              : Colors.grey,
-                        ),
-                      );
-                    }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: _currentPage < 2
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  // Handle skip button press
-                                },
-                                child: const Text(
-                                  "Skip",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (_currentPage < _contents.length - 1) {
-                                    _pageController.nextPage(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      curve: Curves.easeIn,
-                                    );
-                                    print('Current Page: $_currentPage');
-                                  } else {
-                                    // Handle finish button press
-                                  }
-                                },
-                                child: Container(
-                                  width: 35,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                    color: const Color(
-                                        0xFFFFFDF4), //Colors.black.withOpacity(0.8),
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: const Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: Colors.black,
-                                    size: 15,
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
-                        : ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                  context, Welcome.routeName);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: Size(exploreBtnWidth, 55),
-                              backgroundColor:
-                                  const Color(0xFFFFFDF4), // Colors.black,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            child: const Text(
-                              "Get Started",
-                              style: TextStyle(color: Colors.black),
-                            ),
+                  // ),
+                  Positioned(
+                    bottom: 85,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(_contents.length, (index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _currentPage == index
+                                ? Colors.black
+                                : Colors.grey,
                           ),
+                        );
+                      }),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: _currentPage < 2
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    // Handle skip button press
+                                  },
+                                  child: const Text(
+                                    "Skip",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_currentPage < _contents.length - 1) {
+                                      _pageController.nextPage(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeIn,
+                                      );
+                                      print('Current Page: $_currentPage');
+                                    } else {
+                                      // Handle finish button press
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 35,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      color: const Color(
+                                          0xFFFFFDF4), //Colors.black.withOpacity(0.8),
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.black,
+                                      size: 15,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          : ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(
+                                    context, Welcome.routeName);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                fixedSize: Size(exploreBtnWidth, 55),
+                                backgroundColor:
+                                    const Color(0xFFFFFDF4), // Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                              child: const Text(
+                                "Get Started",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                    ),
                   ),
                 ],
               ),
