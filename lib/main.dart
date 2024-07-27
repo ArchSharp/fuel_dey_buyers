@@ -15,6 +15,7 @@ import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Main/search.dart';
 import 'package:fuel_dey_buyers/Screens/Main/vendor_home.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/app_loading.dart';
+import 'package:fuel_dey_buyers/Screens/Splash/logo_splash.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/onboarding.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/welcome.dart';
 import 'package:fuel_dey_buyers/Screens/Main/home.dart';
@@ -74,6 +75,7 @@ class MyApp extends StatelessWidget {
         ResetPassword.routeName: (ctx) => const ResetPassword(),
         Search.routeName: (ctx) => const Search(),
         VendorHome.routeName: (ctx) => const VendorHome(),
+        LogoSplash.routeName: (ctx) => const LogoSplash(),
       },
     );
   }

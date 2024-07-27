@@ -48,17 +48,18 @@ class _CommuterSignupState extends State<CommuterSignup> {
 
     // Create an instance of UserPayload
     CommuterPayload userPayload = CommuterPayload(
-      email: email,
-      password: password,
-      firstname: firstname,
-      lastname: lastname,
-      middlename: mname,
-      phonenumber: phoneNumber,
+      email: _emailController.text,
+      password: _passwordController.text,
+      firstname: _firstNameController.text,
+      lastname: _lastNameController.text,
+      // middlename: mname,
+      phonenumber: "+234${_phoneController.text}",
     );
 
     try {
       store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result = await signupFn(userPayload);
+      print("payload: $userPayload");
+      Tuple2<int, String> result = await signupCommuterFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
@@ -69,6 +70,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
           setState(() {
             isButtonClicked = true;
             errorText = '';
+            isLoading = false;
           });
 
           // You might want to navigate to another screen or perform user registration
@@ -104,9 +106,9 @@ class _CommuterSignupState extends State<CommuterSignup> {
     _firstNameController.addListener(() {
       _clearErrorIfTextPresent('firstname', _firstNameController);
     });
-    _middleNameController.addListener(() {
-      _clearErrorIfTextPresent('middlename', _middleNameController);
-    });
+    // _middleNameController.addListener(() {
+    //   _clearErrorIfTextPresent('middlename', _middleNameController);
+    // });
     _emailController.addListener(() {
       _clearErrorIfTextPresent('email', _emailController);
     });
@@ -133,9 +135,9 @@ class _CommuterSignupState extends State<CommuterSignup> {
   final Map<String, String?> _errors = {
     'lastname': null,
     'firstname': null,
-    'middlename': null,
+    // 'middlename': null,
     'phone': null,
-    'address': null,
+    // 'address': null,
     'email': null,
     'password': null,
   };
@@ -489,9 +491,9 @@ class _CommuterSignupState extends State<CommuterSignup> {
       _errors['firstname'] = _firstNameController.text.isEmpty
           ? 'Please enter your first name'
           : null;
-      _errors['middlename'] = _middleNameController.text.isEmpty
-          ? 'Please enter your middle name'
-          : null;
+      // _errors['middlename'] = _middleNameController.text.isEmpty
+      //     ? 'Please enter your middle name'
+      //     : null;
       _errors['phone'] = _phoneController.text.isEmpty
           ? 'Please enter your phone number'
           : null;
@@ -505,7 +507,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
     });
 
     if (_errors.values.every((error) => error == null)) {
-      myNotificationBar(context, 'Form submitted', 'success');
+      handleSignUp();
     }
   }
 

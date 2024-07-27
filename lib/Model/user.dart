@@ -5,7 +5,7 @@ class CommuterPayload {
   String password;
   String firstname;
   String lastname;
-  String middlename;
+  // String middlename;
   String phonenumber;
 
   CommuterPayload({
@@ -13,7 +13,7 @@ class CommuterPayload {
     required this.password,
     required this.firstname,
     required this.lastname,
-    required this.middlename,
+    // required this.middlename,
     required this.phonenumber,
   });
 
@@ -24,8 +24,8 @@ class CommuterPayload {
       "password": password,
       "firstname": firstname,
       "lastname": lastname,
-      "middle_name": middlename,
-      "phone_number": phonenumber,
+      // "middle_name": middlename,
+      "phonenumber": phonenumber,
     };
   }
 
@@ -36,8 +36,8 @@ class CommuterPayload {
       password: json['password'],
       firstname: json['firstname'],
       lastname: json['lastname'],
-      middlename: json['middle_name'],
-      phonenumber: json['phone_number'],
+      // middlename: json['middle_name'],
+      phonenumber: json['phonenumber'],
     );
   }
 }

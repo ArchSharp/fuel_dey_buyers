@@ -20,6 +20,16 @@ class CommuterSignin extends StatefulWidget {
 class _CommuterSigninState extends State<CommuterSignin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController dateController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _revealPassword = false;
+
+  final Map<String, String?> _errors = {
+    'email': null,
+    'password': null,
+  };
+
   String email = '';
   String password = '';
 
@@ -29,26 +39,26 @@ class _CommuterSigninState extends State<CommuterSignin> {
   bool isLoading = false;
   late Tuple2<int, String> result;
 
-  Future<void> handleSignUp() async {
+  Future<void> handleSignIn() async {
     setState(() {
       isLoading = true;
     });
 
     // Create an instance of UserPayload
     UserSignInPayload userPayload = UserSignInPayload(
-      email: email,
-      password: password,
+      email: _emailController.text,
+      password: _passwordController.text,
     );
 
     try {
       store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result = await signinFn(userPayload);
+      print("payload: $userPayload");
+      Tuple2<int, String> result = await signInCommuterFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => const OTPScreen()));
             myNotificationBar(context, result.item2, "success");
+            Navigator.pushReplacementNamed(context, Home.routeName);
           }
           setState(() {
             isButtonClicked = true;
@@ -73,16 +83,6 @@ class _CommuterSigninState extends State<CommuterSignin> {
       });
     }
   }
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  bool _revealPassword = false;
-
-  final Map<String, String?> _errors = {
-    'email': null,
-    'password': null,
-  };
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -439,8 +439,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
     });
 
     if (_errors.values.every((error) => error == null)) {
-      myNotificationBar(context, 'Form submitted', 'success');
-      Navigator.pushReplacementNamed(context, Home.routeName);
+      handleSignIn();
     }
   }
 

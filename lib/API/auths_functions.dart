@@ -47,6 +47,46 @@ Future<Tuple2<int, String>> signinFn(UserSignInPayload payload) async {
   return result;
 }
 
+Future<Tuple2<int, String>> signInCommuterFn(UserSignInPayload payload) async {
+  String apiUrl = '$baseUrl/api/SignInCommuter';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_API_KEY",
+  };
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.post(Uri.parse(apiUrl),
+        headers: headers, body: json.encode(payload));
+
+    final Map<String, dynamic> data = json.decode(response.body);
+    // print("object $data");
+    if (response.statusCode == 200) {
+      // print(data["extrainfo"]);
+      store.dispatch(UpdateUserAction(data['body']));
+      store.dispatch(SaveUserToken(data["extrainfo"]));
+      result = const Tuple2(1, "Login success");
+    } else {
+      // Handle errors
+      print(
+          'Request failed with status: ${response.statusCode}, responsePayload: $data');
+      String msg = data['body'];
+      if (msg.toLowerCase() == "please verify your email") {
+        result = Tuple2(2, data['body']);
+      } else if (msg.toLowerCase() == "incorrect password detected") {
+        result = Tuple2(3, data['body']);
+      } else if (msg.toLowerCase() == "user not found") {
+        result = Tuple2(4, data['body']);
+      }
+    }
+  } catch (e) {
+    // Handle exceptions
+    print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
 Future<Tuple2<int, String>> signupFn(CommuterPayload payload) async {
   String apiUrl = '$baseUrl/api/NewUser';
   final Map<String, String> headers = {
@@ -62,6 +102,46 @@ Future<Tuple2<int, String>> signupFn(CommuterPayload payload) async {
         headers: headers, body: json.encode(payload.toJson()));
 
     final Map<String, dynamic> data = json.decode(response.body);
+
+    print('response: $data');
+    if (response.statusCode == 201) {
+      // print(data);
+      result = const Tuple2(1, "Account created succesfully");
+    } else {
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      // print('check error: $data');
+      if (data['error'].toString().contains("parsing time")) {
+        result = const Tuple2(2, 'There is error in date');
+      } else {
+        result = Tuple2(3, data['body']);
+      }
+    }
+  } catch (e) {
+    // Handle exceptions
+    // print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> signupCommuterFn(CommuterPayload payload) async {
+  String apiUrl = '$baseUrl/api/NewCommuter';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_API_KEY",
+  };
+
+  // print(payload);
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.post(Uri.parse(apiUrl),
+        headers: headers, body: json.encode(payload.toJson()));
+
+    final Map<String, dynamic> data = json.decode(response.body);
+
+    print('response: $data');
     if (response.statusCode == 201) {
       // print(data);
       result = const Tuple2(1, "Account created succesfully");
