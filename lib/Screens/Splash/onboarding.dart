@@ -111,25 +111,27 @@ class _OnboardingState extends State<Onboarding> {
                   ),
                   // ),
                   Positioned(
-                    bottom: 85,
+                    bottom: _currentPage < 2 ? 90 : 110,
                     left: 0,
                     right: 0,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(_contents.length, (index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: _currentPage == index
-                                ? Colors.black
-                                : Colors.grey,
-                          ),
-                        );
-                      }),
-                    ),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children:
+                            _buildIndicator(_currentPage, _contents.length)
+                        // List.generate(_contents.length, (index) {
+                        //   return Container(
+                        //     margin: const EdgeInsets.symmetric(horizontal: 5),
+                        //     width: 8,
+                        //     height: 8,
+                        //     decoration: BoxDecoration(
+                        //       shape: BoxShape.circle,
+                        //       color: _currentPage == index
+                        //           ? Colors.black
+                        //           : Colors.grey,
+                        //     ),
+                        //   );
+                        // }),
+                        ),
                   ),
                   Positioned(
                     bottom: 0,
@@ -286,4 +288,66 @@ class CurvedTopClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) {
     return false;
   }
+}
+
+List<Widget> _buildIndicator(int activePage, int pageCount) {
+  final indicators = <Widget>[];
+
+  for (var i = 0; i < pageCount; i++) {
+    if (activePage == i) {
+      indicators.add(_indicatorsTrue(activePage));
+    } else {
+      indicators.add(_indicatorsFalse());
+    }
+  }
+  return indicators;
+}
+
+Widget _indicatorsTrue(int activePage) {
+  // final String color;
+  // if (activePage == 0) {
+  //   color = '#ff8f4e';
+  // } else if (activePage == 1) {
+  //   color = '#ff8f4e';
+  // } else {
+  //   color = '#ff8f4e';
+  // }
+
+  // Active Indicator
+  return AnimatedContainer(
+    duration: const Duration(milliseconds: 300),
+    height: 6,
+    width: 42,
+    margin: const EdgeInsets.only(right: 8),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(50),
+      color: Colors.green, //hexToColor(color),
+    ),
+  );
+}
+
+//Inactive Indicator
+Widget _indicatorsFalse() {
+  return AnimatedContainer(
+    duration: const Duration(microseconds: 300),
+    height: 8,
+    width: 8,
+    margin: const EdgeInsets.only(right: 8),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(50),
+      color: Colors.grey.shade100,
+    ),
+  );
+}
+
+Color hexToColor(String hex) {
+  assert(RegExp(r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$').hasMatch(hex),
+      'Hex color must be #RRGGBB or #AARRGGBB format.');
+
+  if (hex.length == 7) {
+    // If the hex string is in the format #RRGGBB, we add the opaque alpha value (FF)
+    hex = 'FF${hex.substring(1)}';
+  }
+
+  return Color(int.parse(hex.substring(1), radix: 16));
 }
