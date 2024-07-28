@@ -52,7 +52,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
 
     try {
       store.dispatch(InitialiseEmail(email));
-      print("payload: $userPayload");
+      // print("payload: $userPayload");
       Tuple2<int, String> result = await signInCommuterFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
@@ -210,23 +210,40 @@ class _CommuterSigninState extends State<CommuterSignin> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () {
-                    _validateInputs();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 55),
-                    backgroundColor: const Color(0xFFDEB20A),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
+                    onPressed: () {
+                      if (!isLoading) {
+                        _validateInputs();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 55),
+                      backgroundColor: const Color(0xFFDEB20A),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    "Sign In",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Sign In",
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        if (isLoading)
+                          const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          ),
+                      ],
+                    )),
                 const SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),

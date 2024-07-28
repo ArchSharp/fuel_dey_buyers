@@ -58,19 +58,18 @@ class _CommuterSignupState extends State<CommuterSignup> {
 
     try {
       store.dispatch(InitialiseEmail(email));
-      print("payload: $userPayload");
+      // print("payload: $userPayload");
       Tuple2<int, String> result = await signupCommuterFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => const OTPScreen()));
             myNotificationBar(context, result.item2, "success");
+            Navigator.pushReplacementNamed(context, CommuterSignin.routeName);
           }
           setState(() {
             isButtonClicked = true;
             errorText = '';
-            isLoading = false;
+            // isLoading = false;
           });
 
           // You might want to navigate to another screen or perform user registration
@@ -377,7 +376,9 @@ class _CommuterSignupState extends State<CommuterSignup> {
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () {
-                          _validateInputs();
+                          if (!isLoading && _isAgreeTermsCondition) {
+                            _validateInputs();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 55),
@@ -387,9 +388,25 @@ class _CommuterSignupState extends State<CommuterSignup> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
-                        child: const Text(
-                          "Sign Up",
-                          style: TextStyle(color: Colors.black),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Sign Up",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            const SizedBox(width: 15),
+                            if (isLoading)
+                              const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 8),

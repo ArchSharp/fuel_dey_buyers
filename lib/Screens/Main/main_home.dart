@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Main/search.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/all_near_fuel_stations.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/directions.dart';
@@ -177,143 +179,149 @@ class _MainHomeState extends State<MainHome> {
     //   print("current position: $_userPlace");
     // }
 
-    return Stack(
-      children: [
-        MainWidget(onIndexChanged: _updateHomeIndex),
-        if (_homeIndex == 0)
-          Positioned(
-            top: 0, //mtop,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Hello Yemi",
-                        style: TextStyle(
-                            color: Color(0xFF2C2D2F),
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.circle,
-                            color: Color(0xFFA9E27C),
-                            size: 10,
-                          ),
-                          const SizedBox(width: 10),
-                          if (_hasPermission == true &&
-                              _currentPosition == null)
-                            const SizedBox(
-                              width: 10,
-                              height: 10,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 1,
-                              ),
-                            ),
-                          if (_hasPermission == true &&
-                              _currentPosition != null)
+    return StoreConnector<AppState, dynamic>(
+        converter: (store) => store, //store.state.user
+        builder: (context, state /*user*/) {
+          var fname = store.state.user['firstname'];
+          return Stack(
+            children: [
+              MainWidget(onIndexChanged: _updateHomeIndex),
+              if (_homeIndex == 0)
+                Positioned(
+                  top: 0, //mtop,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(0),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text(
-                              _userPlace != null
-                                  ? _userPlace!.subAdministrativeArea!
-                                  : "",
+                              "Hello $fname",
                               style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                color: Color(0xFF2C2D2F),
-                              ),
+                                  color: Color(0xFF2C2D2F),
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
                             ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      widget.onIndexChanged(3);
-                    },
-                    child: CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Colors.grey[300],
-                      backgroundImage:
-                          const AssetImage('assets/images/commuter.png'),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.circle,
+                                  color: Color(0xFFA9E27C),
+                                  size: 10,
+                                ),
+                                const SizedBox(width: 10),
+                                if (_hasPermission == true &&
+                                    _currentPosition == null)
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 10,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 1,
+                                    ),
+                                  ),
+                                if (_hasPermission == true &&
+                                    _currentPosition != null)
+                                  Text(
+                                    _userPlace != null
+                                        ? _userPlace!.subAdministrativeArea!
+                                        : "",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      color: Color(0xFF2C2D2F),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            widget.onIndexChanged(3);
+                          },
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.grey[300],
+                            backgroundImage:
+                                const AssetImage('assets/images/commuter.png'),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        if (_homeIndex != 0)
-          Positioned(
-            top: mtop * 0.3,
-            left: 20,
-            right: 20,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: TextField(
-                controller: _searchController,
+                ),
+              if (_homeIndex != 0)
+                Positioned(
+                  top: mtop * 0.3,
+                  left: 20,
+                  right: 20,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: _searchController,
 
-                // focusNode: _searchFocusNode,
-                onTap: () {
-                  Navigator.of(context).pushNamed(Search.routeName,
-                      arguments: 'Passing data from SignIn');
-                },
-                decoration: InputDecoration(
-                  hintText: 'e.g Oando...',
-                  border: InputBorder.none,
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {},
+                      // focusNode: _searchFocusNode,
+                      onTap: () {
+                        Navigator.of(context).pushNamed(Search.routeName,
+                            arguments: 'Passing data from SignIn');
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'e.g Oando...',
+                        border: InputBorder.none,
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-        // const Spacer(),
-        _homeIndex == 0
-            ? AllNearFuelStations(onIndexChanged: _updateHomeIndex)
-            : _homeIndex == 1
-                ? OnTappedStation(
-                    stationName: 'Oando Fuel Station',
-                    location: 'Eti-Osa, Lagos, Nigeria',
-                    estimatedTime: '8 mins',
-                    distance: '2 km',
-                    icon: Icons.access_time_outlined,
-                    isFuelAvailable: true,
-                    onIndexChanged: _updateHomeIndex,
-                  )
-                : Directions(
-                    onIndexChanged: _updateHomeIndex,
-                  ),
-      ],
-    );
+              // const Spacer(),
+              _homeIndex == 0
+                  ? AllNearFuelStations(onIndexChanged: _updateHomeIndex)
+                  : _homeIndex == 1
+                      ? OnTappedStation(
+                          stationName: 'Oando Fuel Station',
+                          location: 'Eti-Osa, Lagos, Nigeria',
+                          estimatedTime: '8 mins',
+                          distance: '2 km',
+                          icon: Icons.access_time_outlined,
+                          isFuelAvailable: true,
+                          onIndexChanged: _updateHomeIndex,
+                        )
+                      : Directions(
+                          onIndexChanged: _updateHomeIndex,
+                        ),
+            ],
+          );
+        });
   }
 }
 

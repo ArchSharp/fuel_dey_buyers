@@ -60,7 +60,7 @@ Future<Tuple2<int, String>> signInCommuterFn(UserSignInPayload payload) async {
         headers: headers, body: json.encode(payload));
 
     final Map<String, dynamic> data = json.decode(response.body);
-    // print("object $data");
+    // print("signin response: ${data["body"]}");
     if (response.statusCode == 200) {
       // print(data["extrainfo"]);
       store.dispatch(UpdateUserAction(data['body']));
@@ -141,7 +141,7 @@ Future<Tuple2<int, String>> signupCommuterFn(CommuterPayload payload) async {
 
     final Map<String, dynamic> data = json.decode(response.body);
 
-    print('response: $data');
+    // print('response: $data');
     if (response.statusCode == 201) {
       // print(data);
       result = const Tuple2(1, "Account created succesfully");
