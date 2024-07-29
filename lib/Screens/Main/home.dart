@@ -25,6 +25,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // extendBody: true,
       body: SafeArea(
         child: _navbarIndex == 0
             ? MainHome(onIndexChanged: _updateNavbarIndex)

@@ -18,6 +18,7 @@ class _CommuterNavbarState extends State<CommuterNavbar> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      // backgroundColor: const Color.fromRGBO(255, 253, 244, 0.1),
       type: BottomNavigationBarType.fixed,
       currentIndex: widget.currentIndex,
       items: <BottomNavigationBarItem>[

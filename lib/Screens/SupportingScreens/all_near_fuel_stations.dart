@@ -96,7 +96,7 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
                             estimatedTime: '24 mins away',
                             distance: '6 km',
                             icon: Icons.access_time_outlined,
-                            isFuelAvailable: false,
+                            isFuelAvailable: true,
                             onIndexChanged: widget.onIndexChanged,
                           ),
                         ],

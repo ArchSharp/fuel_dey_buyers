@@ -79,6 +79,7 @@ class _CommuterNotificationsState extends State<CommuterNotifications> {
               imgWidth: 16,
               imgHeight: 30,
             ),
+            const SizedBox(height: 15),
           ],
         ),
       ),
