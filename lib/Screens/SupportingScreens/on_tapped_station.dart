@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/ratings_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/star_ratings.dart';
 
@@ -101,6 +102,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                             // mainAxisSize : MainAxisSize.min,
                             children: [
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -114,7 +116,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                       Text(
                                         widget.stationName,
                                         style: const TextStyle(
-                                          color: Colors.black,
+                                          color: Color(0xFF2C2D2F),
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -122,14 +124,26 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     ],
                                   ),
                                   const Row(
-                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisSize: MainAxisSize.max,
                                     children: [
+                                      SizedBox(width: 24),
                                       Text(
-                                        'Oando Fuel Station',
+                                        '3.8',
                                         style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF2C2D2F),
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      StarRatings(rating: 3.8, starSize: 12),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        '(79)',
+                                        style: TextStyle(
+                                          color: Color(0xFF2C2D2F),
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ],
@@ -489,7 +503,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(69, 32),
+                                  minimumSize: const Size(70, 22),
                                   backgroundColor: const Color(0xFF018D5C),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
@@ -513,7 +527,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(69, 32),
+                                  minimumSize: const Size(70, 22),
                                   backgroundColor: const Color(0xFFE15623),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
@@ -537,7 +551,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(69, 32),
+                                  minimumSize: const Size(70, 22),
                                   backgroundColor: const Color(0xFF018D5C),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
@@ -835,14 +849,18 @@ class _OnTappedStationState extends State<OnTappedStation> {
                             children: [
                               const Text(
                                 "Navigate",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: Color(0xFFFFFDF4),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                               const SizedBox(width: 10),
                               Transform.rotate(
                                 angle: 50 * (3.141592653589793 / 180),
                                 child: const Icon(
                                   Icons.navigation_outlined,
-                                  color: Colors.white,
+                                  color: Color(0xFFFFFDF4),
                                   size: 30,
                                 ),
                               ),
@@ -854,16 +872,17 @@ class _OnTappedStationState extends State<OnTappedStation> {
                     ),
                   ),
                 ),
-                const Positioned(
-                  top: 0,
+                Positioned(
+                  top: 8,
                   left: 0,
                   right: 0,
                   child: Center(
-                    child: SizedBox(
+                    child: Container(
                       width: 40,
-                      child: Divider(
-                        color: Colors.grey,
-                        thickness: 5,
+                      height: 5,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF4E4E4E),
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
                       ),
                     ),
                   ),

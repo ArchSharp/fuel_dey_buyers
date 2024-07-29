@@ -11,8 +11,6 @@ class Welcome extends StatelessWidget {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
 
-    // double imageWidth = deviceWidth * 0.4;
-    // double imageHeight = imageWidth - 40;
     double exploreBtnWidth = deviceWidth - 40;
 
     return Scaffold(
@@ -23,121 +21,130 @@ class Welcome extends StatelessWidget {
             child: Center(
               child: Image.asset(
                 'assets/images/welcome2.png',
-                // fit: BoxFit.contain,
                 width: deviceWidth - 90,
                 height: deviceHeight * 0.3,
               ),
             ),
           ),
-          Container(
-            height: deviceHeight * 0.55,
-            width: deviceWidth,
-            // color: Colors.grey,
-            decoration: const BoxDecoration(
-              color: Color(0XFFDEB20A),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
+          Flexible(
+            child: Container(
+              width: deviceWidth,
+              decoration: const BoxDecoration(
+                color: Color(0XFFDEB20A),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
+                ),
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 15, 20, 40),
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Text(
-                        "Welcome",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32,
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
-                      child: Text(
-                        "Are you a commuter looking to find the nearest fuel station or a vendor wanting to keep your customers informed, our app has got you covered. Join us to ensure a smooth journey every time you hit the road.",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, CommuterSignup.routeName);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(exploreBtnWidth, 55),
-                        backgroundColor:
-                            const Color(0xFFFFFDF4), //Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      child: const Text(
-                        "Sign Up as a Commuter",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 16.0, horizontal: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            child: Divider(
-                              color: Colors.black,
-                            ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 40),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Text(
+                          "Welcome",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 32,
+                            color: Color(0xFF2C2D2F),
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(
-                              "or",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Text(
+                          "Are you a commuter looking to find the nearest fuel station or a vendor wanting to keep your customers informed, our app has got you covered. Join us to ensure a smooth journey every time you hit the road.",
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF2C2D2F),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, CommuterSignup.routeName);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: Size(exploreBtnWidth, 52),
+                          backgroundColor: const Color(0xFFFFFDF4),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        child: const Text(
+                          "Sign Up as a Commuter",
+                          style: TextStyle(
+                            color: Color(0xFF2C2D2F),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Expanded(
+                              child: Divider(
+                                color: Color(0xFF2C2D2F),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: Colors.black,
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                "or",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF2C2D2F),
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, VendorSignup.routeName);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(exploreBtnWidth, 55),
-                        backgroundColor:
-                            const Color(0xFFFFFDF4), //Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
+                            Expanded(
+                              child: Divider(
+                                color: Color(0xFF2C2D2F),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      child: const Text(
-                        "Sign Up as a Vendor",
-                        style: TextStyle(color: Colors.black),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, VendorSignup.routeName);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: Size(exploreBtnWidth, 52),
+                          backgroundColor: const Color(0xFFFFFDF4),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        child: const Text(
+                          "Sign Up as a Vendor",
+                          style: TextStyle(
+                            color: Color(0xFF2C2D2F),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

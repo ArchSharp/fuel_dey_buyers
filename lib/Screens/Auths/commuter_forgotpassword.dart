@@ -113,21 +113,30 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF2C2D2F),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 const Text(
                   "No worries! Just enter your email, and we'll help you reset it in no time.",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF2C2D2F),
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 // Image.asset('assets/images/Ayib.jpg',
                 //     width: imageWidth, height: 250),
                 const SizedBox(height: 20),
                 const Text(
                   "Email",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                    color: Color(0xFF2C2D2F),
+                  ),
                 ),
                 const SizedBox(height: 5),
                 _buildTextField(
@@ -172,7 +181,9 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
                   child: const Text(
                     "Reset Password",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Color(0xFF2C2D2F),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),

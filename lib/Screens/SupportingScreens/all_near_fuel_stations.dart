@@ -74,9 +74,10 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
                           const Text(
                             'Fuel Stations Near you',
                             style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                              color: Color(0xFF2C2D2F),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                           const SizedBox(height: 17),
                           NearStation(
@@ -102,16 +103,17 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
                       ),
                     ),
                   ),
-                  const Positioned(
-                    top: 0,
+                  Positioned(
+                    top: 8,
                     left: 0,
                     right: 0,
                     child: Center(
-                      child: SizedBox(
+                      child: Container(
                         width: 40,
-                        child: Divider(
-                          color: Colors.grey,
-                          thickness: 5,
+                        height: 5,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF4E4E4E),
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
                         ),
                       ),
                     ),

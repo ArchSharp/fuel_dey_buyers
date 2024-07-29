@@ -383,16 +383,17 @@ class _DirectionsState extends State<Directions> {
                       ),
                     ),
                   ),
-                  const Positioned(
-                    top: 0,
+                  Positioned(
+                    top: 8,
                     left: 0,
                     right: 0,
                     child: Center(
-                      child: SizedBox(
+                      child: Container(
                         width: 40,
-                        child: Divider(
-                          color: Colors.grey,
-                          thickness: 5,
+                        height: 5,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF4E4E4E),
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
                         ),
                       ),
                     ),

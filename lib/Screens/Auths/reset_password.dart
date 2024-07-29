@@ -135,8 +135,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                 const Text(
                   "Password",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     fontSize: 14,
+                    color: Color(0xFF2C2D2F),
                   ),
                 ),
                 const SizedBox(
@@ -225,7 +226,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ),
                   child: const Text(
                     "Done",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                      color: Color(0xFF2C2D2F),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],

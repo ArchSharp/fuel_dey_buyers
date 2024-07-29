@@ -185,7 +185,8 @@ class _CommuterSignupState extends State<CommuterSignup> {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: 32,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF2C2D2F),
                           ),
                         ),
                       ),
@@ -198,27 +199,33 @@ class _CommuterSignupState extends State<CommuterSignup> {
                       //     width: imageWidth, height: 250),
                       const SizedBox(height: 20),
                       const Text(
-                        "Last Name",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
-                      ),
-                      const SizedBox(height: 5),
-                      _buildTextField(
-                        controller: _lastNameController,
-                        label: 'Last Name / Surname',
-                        error: _errors['lastname'],
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
                         "First Name",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: Color(0xFF2C2D2F),
+                        ),
                       ),
                       const SizedBox(height: 5),
                       _buildTextField(
                         controller: _firstNameController,
                         label: 'First Name',
                         error: _errors['firstname'],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        "Last Name",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: Color(0xFF2C2D2F),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      _buildTextField(
+                        controller: _lastNameController,
+                        label: 'Last Name / Surname',
+                        error: _errors['lastname'],
                       ),
                       const SizedBox(height: 8),
                       // const Text(
@@ -235,7 +242,10 @@ class _CommuterSignupState extends State<CommuterSignup> {
                       const Text(
                         "Email",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: Color(0xFF2C2D2F),
+                        ),
                       ),
                       const SizedBox(height: 5),
                       _buildTextField(
@@ -247,7 +257,10 @@ class _CommuterSignupState extends State<CommuterSignup> {
                       const Text(
                         "Phone Number",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: Color(0xFF2C2D2F),
+                        ),
                       ),
                       const SizedBox(height: 5),
                       Row(
@@ -285,6 +298,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
+                          color: Color(0xFF2C2D2F),
                         ),
                       ),
                       const SizedBox(
@@ -377,6 +391,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
                       ElevatedButton(
                         onPressed: () {
                           if (!isLoading && _isAgreeTermsCondition) {
+                            FocusScope.of(context).unfocus();
                             _validateInputs();
                           }
                         },
@@ -393,7 +408,11 @@ class _CommuterSignupState extends State<CommuterSignup> {
                           children: [
                             const Text(
                               "Sign Up",
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(
+                                color: Color(0xFF2C2D2F),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             const SizedBox(width: 15),
                             if (isLoading)
@@ -412,6 +431,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        // mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           const Text(
                             'Already have an account?',
@@ -423,12 +443,16 @@ class _CommuterSignupState extends State<CommuterSignup> {
                                   CommuterSignin.routeName,
                                   arguments: 'Passing data from SignIn');
                             },
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.all(0),
+                            ),
                             child: const Text(
                               "Sign in",
                               style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                                fontSize: 12,
+                                color: Color(0xFF2C2D2F),
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ],

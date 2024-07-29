@@ -106,14 +106,19 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 32,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF2C2D2F),
                 ),
               ),
             ),
             const SizedBox(height: 20),
             const Text(
               "We sent a 6-digit code verification to your mail. Enter the code to continue.",
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: Color(0xFF2C2D2F),
+              ),
             ),
             // Image.asset('assets/images/Ayib.jpg',
             //     width: imageWidth, height: 250),
@@ -140,9 +145,10 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
                   child: const Text(
                     "Resend Code",
                     style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF018D5C),
-                        fontWeight: FontWeight.bold),
+                      fontSize: 12,
+                      color: Color(0xFF018D5C),
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -162,7 +168,9 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
               child: const Text(
                 "Confirm",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Color(0xFF2C2D2F),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),

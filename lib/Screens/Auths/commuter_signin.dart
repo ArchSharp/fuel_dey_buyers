@@ -144,7 +144,8 @@ class _CommuterSigninState extends State<CommuterSignin> {
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF2C2D2F),
                     ),
                   ),
                 ),
@@ -156,7 +157,11 @@ class _CommuterSigninState extends State<CommuterSignin> {
                 const SizedBox(height: 20),
                 const Text(
                   "Email",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                    color: Color(0xFF2C2D2F),
+                  ),
                 ),
                 const SizedBox(height: 5),
                 _buildTextField(
@@ -168,7 +173,8 @@ class _CommuterSigninState extends State<CommuterSignin> {
                 const Text(
                   "Password",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF2C2D2F),
                     fontSize: 14,
                   ),
                 ),
@@ -212,6 +218,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                 ElevatedButton(
                     onPressed: () {
                       if (!isLoading) {
+                        FocusScope.of(context).unfocus();
                         _validateInputs();
                       }
                     },
@@ -228,7 +235,9 @@ class _CommuterSigninState extends State<CommuterSignin> {
                         const Text(
                           "Sign In",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Color(0xFF2C2D2F),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(width: 15),
@@ -258,7 +267,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                             gradient: LinearGradient(
                               colors: [
                                 Colors.grey,
-                                Colors.black,
+                                Color(0xFF2C2D2F),
                               ],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
@@ -271,8 +280,9 @@ class _CommuterSigninState extends State<CommuterSignin> {
                         child: Text(
                           "or",
                           style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF2C2D2F),
                           ),
                         ),
                       ),
@@ -283,7 +293,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                             gradient: LinearGradient(
                               colors: [
                                 Colors.grey,
-                                Colors.black,
+                                Color(0xFF2C2D2F),
                               ],
                               begin: Alignment.centerRight,
                               end: Alignment.centerLeft,
@@ -305,7 +315,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    side: const BorderSide(width: 1),
+                    side: const BorderSide(width: 0.5),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -321,8 +331,9 @@ class _CommuterSigninState extends State<CommuterSignin> {
                       const Text(
                         "Sign In with Google",
                         style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2C2D2F),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
                         ),
                       ),
                     ],
@@ -340,7 +351,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    side: const BorderSide(width: 1),
+                    side: const BorderSide(width: 0.5),
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -348,15 +359,16 @@ class _CommuterSigninState extends State<CommuterSignin> {
                     children: [
                       Icon(
                         Icons.apple,
-                        color: Colors.black,
+                        color: Color(0xFF2C2D2F),
                         size: 35,
                       ),
                       SizedBox(width: 15),
                       Text(
                         "Sign In with Apple",
                         style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2C2D2F),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
                         ),
                       ),
                     ],

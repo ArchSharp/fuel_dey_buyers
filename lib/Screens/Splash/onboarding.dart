@@ -92,14 +92,18 @@ class _OnboardingState extends State<Onboarding> {
                                 Text(
                                   _contents[index].title,
                                   style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF2C2D2F),
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
                                   _contents[index].description,
-                                  style: const TextStyle(fontSize: 16),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xFF2C2D2F),
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
@@ -151,7 +155,8 @@ class _OnboardingState extends State<Onboarding> {
                                     "Skip",
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.black,
+                                      color: Color(0xFF2C2D2F),
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 ),
@@ -201,7 +206,11 @@ class _OnboardingState extends State<Onboarding> {
                               ),
                               child: const Text(
                                 "Get Started",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(
+                                  color: Color(0xFF2C2D2F),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                     ),
@@ -239,7 +248,7 @@ class CurvedTopContainer extends StatelessWidget {
         child: Center(
           child: Image.asset(
             slideIndex == 0
-                ? 'assets/images/onboard1.png'
+                ? 'assets/images/onboard11.png'
                 : slideIndex == 1
                     ? 'assets/images/onboard2.png'
                     : 'assets/images/onboard3.png',
@@ -321,7 +330,7 @@ Widget _indicatorsTrue(int activePage) {
     margin: const EdgeInsets.only(right: 8),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(50),
-      color: Colors.green, //hexToColor(color),
+      color: const Color(0xFF2C2D2F), //hexToColor(color),
     ),
   );
 }
@@ -334,9 +343,9 @@ Widget _indicatorsFalse() {
     width: 8,
     margin: const EdgeInsets.only(right: 8),
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(50),
-      color: Colors.grey.shade100,
-    ),
+        borderRadius: BorderRadius.circular(50),
+        color: const Color(0xFFECB920),
+        border: Border.all(width: 1)),
   );
 }
 

@@ -28,13 +28,24 @@ class _SearchState extends State<Search> {
             SizedBox(height: mtop),
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
+                horizontal: 0.0,
               ),
               child: Form(
                 key: _formKey,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    const SizedBox(width: 5),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.keyboard_arrow_left,
+                        size: 32,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
                     Expanded(
                       child: Container(
                         color: const Color(0xFFE7E3E3),
@@ -48,7 +59,6 @@ class _SearchState extends State<Search> {
                     TextButton(
                       onPressed: () {
                         _searchController.clear();
-                        Navigator.pop(context);
                       },
                       child: const Text(
                         "Cancel",
@@ -206,8 +216,9 @@ class _SearchState extends State<Search> {
         errorStyle: const TextStyle(color: Colors.red),
         border: const OutlineInputBorder(
           borderSide: BorderSide(
-            style: BorderStyle.solid,
+            style: BorderStyle.none,
             color: Color(0xFFE7E3E3),
+            // width: 0.5,
           ),
         ),
       ),
