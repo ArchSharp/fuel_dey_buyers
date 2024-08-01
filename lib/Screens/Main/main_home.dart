@@ -15,9 +15,12 @@ const LatLng currentLocation = LatLng(25.1193, 55.3773);
 
 class MainHome extends StatefulWidget {
   final ValueChanged<int> onIndexChanged;
+  final ValueChanged<bool> onShowNavBarChanged;
+
   const MainHome({
     super.key,
     required this.onIndexChanged,
+    required this.onShowNavBarChanged,
   });
 
   @override
@@ -33,6 +36,15 @@ class _MainHomeState extends State<MainHome> {
 
   void _updateHomeIndex(int newIndex) {
     setState(() {
+      if (newIndex >= 1 && newIndex < 3) {
+        widget.onShowNavBarChanged(false);
+      } else {
+        widget.onShowNavBarChanged(true);
+      }
+
+      if (newIndex == 3) {
+        widget.onIndexChanged(1);
+      }
       _homeIndex = newIndex;
     });
   }
@@ -185,7 +197,7 @@ class _MainHomeState extends State<MainHome> {
           var fname = store.state.user['firstname'];
           return Stack(
             children: [
-              MainWidget(onIndexChanged: _updateHomeIndex),
+              MainWidget(onIndexChangedFunc: _updateHomeIndex),
               if (_homeIndex == 0)
                 Positioned(
                   top: 0, //mtop,
@@ -305,7 +317,7 @@ class _MainHomeState extends State<MainHome> {
                 ),
               // const Spacer(),
               _homeIndex == 0
-                  ? AllNearFuelStations(onIndexChanged: _updateHomeIndex)
+                  ? AllNearFuelStations(onIndexChangedFunc: _updateHomeIndex)
                   : _homeIndex == 1
                       ? OnTappedStation(
                           stationName: 'Oando Fuel Station',
@@ -314,10 +326,10 @@ class _MainHomeState extends State<MainHome> {
                           distance: '2 km',
                           icon: Icons.access_time_outlined,
                           isFuelAvailable: true,
-                          onIndexChanged: _updateHomeIndex,
+                          onIndexChangedFunc: _updateHomeIndex,
                         )
                       : Directions(
-                          onIndexChanged: _updateHomeIndex,
+                          onIndexChangedFunc: _updateHomeIndex,
                         ),
             ],
           );
@@ -326,11 +338,11 @@ class _MainHomeState extends State<MainHome> {
 }
 
 class MainWidget extends StatefulWidget {
-  final ValueChanged<int> onIndexChanged;
+  final ValueChanged<int> onIndexChangedFunc;
 
   const MainWidget({
     super.key,
-    required this.onIndexChanged,
+    required this.onIndexChangedFunc,
   });
 
   @override
@@ -355,7 +367,7 @@ class _MainWidgetState extends State<MainWidget> {
       onTap: () {
         print("Map is tapped");
         setState(() {
-          widget.onIndexChanged(0);
+          widget.onIndexChangedFunc(0);
         });
       },
       onDoubleTap: () {

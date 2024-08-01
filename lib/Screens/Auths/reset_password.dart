@@ -169,7 +169,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       value: _isAgreeTermsCondition,
                       checkColor: Colors.black,
                       activeColor: _isAgreeTermsCondition
-                          ? const Color(0xFFDEB20A)
+                          ? const Color(0XFFECB920)
                           : Colors.white,
                       onChanged: (bool? value) {
                         // Handle the state change here
@@ -195,7 +195,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       value: _isAgreeTermsCondition,
                       checkColor: Colors.black,
                       activeColor: _isAgreeTermsCondition
-                          ? const Color(0xFFDEB20A)
+                          ? const Color(0XFFECB920)
                           : Colors.white,
                       onChanged: (bool? value) {
                         // Handle the state change here
@@ -219,7 +219,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 55),
-                    backgroundColor: const Color(0xFFDEB20A),
+                    backgroundColor: const Color(0XFFECB920),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),

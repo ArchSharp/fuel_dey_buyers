@@ -10,7 +10,7 @@ class OnTappedStation extends StatefulWidget {
   final String distance;
   final IconData icon;
   final bool isFuelAvailable;
-  final ValueChanged<int> onIndexChanged;
+  final ValueChanged<int> onIndexChangedFunc;
 
   const OnTappedStation({
     super.key,
@@ -20,7 +20,7 @@ class OnTappedStation extends StatefulWidget {
     required this.distance,
     required this.icon,
     required this.isFuelAvailable,
-    required this.onIndexChanged,
+    required this.onIndexChangedFunc,
   });
 
   @override
@@ -167,8 +167,8 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     color: Colors.white,
                                   ),
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, '/commuter_signup');
+                                    // Navigator.pushReplacementNamed(
+                                    //     context, '/commuter_signup');
                                   },
                                 ),
                               ),
@@ -188,8 +188,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     color: Colors.white,
                                   ),
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, '/commuter_signup');
+                                    widget.onIndexChangedFunc(3);
                                   },
                                 ),
                               ),
@@ -835,7 +834,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                         const SizedBox(height: 15),
                         ElevatedButton(
                           onPressed: () {
-                            widget.onIndexChanged(2);
+                            widget.onIndexChangedFunc(2);
                           },
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(double.infinity, 52),

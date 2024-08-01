@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Directions extends StatefulWidget {
-  final ValueChanged<int> onIndexChanged;
+  final ValueChanged<int> onIndexChangedFunc;
 
   const Directions({
     super.key,
-    required this.onIndexChanged,
+    required this.onIndexChangedFunc,
   });
 
   @override
@@ -158,7 +158,7 @@ class _DirectionsState extends State<Directions> {
                                     padding: const EdgeInsets.all(0),
                                     iconSize: 16,
                                     onPressed: () {
-                                      widget.onIndexChanged(1);
+                                      widget.onIndexChangedFunc(1);
                                     },
                                     icon: const Icon(Icons.close),
                                     color: Colors.white,

@@ -15,10 +15,17 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _navbarIndex = 0;
+  bool _isShowNavBar = true;
 
   void _updateNavbarIndex(int newIndex) {
     setState(() {
       _navbarIndex = newIndex;
+    });
+  }
+
+  void _updateShowNavBar(bool isShowNavBar) {
+    setState(() {
+      _isShowNavBar = isShowNavBar;
     });
   }
 
@@ -28,17 +35,23 @@ class _HomeState extends State<Home> {
       // extendBody: true,
       body: SafeArea(
         child: _navbarIndex == 0
-            ? MainHome(onIndexChanged: _updateNavbarIndex)
+            ? MainHome(
+                onIndexChanged: _updateNavbarIndex,
+                onShowNavBarChanged: _updateShowNavBar,
+              )
             : _navbarIndex == 1
                 ? const Saved()
                 : _navbarIndex == 2
                     ? const CommuterNotifications()
                     : const CommuterSettings(),
       ),
-      bottomNavigationBar: CommuterNavbar(
-        currentIndex: _navbarIndex,
-        onIndexChanged: _updateNavbarIndex,
-      ),
+
+      bottomNavigationBar: _isShowNavBar
+          ? CommuterNavbar(
+              currentIndex: _navbarIndex,
+              onIndexChanged: _updateNavbarIndex,
+            )
+          : null,
     );
   }
 }

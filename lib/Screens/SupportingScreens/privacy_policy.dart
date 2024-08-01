@@ -361,7 +361,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
             style: ElevatedButton.styleFrom(
               fixedSize: Size(deviceWidth - 32, 52),
               padding: const EdgeInsets.all(0),
-              backgroundColor: const Color(0xFFDEB20A)
+              backgroundColor: const Color(0XFFECB920)
                   .withOpacity(isAgreeTermsCondition ? 1 : 0.3),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),

@@ -53,7 +53,13 @@ class _OnboardingState extends State<Onboarding> {
       body: Column(
         children: [
           Container(
-            color: const Color(0XFFDEB20A),
+            decoration: BoxDecoration(
+              color: const Color(0XFFECB920),
+              border: Border.all(
+                color: const Color(0XFFECB920),
+                width: 0,
+              ),
+            ),
             child: CurvedTopContainer(
               height: deviceHeight * 0.6,
               slideIndex: _currentPage,
@@ -62,8 +68,13 @@ class _OnboardingState extends State<Onboarding> {
           ),
           Expanded(
             child: Container(
-              color: const Color(0XFFDEB20A),
-              // height: deviceHeight / 2,
+              decoration: BoxDecoration(
+                color: const Color(0XFFECB920),
+                border: Border.all(
+                  color: const Color(0XFFECB920),
+                  width: 5,
+                ),
+              ),
               child: Stack(
                 // mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -88,7 +99,7 @@ class _OnboardingState extends State<Onboarding> {
                           child: Column(
                             // mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const SizedBox(height: 10),
+                              // const SizedBox(height: 10),
                               Text(
                                 _contents[index].title,
                                 style: const TextStyle(

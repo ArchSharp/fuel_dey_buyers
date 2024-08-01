@@ -30,7 +30,7 @@ class Welcome extends StatelessWidget {
             child: Container(
               width: deviceWidth,
               decoration: const BoxDecoration(
-                color: Color(0XFFDEB20A),
+                color: Color(0XFFECB920),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(40),
                   topRight: Radius.circular(40),

@@ -46,7 +46,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
 
     // Create an instance of UserPayload
     UserSignInPayload userPayload = UserSignInPayload(
-      email: _emailController.text,
+      email: _emailController.text.toLowerCase(),
       password: _passwordController.text,
     );
 
@@ -224,7 +224,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 55),
-                      backgroundColor: const Color(0xFFDEB20A),
+                      backgroundColor: const Color(0XFFECB920),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),

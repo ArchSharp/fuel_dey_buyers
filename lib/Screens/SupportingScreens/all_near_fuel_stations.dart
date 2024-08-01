@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/near_station.dart';
 
 class AllNearFuelStations extends StatefulWidget {
-  final ValueChanged<int> onIndexChanged;
+  final ValueChanged<int> onIndexChangedFunc;
 
   const AllNearFuelStations({
     super.key,
-    required this.onIndexChanged,
+    required this.onIndexChangedFunc,
   });
 
   @override
@@ -87,7 +87,7 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
                             distance: '2 km',
                             icon: Icons.access_time_outlined,
                             isFuelAvailable: true,
-                            onIndexChanged: widget.onIndexChanged,
+                            onIndexChanged: widget.onIndexChangedFunc,
                           ),
                           const SizedBox(height: 15),
                           NearStation(
@@ -97,7 +97,7 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
                             distance: '6 km',
                             icon: Icons.access_time_outlined,
                             isFuelAvailable: true,
-                            onIndexChanged: widget.onIndexChanged,
+                            onIndexChanged: widget.onIndexChangedFunc,
                           ),
                         ],
                       ),

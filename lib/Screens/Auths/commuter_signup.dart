@@ -397,7 +397,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 55),
-                          backgroundColor: const Color(0xFFDEB20A)
+                          backgroundColor: const Color(0XFFECB920)
                               .withOpacity(_isAgreeTermsCondition ? 1 : 0.3),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
