@@ -149,7 +149,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 7),
                 const Text(
                   "Welcome back! We missed you. Log in to continue where you left off.",
                   style: TextStyle(fontSize: 16),

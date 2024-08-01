@@ -166,12 +166,12 @@ class _VendorSigninState extends State<VendorSignin> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
                 const Text(
                   "Welcome back! We missed you. Log in to continue where you left off.",
                   style: TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 const Text(
                   "Email or Phone Number",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),

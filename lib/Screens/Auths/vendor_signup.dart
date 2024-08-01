@@ -192,14 +192,14 @@ class _VendorSignupState extends State<VendorSignup> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      // const SizedBox(height: 20),
                       const Text(
                         "Welcome! Let's get you started on your journey. Register your station to unlock a world of possibilities.",
                         style: TextStyle(fontSize: 16),
                       ),
                       // Image.asset('assets/images/Ayib.jpg',
                       //     width: imageWidth, height: 250),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 15),
                       const Text(
                         "Station Name",
                         style: TextStyle(

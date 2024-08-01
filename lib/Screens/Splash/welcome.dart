@@ -56,10 +56,10 @@ class Welcome extends StatelessWidget {
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
                         child: Text(
                           "Are you a commuter looking to find the nearest fuel station or a vendor wanting to keep your customers informed, our app has got you covered. Join us to ensure a smooth journey every time you hit the road.",
-                          textAlign: TextAlign.justify,
+                          textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,

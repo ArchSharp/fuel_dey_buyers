@@ -124,7 +124,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
                 const Text(
                   "Please enter your new password.",
                   style: TextStyle(fontSize: 16),

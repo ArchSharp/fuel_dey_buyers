@@ -110,14 +110,14 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
             const Text(
               "We sent a 6-digit code verification to your phone number. Enter the code to continue.",
               style: TextStyle(fontSize: 16),
             ),
             // Image.asset('assets/images/Ayib.jpg',
             //     width: imageWidth, height: 250),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(

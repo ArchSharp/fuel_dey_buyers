@@ -27,17 +27,17 @@ class _OnboardingState extends State<Onboarding> {
     OnboardingContent(
       title: "Never Get Stuck Again",
       description:
-          "Drive with peace of mind, knowing you’ll never be left to search for fuel again.",
+          "Get directions to the nearest station, drive with peace of mind, knowing you’ll never be left to search for fuel again.",
     ),
     OnboardingContent(
       title: "Real-Time Availability",
       description:
-          "No more guessing games, just accurate and timely information to keep your journey smooth and uninterrupted.",
+          "Stay Updated on the Go. No more guessing games just accurate and timely information to keep your journey smooth and uninterrupted.",
     ),
     OnboardingContent(
       title: "Easy Navigation",
       description:
-          "Guides you there effortlessly and helps you quickly locate the nearest fuel stations to get petrol, diesel, or gas.",
+          "Our intuitive map and search features guides you there effortlessly and helps you quickly locate the nearest fuel stations to get petrol, diesel, or gas.",
     ),
   ];
 
@@ -74,43 +74,43 @@ class _OnboardingState extends State<Onboarding> {
                   // child:
                   SizedBox(
                     height: deviceHeight * 0.4 - 100,
-                    child: Center(
-                      child: PageView.builder(
-                        controller: _pageController,
-                        onPageChanged: (index) {
-                          setState(() {
-                            _currentPage = index;
-                          });
-                        },
-                        itemCount: _contents.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _contents[index].title,
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFF2C2D2F),
-                                  ),
-                                  textAlign: TextAlign.center,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentPage = index;
+                        });
+                      },
+                      itemCount: _contents.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 10),
+                              Text(
+                                _contents[index].title,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF2C2D2F),
                                 ),
-                                Text(
-                                  _contents[index].description,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xFF2C2D2F),
-                                  ),
-                                  textAlign: TextAlign.center,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                _contents[index].description,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xFF2C2D2F),
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
                   // ),
@@ -180,7 +180,7 @@ class _OnboardingState extends State<Onboarding> {
                                       color: const Color(
                                           0xFFFFFDF4), //Colors.black.withOpacity(0.8),
                                       shape: BoxShape.rectangle,
-                                      borderRadius: BorderRadius.circular(6),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: const Icon(
                                       Icons.arrow_forward_ios,

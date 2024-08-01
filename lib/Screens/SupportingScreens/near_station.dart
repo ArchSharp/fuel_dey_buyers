@@ -124,20 +124,24 @@ class NearStation extends StatelessWidget {
               color: Colors.white,
               shape: BoxShape.circle,
             ),
-            child: IconButton(
-              iconSize: 14,
-              padding: EdgeInsets.zero,
-              icon: const RotatedBox(
-                quarterTurns: 2,
-                child: Icon(
-                  Icons.subdirectory_arrow_left,
-                  color: Color(0xFF018D5C),
-                  size: 20,
+            child: Center(
+              child: IconButton(
+                alignment: Alignment.center,
+                iconSize: 14,
+                padding: EdgeInsets.zero,
+                icon: const RotatedBox(
+                  quarterTurns: 2,
+                  child: Icon(
+                    Icons.subdirectory_arrow_left,
+                    color: Color(0xFF018D5C),
+                    size: 20,
+                    // weight: 30,
+                  ),
                 ),
+                onPressed: () {
+                  onIndexChanged(1);
+                },
               ),
-              onPressed: () {
-                onIndexChanged(1);
-              },
             ),
           ),
         ],

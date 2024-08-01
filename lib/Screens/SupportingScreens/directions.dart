@@ -81,15 +81,17 @@ class _DirectionsState extends State<Directions> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(height: 30),
+                                    // const SizedBox(height: 30),
                                     const Text(
                                       "Directions",
                                       style: TextStyle(
@@ -106,6 +108,7 @@ class _DirectionsState extends State<Directions> {
                                         Container(
                                           width: 40,
                                           height: 26,
+                                          // padding: const EdgeInsets.all(0),
                                           decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
                                             color: const Color(0xFF018D5C),

@@ -190,14 +190,14 @@ class _CommuterSignupState extends State<CommuterSignup> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      // const SizedBox(height: 3),
                       const Text(
                         "Welcome! Let's get you started on your journey. Sign up to unlock a world of possibilities.",
                         style: TextStyle(fontSize: 16),
                       ),
                       // Image.asset('assets/images/Ayib.jpg',
                       //     width: imageWidth, height: 250),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       const Text(
                         "First Name",
                         style: TextStyle(
@@ -224,7 +224,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
                       const SizedBox(height: 5),
                       _buildTextField(
                         controller: _lastNameController,
-                        label: 'Last Name / Surname',
+                        label: 'Last Name',
                         error: _errors['lastname'],
                       ),
                       const SizedBox(height: 8),

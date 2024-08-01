@@ -111,7 +111,7 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
             const Text(
               "We sent a 6-digit code verification to your mail. Enter the code to continue.",
               style: TextStyle(

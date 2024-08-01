@@ -138,14 +138,14 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
                 const Text(
                   "No worries! Just enter your email, and we'll help you reset it in no time.",
                   style: TextStyle(fontSize: 16),
                 ),
                 // Image.asset('assets/images/Ayib.jpg',
                 //     width: imageWidth, height: 250),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 // const Text(
                 //   "Email",
                 //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),

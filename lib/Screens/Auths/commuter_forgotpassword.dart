@@ -118,7 +118,7 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
                 const Text(
                   "No worries! Just enter your email, and we'll help you reset it in no time.",
                   style: TextStyle(
