@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/reset_password.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
@@ -32,11 +32,6 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
           : 'OTP must be provided';
       myNotificationBar(context, msg, "error");
       return;
-    } else {
-      Navigator.of(context).pushNamed(
-        ResetPassword.routeName,
-        arguments: 'Passing data from SignIn',
-      );
     }
 
     setState(() {
@@ -45,12 +40,12 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
 
     try {
       var email = store.state.email;
-      print(email);
-      Tuple2<int, String> result = await verifyEmailFn(email, otp);
+      // print(email);
+      Tuple2<int, String> result = await verifyEmailFn(email, otp, true);
       if (context.mounted) {
         if (result.item1 == 1) {
           Navigator.of(context).pushNamed(
-            ResetPassword.routeName,
+            VendorSignin.routeName,
             arguments: 'Passing data from SignIn',
           );
           myNotificationBar(context, result.item2, "success");
@@ -85,7 +80,7 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
     // double exploreBtnWidth = deviceWidth - 40;
     double otpBoxWidth = 45;
     if (deviceWidth < 502) {
-      print("device width: $deviceWidth");
+      //print("device width: $deviceWidth");
       otpBoxWidth = (13.33 / 100) * deviceWidth;
     }
 

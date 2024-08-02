@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/reset_password.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
@@ -32,11 +31,6 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
           : 'OTP must be provided';
       myNotificationBar(context, msg, "error");
       return;
-    } else {
-      Navigator.of(context).pushNamed(
-        ResetPassword.routeName,
-        arguments: 'Passing data from SignIn',
-      );
     }
 
     setState(() {
@@ -45,12 +39,12 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
 
     try {
       var email = store.state.email;
-      print(email);
-      Tuple2<int, String> result = await verifyEmailFn(email, otp);
+      // print("email: $email");
+      Tuple2<int, String> result = await verifyEmailFn(email, otp, false);
       if (context.mounted) {
         if (result.item1 == 1) {
           Navigator.of(context).pushNamed(
-            ResetPassword.routeName,
+            CommuterSignin.routeName,
             arguments: 'Passing data from SignIn',
           );
           myNotificationBar(context, result.item2, "success");
@@ -58,6 +52,34 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
           setState(() {
             resendOtp = true;
           });
+          myNotificationBar(context, result.item2, "error");
+        } else {
+          myNotificationBar(context, result.item2, "error");
+        }
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> resendVerifyEmail() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var email = store.state.email;
+      // print("email: $email");
+      Tuple2<int, String> result = await resendVerifyEmailFn(email, false);
+      if (context.mounted) {
+        if (result.item1 == 1) {
+          setState(() {
+            resendOtp = false;
+          });
+          myNotificationBar(context, result.item2, "success");
+        } else if (result.item1 == 2) {
           myNotificationBar(context, result.item2, "error");
         } else {
           myNotificationBar(context, result.item2, "error");
@@ -85,7 +107,7 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
     // double exploreBtnWidth = deviceWidth - 40;
     double otpBoxWidth = 45;
     if (deviceWidth < 502) {
-      print("device width: $deviceWidth");
+      //print("device width: $deviceWidth");
       otpBoxWidth = (13.33 / 100) * deviceWidth;
     }
 
@@ -138,15 +160,16 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(
-                        CommuterForgotpassword.routeName,
-                        arguments: 'Passing data from SignIn');
+                    if (resendOtp == true) {
+                      FocusScope.of(context).unfocus();
+                      resendVerifyEmail();
+                    }
                   },
-                  child: const Text(
+                  child: Text(
                     "Resend Code",
                     style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF018D5C),
+                      fontSize: resendOtp ? 17 : 12,
+                      color: const Color(0xFF018D5C),
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -156,11 +179,15 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                verifyOTP();
+                if (resendOtp == false) {
+                  FocusScope.of(context).unfocus();
+                  verifyOTP();
+                }
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 55),
-                backgroundColor: const Color(0XFFECB920),
+                backgroundColor:
+                    const Color(0XFFECB920).withOpacity(resendOtp ? 0.3 : 1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),

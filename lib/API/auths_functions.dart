@@ -199,8 +199,9 @@ Future<Tuple2<int, String>> vendorsignupFn(VendorSignUpPayload payload) async {
   return result;
 }
 
-Future<Tuple2<int, String>> verifyEmailFn(email, otp) async {
-  String apiUrl = '$baseUrl/api/VerifyEmail';
+Future<Tuple2<int, String>> verifyEmailFn(email, otp, isVendor) async {
+  String apiUrl = '$baseUrl/api/CommuterVerifyEmail';
+  if (isVendor == true) apiUrl = '$baseUrl/api/VendorVerifyEmail';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer YOUR_API_KEY",
@@ -227,6 +228,43 @@ Future<Tuple2<int, String>> verifyEmailFn(email, otp) async {
       } else if (msg.contains("wrong")) {
         result = Tuple2(3, msg);
       }
+    }
+  } catch (e) {
+    print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> resendVerifyEmailFn(email, isVendor) async {
+  String apiUrl = '$baseUrl/api/CommuterResendVerifyEmail';
+  if (isVendor == true) apiUrl = '$baseUrl/api/VendorResendVerifyEmail';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_API_KEY",
+  };
+
+  final Map<String, dynamic> payload = {"email": email};
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.post(Uri.parse(apiUrl),
+        headers: headers, body: json.encode(payload));
+
+    final Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      // print(data);
+      result = Tuple2(1, data['body']);
+    } else {
+      print(
+          'Request failed with status: ${response.statusCode} response payload: $data');
+
+      // String msg = data['body'];
+      // if (msg.contains("expired")) {
+      //   result = Tuple2(2, msg);
+      // } else if (msg.contains("wrong")) {
+      //   result = Tuple2(3, msg);
+      // }
     }
   } catch (e) {
     print('Error: $e');

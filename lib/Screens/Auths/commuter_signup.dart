@@ -5,6 +5,7 @@ import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/privacy_policy.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/terms_conditions.dart';
@@ -57,14 +58,15 @@ class _CommuterSignupState extends State<CommuterSignup> {
     );
 
     try {
-      store.dispatch(InitialiseEmail(email));
+      store.dispatch(InitialiseEmail(userPayload.email));
       // print("payload: $userPayload");
       Tuple2<int, String> result = await signupCommuterFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
             myNotificationBar(context, result.item2, "success");
-            Navigator.pushReplacementNamed(context, CommuterSignin.routeName);
+            Navigator.pushReplacementNamed(
+                context, CommuterVerifyEmail.routeName);
           }
           setState(() {
             isButtonClicked = true;

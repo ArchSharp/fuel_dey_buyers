@@ -5,6 +5,7 @@ import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Main/home.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
@@ -51,7 +52,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
     );
 
     try {
-      store.dispatch(InitialiseEmail(email));
+      store.dispatch(InitialiseEmail(userPayload.email));
       // print("payload: $userPayload");
       Tuple2<int, String> result = await signInCommuterFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
@@ -70,6 +71,10 @@ class _CommuterSigninState extends State<CommuterSignin> {
           // Failed sign-up
           if (context.mounted) {
             myNotificationBar(context, result.item2, "error");
+            if (result.item1 == 2) {
+              Navigator.pushReplacementNamed(
+                  context, CommuterVerifyEmail.routeName);
+            }
           }
           setState(() {
             isButtonClicked = true;
