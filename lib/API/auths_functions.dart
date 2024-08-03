@@ -6,7 +6,7 @@ import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:http/http.dart' as http;
 import 'package:tuple/tuple.dart';
 
-String? baseUrl = dotenv.env['NGROK_URL'];
+String? baseUrl = dotenv.env['BASE_URL'];
 
 Future<Tuple2<int, String>> signInVendorFn(UserSignInPayload payload) async {
   String apiUrl = '$baseUrl/api/SignInVendor';

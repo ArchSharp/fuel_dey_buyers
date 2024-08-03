@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tuple/tuple.dart';
 import 'package:http/http.dart' as http;
 
-String? baseUrl = dotenv.env['NGROK_URL'];
+String? baseUrl = dotenv.env['BASE_URL'];
 
 void writeApiResponseToFile(
     List<Map<String, dynamic>> data, String fileName) async {
