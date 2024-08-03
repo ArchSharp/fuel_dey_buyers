@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
-import 'package:fuel_dey_buyers/Model/user.dart';
-import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
@@ -16,8 +14,8 @@ class ResetPassword extends StatefulWidget {
 
 class _ResetPasswordState extends State<ResetPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String email = '';
-  String password = '';
+  final TextEditingController _otpController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   bool revealPassword = false;
   bool _isAgreeTermsCondition = false;
@@ -30,16 +28,13 @@ class _ResetPasswordState extends State<ResetPassword> {
     setState(() {
       isLoading = true;
     });
-
-    // Create an instance of UserPayload
-    UserSignInPayload userPayload = UserSignInPayload(
-      email: email,
-      password: password,
-    );
+    String otp = _otpController.text;
+    String newPassword = _passwordController.text;
 
     try {
-      store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result = await signinFn(userPayload);
+      String email = store.state.email;
+      Tuple2<int, String> result =
+          await resetPasswordFn(otp, newPassword, false);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
@@ -76,8 +71,6 @@ class _ResetPasswordState extends State<ResetPassword> {
     super.initState();
     // Initialize the text controller with the initial date
   }
-
-  final TextEditingController _passwordController = TextEditingController();
 
   bool _revealPassword = false;
 

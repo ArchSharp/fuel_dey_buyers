@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
-import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
@@ -17,7 +16,8 @@ class VendorForgotpassword extends StatefulWidget {
 
 class _VendorForgotpasswordState extends State<VendorForgotpassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController dateController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   String email = '';
   String password = '';
 
@@ -27,20 +27,16 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
   bool isLoading = false;
   late Tuple2<int, String> result;
 
-  Future<void> handleSignUp() async {
+  Future<void> handleForgotPassword() async {
     setState(() {
       isLoading = true;
     });
 
-    // Create an instance of UserPayload
-    UserSignInPayload userPayload = UserSignInPayload(
-      email: email,
-      password: password,
-    );
+    String email = _emailController.text;
 
     try {
       store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result = await signinFn(userPayload);
+      Tuple2<int, String> result = await forgotPasswordFn(email, true);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
@@ -78,9 +74,6 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
     // Initialize the text controller with the initial date
     _initializeTextControllers();
   }
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
 
   final Map<String, String?> _errors = {
     'email': null,

@@ -71,19 +71,23 @@ class UserSignInPayload {
 class VendorSignUpPayload {
   String stationname;
   String address;
+  String latitude;
+  String longitude;
   String state;
   String lga;
   String email;
-  String phone;
+  String phonenumber;
   String password;
 
   VendorSignUpPayload({
     required this.stationname,
     required this.address,
+    required this.latitude,
+    required this.longitude,
     required this.state,
     required this.lga,
     required this.email,
-    required this.phone,
+    required this.phonenumber,
     required this.password,
   });
 
@@ -92,10 +96,12 @@ class VendorSignUpPayload {
     return {
       "stationname": stationname,
       "address": address,
+      "latitude": latitude,
+      "longitude": longitude,
       "state": state,
       "lga": lga,
       "email": email,
-      "phonenumber": phone,
+      "phonenumber": phonenumber,
       "password": password,
     };
   }
@@ -105,10 +111,12 @@ class VendorSignUpPayload {
     return VendorSignUpPayload(
       stationname: json['stationname'],
       address: json['address'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
       state: json['state'],
       lga: json['lga'],
       email: json['email'],
-      phone: json['phone'],
+      phonenumber: json['phonenumber'],
       password: json['password'],
     );
   }

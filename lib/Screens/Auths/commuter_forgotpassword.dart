@@ -27,7 +27,7 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
   bool isLoading = false;
   late Tuple2<int, String> result;
 
-  Future<void> handleSignUp() async {
+  Future<void> handleForgotPassword() async {
     setState(() {
       isLoading = true;
     });
@@ -40,7 +40,8 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
 
     try {
       store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result = await signinFn(userPayload);
+      Tuple2<int, String> result =
+          await forgotPasswordFn(userPayload.email, false);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {

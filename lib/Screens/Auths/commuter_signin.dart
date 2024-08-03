@@ -204,9 +204,11 @@ class _CommuterSigninState extends State<CommuterSignin> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(
-                            CommuterForgotpassword.routeName,
-                            arguments: 'Passing data from SignIn');
+                        if (!isLoading) {
+                          Navigator.of(context).pushNamed(
+                              CommuterForgotpassword.routeName,
+                              arguments: 'Passing data from SignIn');
+                        }
                       },
                       child: const Text(
                         "Forgot Password?",

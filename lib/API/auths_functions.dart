@@ -8,8 +8,8 @@ import 'package:tuple/tuple.dart';
 
 String? baseUrl = dotenv.env['NGROK_URL'];
 
-Future<Tuple2<int, String>> signinFn(UserSignInPayload payload) async {
-  String apiUrl = '$baseUrl/api/SigninUser';
+Future<Tuple2<int, String>> signInVendorFn(UserSignInPayload payload) async {
+  String apiUrl = '$baseUrl/api/SignInVendor';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer YOUR_API_KEY",
@@ -21,6 +21,7 @@ Future<Tuple2<int, String>> signinFn(UserSignInPayload payload) async {
         headers: headers, body: json.encode(payload));
 
     final Map<String, dynamic> data = json.decode(response.body);
+    // print("signin response: ${data["body"]}");
     if (response.statusCode == 200) {
       // print(data["extrainfo"]);
       store.dispatch(UpdateUserAction(data['body']));
@@ -87,44 +88,6 @@ Future<Tuple2<int, String>> signInCommuterFn(UserSignInPayload payload) async {
   return result;
 }
 
-Future<Tuple2<int, String>> signupFn(CommuterPayload payload) async {
-  String apiUrl = '$baseUrl/api/NewUser';
-  final Map<String, String> headers = {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY",
-  };
-
-  // print(payload);
-
-  var result = const Tuple2(0, "");
-  try {
-    final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload.toJson()));
-
-    final Map<String, dynamic> data = json.decode(response.body);
-
-    print('response: $data');
-    if (response.statusCode == 201) {
-      // print(data);
-      result = const Tuple2(1, "Account created succesfully");
-    } else {
-      // Handle errors
-      // print('Request failed with status: ${response.statusCode}');
-      // print('check error: $data');
-      if (data['error'].toString().contains("parsing time")) {
-        result = const Tuple2(2, 'There is error in date');
-      } else {
-        result = Tuple2(3, data['body']);
-      }
-    }
-  } catch (e) {
-    // Handle exceptions
-    // print('Error: $e');
-    result = const Tuple2(-1, "Network error");
-  }
-  return result;
-}
-
 Future<Tuple2<int, String>> signupCommuterFn(CommuterPayload payload) async {
   String apiUrl = '$baseUrl/api/NewCommuter';
   final Map<String, String> headers = {
@@ -164,7 +127,7 @@ Future<Tuple2<int, String>> signupCommuterFn(CommuterPayload payload) async {
 }
 
 Future<Tuple2<int, String>> vendorsignupFn(VendorSignUpPayload payload) async {
-  String apiUrl = '$baseUrl/api/NewUser';
+  String apiUrl = '$baseUrl/api/NewVendor';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer YOUR_API_KEY",
@@ -273,7 +236,7 @@ Future<Tuple2<int, String>> resendVerifyEmailFn(email, isVendor) async {
   return result;
 }
 
-Future<Tuple2<int, String>> forgotPasswordFn(email) async {
+Future<Tuple2<int, String>> forgotPasswordFn(email, isVendor) async {
   String apiUrl = '$baseUrl/api/ForgotPassword?email=$email';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
@@ -306,7 +269,7 @@ Future<Tuple2<int, String>> forgotPasswordFn(email) async {
   return result;
 }
 
-Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword) async {
+Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
   String apiUrl = '$baseUrl/api/ResetPassword';
   final Map<String, String> headers = {
     "Content-Type": "application/json",

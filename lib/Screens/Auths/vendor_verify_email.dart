@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
@@ -40,7 +39,7 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
 
     try {
       var email = store.state.email;
-      // print(email);
+      print(email);
       Tuple2<int, String> result = await verifyEmailFn(email, otp, true);
       if (context.mounted) {
         if (result.item1 == 1) {
@@ -53,6 +52,34 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
           setState(() {
             resendOtp = true;
           });
+          myNotificationBar(context, result.item2, "error");
+        } else {
+          myNotificationBar(context, result.item2, "error");
+        }
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> resendVerifyEmail() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var email = store.state.email;
+      // print("email: $email");
+      Tuple2<int, String> result = await resendVerifyEmailFn(email, true);
+      if (context.mounted) {
+        if (result.item1 == 1) {
+          setState(() {
+            resendOtp = false;
+          });
+          myNotificationBar(context, result.item2, "success");
+        } else if (result.item1 == 2) {
           myNotificationBar(context, result.item2, "error");
         } else {
           myNotificationBar(context, result.item2, "error");
@@ -108,7 +135,11 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
             // const SizedBox(height: 20),
             const Text(
               "We sent a 6-digit code verification to your phone number. Enter the code to continue.",
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: Color(0xFF2C2D2F),
+              ),
             ),
             // Image.asset('assets/images/Ayib.jpg',
             //     width: imageWidth, height: 250),
@@ -128,16 +159,18 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(
-                        CommuterForgotpassword.routeName,
-                        arguments: 'Passing data from SignIn');
+                    if (resendOtp == true) {
+                      FocusScope.of(context).unfocus();
+                      resendVerifyEmail();
+                    }
                   },
-                  child: const Text(
+                  child: Text(
                     "Resend Code",
                     style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF018D5C),
-                        fontWeight: FontWeight.bold),
+                      fontSize: resendOtp ? 17 : 12,
+                      color: const Color(0xFF018D5C),
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -145,20 +178,41 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                verifyOTP();
+                if (!resendOtp && !isLoading) {
+                  FocusScope.of(context).unfocus();
+                  verifyOTP();
+                }
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 55),
-                backgroundColor: const Color(0XFFECB920),
+                backgroundColor:
+                    const Color(0XFFECB920).withOpacity(resendOtp ? 0.3 : 1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              child: const Text(
-                "Confirm",
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Confirm",
+                    style: TextStyle(
+                      color: Color(0xFF2C2D2F),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  if (isLoading)
+                    const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ),
+                ],
               ),
             ),
           ],

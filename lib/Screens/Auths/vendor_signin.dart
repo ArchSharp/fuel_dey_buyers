@@ -6,6 +6,7 @@ import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Main/vendor_home.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
@@ -31,26 +32,26 @@ class _VendorSigninState extends State<VendorSignin> {
   int _previousTextLength = 0;
   late Tuple2<int, String> result;
 
-  Future<void> handleSignUp() async {
+  Future<void> handleSignIn() async {
     setState(() {
       isLoading = true;
     });
 
     // Create an instance of UserPayload
     UserSignInPayload userPayload = UserSignInPayload(
-      email: email,
-      password: password,
+      email: _emailController.text.toLowerCase(),
+      password: _passwordController.text,
     );
 
     try {
-      store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result = await signinFn(userPayload);
+      store.dispatch(InitialiseEmail(userPayload.email));
+      // print("payload: ${userPayload.email}");
+      Tuple2<int, String> result = await signInVendorFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => const OTPScreen()));
             myNotificationBar(context, result.item2, "success");
+            Navigator.pushReplacementNamed(context, VendorHome.routeName);
           }
           setState(() {
             isButtonClicked = true;
@@ -62,6 +63,10 @@ class _VendorSigninState extends State<VendorSignin> {
           // Failed sign-up
           if (context.mounted) {
             myNotificationBar(context, result.item2, "error");
+            if (result.item1 == 2) {
+              Navigator.pushReplacementNamed(
+                  context, VendorVerifyEmail.routeName);
+            }
           }
           setState(() {
             isButtonClicked = true;
@@ -218,9 +223,11 @@ class _VendorSigninState extends State<VendorSignin> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(
-                            VendorForgotpassword.routeName,
-                            arguments: 'Passing data from SignIn');
+                        if (!isLoading) {
+                          Navigator.of(context).pushNamed(
+                              VendorForgotpassword.routeName,
+                              arguments: 'Passing data from SignIn');
+                        }
                       },
                       child: const Text(
                         "Forgot Password?",
@@ -235,7 +242,10 @@ class _VendorSigninState extends State<VendorSignin> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    _validateInputs();
+                    if (!isLoading) {
+                      FocusScope.of(context).unfocus();
+                      _validateInputs();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 55),
@@ -244,11 +254,29 @@ class _VendorSigninState extends State<VendorSignin> {
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                  child: const Text(
-                    "Sign In",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Sign In",
+                        style: TextStyle(
+                          color: Color(0xFF2C2D2F),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      if (isLoading)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -380,8 +408,11 @@ class _VendorSigninState extends State<VendorSignin> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(VendorSignup.routeName,
-                            arguments: 'Passing data from SignIn');
+                        if (!isLoading) {
+                          Navigator.of(context).pushNamed(
+                              VendorSignup.routeName,
+                              arguments: 'Passing data from SignIn');
+                        }
                       },
                       child: const Text(
                         "Sign Up",
@@ -465,8 +496,7 @@ class _VendorSigninState extends State<VendorSignin> {
     });
 
     if (_errors.values.every((error) => error == null)) {
-      myNotificationBar(context, 'Form submitted', 'success');
-      Navigator.pushReplacementNamed(context, VendorHome.routeName);
+      handleSignIn();
     }
   }
 

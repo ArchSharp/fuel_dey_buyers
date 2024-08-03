@@ -5,6 +5,7 @@ import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/privacy_policy.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/terms_conditions.dart';
@@ -41,24 +42,26 @@ class _VendorSignupState extends State<VendorSignup> {
 
     // Create an instance of UserPayload
     VendorSignUpPayload userPayload = VendorSignUpPayload(
-      stationname: stationname,
-      address: address,
-      state: state,
-      lga: lga,
-      email: email,
-      phone: phone,
-      password: password,
+      stationname: _stationNameController.text,
+      address: _addressController.text,
+      latitude: '4.37065',
+      longitude: '5.01262',
+      state: _stateController.text,
+      lga: _lgaController.text,
+      email: _emailController.text,
+      phonenumber: "+234${_phoneController.text}",
+      password: _passwordController.text,
     );
 
     try {
-      store.dispatch(InitialiseEmail(state));
+      store.dispatch(InitialiseEmail(userPayload.email));
       Tuple2<int, String> result = await vendorsignupFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => const OTPScreen()));
             myNotificationBar(context, result.item2, "success");
+            Navigator.pushReplacementNamed(
+                context, VendorVerifyEmail.routeName);
           }
           setState(() {
             isButtonClicked = true;
@@ -136,7 +139,7 @@ class _VendorSignupState extends State<VendorSignup> {
   bool _isAgreeTermsCondition = false;
 
   final Map<String, String?> _errors = {
-    'stationname': null,
+    'station_name': null,
     'address': null,
     'state': null,
     'lga': null,
@@ -392,7 +395,9 @@ class _VendorSignupState extends State<VendorSignup> {
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () {
-                          _validateInputs();
+                          if (_isAgreeTermsCondition && !isLoading) {
+                            _validateInputs();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 55),
@@ -402,11 +407,29 @@ class _VendorSignupState extends State<VendorSignup> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
-                        child: const Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                color: Color(0xFF2C2D2F),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            if (isLoading)
+                              const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -523,7 +546,7 @@ class _VendorSignupState extends State<VendorSignup> {
     });
 
     if (_errors.values.every((error) => error == null)) {
-      myNotificationBar(context, 'Form submitted', 'success');
+      handleSignUp();
     }
   }
 
