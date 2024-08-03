@@ -176,7 +176,11 @@ class MainCommuterSettings extends StatelessWidget {
                       SizedBox(width: 10),
                       Text(
                         "Favorite stations",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF2C2D2F),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
@@ -193,7 +197,40 @@ class MainCommuterSettings extends StatelessWidget {
                       SizedBox(width: 10),
                       Text(
                         "Your Timeline",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF2C2D2F),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.timeline_outlined,
+                        size: 24,
+                        color: Color(0xFF2C2D2F),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Total station visited: ",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF2C2D2F),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "10",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFFC9C9C9),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
@@ -210,7 +247,11 @@ class MainCommuterSettings extends StatelessWidget {
                       SizedBox(width: 10),
                       Text(
                         "Settings",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF2C2D2F),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
@@ -221,7 +262,7 @@ class MainCommuterSettings extends StatelessWidget {
                       "Other",
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                        color: Color(0xFFACACAC),
+                        color: Color(0xFFC9C9C9),
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -240,7 +281,11 @@ class MainCommuterSettings extends StatelessWidget {
                       SizedBox(width: 10),
                       Text(
                         "FAQ",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF2C2D2F),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
@@ -257,7 +302,11 @@ class MainCommuterSettings extends StatelessWidget {
                       SizedBox(width: 10),
                       Text(
                         "Help and Feedback",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF2C2D2F),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
