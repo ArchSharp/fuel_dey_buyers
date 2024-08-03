@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
-import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
@@ -23,8 +24,9 @@ class _ResetPasswordState extends State<ResetPassword> {
   String errorText = '';
   bool isLoading = false;
   late Tuple2<int, String> result;
+  bool? isVendor;
 
-  Future<void> handleSignUp() async {
+  Future<void> handleResetPasswordFn() async {
     setState(() {
       isLoading = true;
     });
@@ -32,15 +34,19 @@ class _ResetPasswordState extends State<ResetPassword> {
     String newPassword = _passwordController.text;
 
     try {
-      String email = store.state.email;
       Tuple2<int, String> result =
-          await resetPasswordFn(otp, newPassword, false);
+          await resetPasswordFn(otp, newPassword, isVendor);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => const OTPScreen()));
             myNotificationBar(context, result.item2, "success");
+            Navigator.pushNamed(
+              context,
+              isVendor == true
+                  ? VendorSignin.routeName
+                  : CommuterSignin.routeName,
+              arguments: "",
+            );
           }
           setState(() {
             isButtonClicked = true;
@@ -69,13 +75,40 @@ class _ResetPasswordState extends State<ResetPassword> {
   @override
   void initState() {
     super.initState();
-    // Initialize the text controller with the initial date
+    // Extract arguments in initState
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        var args = ModalRoute.of(context)?.settings.arguments as String;
+        isVendor = args == "Vendor" ? true : false;
+      });
+    });
+
+    _initializeTextControllers();
+  }
+
+  void _initializeTextControllers() {
+    _otpController.addListener(() {
+      _clearErrorIfTextPresent('otp', _otpController);
+    });
+    _passwordController.addListener(() {
+      _clearErrorIfTextPresent('password', _passwordController);
+    });
+  }
+
+  void _clearErrorIfTextPresent(
+      String field, TextEditingController controller) {
+    if (controller.text.isNotEmpty && _errors[field] != null) {
+      setState(() {
+        _errors[field] = null;
+      });
+    }
   }
 
   bool _revealPassword = false;
 
   final Map<String, String?> _errors = {
     'password': null,
+    'otp': null,
   };
 
   void _togglePasswordVisibility() {
@@ -126,19 +159,32 @@ class _ResetPasswordState extends State<ResetPassword> {
                 //     width: imageWidth, height: 250),
                 const SizedBox(height: 20),
                 const Text(
-                  "Password",
+                  "OTP (one time pin)",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                     color: Color(0xFF2C2D2F),
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
+                const SizedBox(height: 5),
+                _buildTextField(
+                  controller: _otpController,
+                  label: 'OTP',
+                  error: _errors['otp'],
                 ),
+                const SizedBox(height: 10),
+                const Text(
+                  "New Password",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: Color(0xFF2C2D2F),
+                  ),
+                ),
+                const SizedBox(height: 5),
                 _buildPasswordField(
                   controller: _passwordController,
-                  label: 'Password',
+                  label: 'New Password',
                   obscureText: !_revealPassword,
                   onChanged: (value) {
                     setState(() {
@@ -148,7 +194,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   onToggleVisibility: _togglePasswordVisibility,
                   error: _errors['password'],
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
                 const Padding(
                   padding: EdgeInsets.all(0),
                   child: Text("Your password must contain:"),
@@ -179,7 +225,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     )
                   ],
                 ),
-                const SizedBox(height: 5),
+                // const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -208,7 +254,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    _validateInputs();
+                    if (!isLoading) {
+                      FocusScope.of(context).unfocus();
+                      _validateInputs();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 55),
@@ -217,13 +266,29 @@ class _ResetPasswordState extends State<ResetPassword> {
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                  child: const Text(
-                    "Done",
-                    style: TextStyle(
-                      color: Color(0xFF2C2D2F),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Done",
+                        style: TextStyle(
+                          color: Color(0xFF2C2D2F),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      if (isLoading)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ],
@@ -231,6 +296,29 @@ class _ResetPasswordState extends State<ResetPassword> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType keyboardType = TextInputType.number,
+    required error,
+  }) {
+    return TextField(
+      style: const TextStyle(fontSize: 14),
+      controller: controller,
+      decoration: InputDecoration(
+        // labelText: label,
+        hintText: "Enter $label",
+        errorText: error,
+        errorStyle: const TextStyle(color: Colors.red),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(style: BorderStyle.solid),
+        ),
+      ),
+      keyboardType: keyboardType,
+      textInputAction: TextInputAction.next,
     );
   }
 
@@ -268,16 +356,19 @@ class _ResetPasswordState extends State<ResetPassword> {
       _errors['password'] = _passwordController.text.isEmpty
           ? 'Please enter your password'
           : null;
+      _errors['otp'] =
+          _otpController.text.isEmpty ? 'Please enter the received OTP' : null;
     });
 
     if (_errors.values.every((error) => error == null)) {
-      myNotificationBar(context, 'Form submitted', 'success');
+      handleResetPasswordFn();
     }
   }
 
   @override
   void dispose() {
     _passwordController.dispose();
+    _otpController.dispose();
     super.dispose();
   }
 }

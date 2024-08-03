@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
-import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_verify_email.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/reset_password.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
 
@@ -17,7 +17,7 @@ class CommuterForgotpassword extends StatefulWidget {
 
 class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController dateController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   String email = '';
   String password = '';
 
@@ -32,22 +32,16 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
       isLoading = true;
     });
 
-    // Create an instance of UserPayload
-    UserSignInPayload userPayload = UserSignInPayload(
-      email: email,
-      password: password,
-    );
-
+    var email = _emailController.text;
     try {
       store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result =
-          await forgotPasswordFn(userPayload.email, false);
+      Tuple2<int, String> result = await forgotPasswordFn(email, false);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => const OTPScreen()));
             myNotificationBar(context, result.item2, "success");
+            Navigator.of(context)
+                .pushNamed(ResetPassword.routeName, arguments: 'Commuter');
           }
           setState(() {
             isButtonClicked = true;
@@ -59,6 +53,10 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
           // Failed sign-up
           if (context.mounted) {
             myNotificationBar(context, result.item2, "error");
+            if (result.item1 == 3) {
+              Navigator.of(context).pushNamed(CommuterVerifyEmail.routeName,
+                  arguments: 'Commuter');
+            }
           }
           setState(() {
             isButtonClicked = true;
@@ -77,13 +75,27 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
   void initState() {
     super.initState();
     // Initialize the text controller with the initial date
+    _initializeTextControllers();
   }
-
-  final TextEditingController _emailController = TextEditingController();
 
   final Map<String, String?> _errors = {
     'email': null,
   };
+
+  void _initializeTextControllers() {
+    _emailController.addListener(() {
+      _clearErrorIfTextPresent('email', _emailController);
+    });
+  }
+
+  void _clearErrorIfTextPresent(
+      String field, TextEditingController controller) {
+    if (controller.text.isNotEmpty && _errors[field] != null) {
+      setState(() {
+        _errors[field] = null;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,9 +164,12 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
                     alignment: Alignment.center,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(
-                            CommuterForgotpassword.routeName,
-                            arguments: 'Passing data from SignIn');
+                        if (!isLoading) {
+                          FocusScope.of(context).unfocus();
+                          // Navigator.of(context).pushNamed(
+                          //     CommuterForgotpassword.routeName,
+                          //     arguments: 'Passing data from SignIn');
+                        }
                       },
                       child: const Text(
                         "Try another way",
@@ -170,7 +185,10 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    _validateInputs();
+                    if (!isLoading) {
+                      FocusScope.of(context).unfocus();
+                      _validateInputs();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 55),
@@ -179,13 +197,29 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                  child: const Text(
-                    "Reset Password",
-                    style: TextStyle(
-                      color: Color(0xFF2C2D2F),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Reset Password",
+                        style: TextStyle(
+                          color: Color(0xFF2C2D2F),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      if (isLoading)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ],
@@ -226,11 +260,7 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
     });
 
     if (_errors.values.every((error) => error == null)) {
-      myNotificationBar(context, 'Form submitted', 'success');
-      Navigator.of(context).pushNamed(
-        CommuterVerifyEmail.routeName,
-        arguments: 'Passing data from SignIn',
-      );
+      handleForgotPassword();
     }
   }
 

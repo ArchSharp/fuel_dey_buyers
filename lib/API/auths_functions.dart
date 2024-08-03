@@ -237,7 +237,12 @@ Future<Tuple2<int, String>> resendVerifyEmailFn(email, isVendor) async {
 }
 
 Future<Tuple2<int, String>> forgotPasswordFn(email, isVendor) async {
-  String apiUrl = '$baseUrl/api/ForgotPassword?email=$email';
+  String type =
+      isVendor == true ? 'VendorForgotPassword' : 'CommuterForgotPassword';
+  String apiUrl = '$baseUrl/api/$type?email=$email';
+
+  // print(apiUrl);
+
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer YOUR_API_KEY",
@@ -249,7 +254,7 @@ Future<Tuple2<int, String>> forgotPasswordFn(email, isVendor) async {
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
-      print(data);
+      // print(data);
       result = Tuple2(1, data['body']);
     } else {
       print(
@@ -270,16 +275,19 @@ Future<Tuple2<int, String>> forgotPasswordFn(email, isVendor) async {
 }
 
 Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
-  String apiUrl = '$baseUrl/api/ResetPassword';
+  String type =
+      isVendor == true ? 'VendorResetPassword' : 'CommuterResetPassword';
+  String apiUrl = '$baseUrl/api/$type';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer YOUR_API_KEY",
   };
   var email = store.state.email;
+  email = isVendor == true ? email.replaceAll(RegExp(r'%2B'), "+") : email;
   final Map<String, dynamic> payload = {
     "email": email,
     "otp": otp,
-    "new_password": newPassword,
+    "newpassword": newPassword,
   };
 
   var result = const Tuple2(0, "");

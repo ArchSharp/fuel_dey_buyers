@@ -192,13 +192,28 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              child: const Text(
-                "Confirm",
-                style: TextStyle(
-                  color: Color(0xFF2C2D2F),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Confirm",
+                    style: TextStyle(
+                      color: Color(0xFF2C2D2F),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  if (isLoading)
+                    const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ),
+                ],
               ),
             ),
           ],

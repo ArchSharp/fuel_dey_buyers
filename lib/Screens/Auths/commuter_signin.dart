@@ -223,43 +223,44 @@ class _CommuterSigninState extends State<CommuterSignin> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                    onPressed: () {
-                      if (!isLoading) {
-                        FocusScope.of(context).unfocus();
-                        _validateInputs();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 55),
-                      backgroundColor: const Color(0XFFECB920),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+                  onPressed: () {
+                    if (!isLoading) {
+                      FocusScope.of(context).unfocus();
+                      _validateInputs();
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 55),
+                    backgroundColor: const Color(0XFFECB920),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Sign In",
-                          style: TextStyle(
-                            color: Color(0xFF2C2D2F),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Sign In",
+                        style: TextStyle(
+                          color: Color(0xFF2C2D2F),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      if (isLoading)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         ),
-                        const SizedBox(width: 15),
-                        if (isLoading)
-                          const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          ),
-                      ],
-                    )),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),

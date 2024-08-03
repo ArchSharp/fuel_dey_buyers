@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/reset_password.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:tuple/tuple.dart';
@@ -16,7 +17,6 @@ class VendorForgotpassword extends StatefulWidget {
 
 class _VendorForgotpasswordState extends State<VendorForgotpassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   String email = '';
   String password = '';
@@ -32,17 +32,18 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
       isLoading = true;
     });
 
-    String email = _emailController.text;
+    String email = '%2B234${_phoneController.text}';
 
     try {
+      // print("email: $email");
       store.dispatch(InitialiseEmail(email));
       Tuple2<int, String> result = await forgotPasswordFn(email, true);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => const OTPScreen()));
             myNotificationBar(context, result.item2, "success");
+            Navigator.of(context)
+                .pushNamed(ResetPassword.routeName, arguments: 'Vendor');
           }
           setState(() {
             isButtonClicked = true;
@@ -54,6 +55,10 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
           // Failed sign-up
           if (context.mounted) {
             myNotificationBar(context, result.item2, "error");
+            if (result.item1 == 3) {
+              Navigator.of(context)
+                  .pushNamed(VendorVerifyEmail.routeName, arguments: 'Vendor');
+            }
           }
           setState(() {
             isButtonClicked = true;
@@ -76,16 +81,12 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
   }
 
   final Map<String, String?> _errors = {
-    'email': null,
     'phone': null,
   };
 
   void _initializeTextControllers() {
     _phoneController.addListener(() {
       _clearErrorIfTextPresent('phone', _phoneController);
-    });
-    _emailController.addListener(() {
-      _clearErrorIfTextPresent('email', _emailController);
     });
   }
 
@@ -134,7 +135,7 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
                 // const SizedBox(height: 20),
                 const Text(
                   "No worries! Just enter your email, and we'll help you reset it in no time.",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 12),
                 ),
                 // Image.asset('assets/images/Ayib.jpg',
                 //     width: imageWidth, height: 250),
@@ -207,7 +208,10 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    _validateInputs();
+                    if (!isLoading) {
+                      FocusScope.of(context).unfocus();
+                      _validateInputs();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 55),
@@ -216,11 +220,29 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                  child: const Text(
-                    "Reset Password",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Reset Password",
+                        style: TextStyle(
+                          color: Color(0xFF2C2D2F),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      if (isLoading)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ],
@@ -265,17 +287,12 @@ class _VendorForgotpasswordState extends State<VendorForgotpassword> {
     });
 
     if (_errors.values.every((error) => error == null)) {
-      myNotificationBar(context, 'Form submitted', 'success');
-      Navigator.of(context).pushNamed(
-        VendorVerifyEmail.routeName,
-        arguments: 'Passing data from SignIn',
-      );
+      handleForgotPassword();
     }
   }
 
   @override
   void dispose() {
-    _emailController.dispose();
     _phoneController.dispose();
     super.dispose();
   }
