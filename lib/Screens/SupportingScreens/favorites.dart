@@ -154,8 +154,10 @@ class _FavoritesState extends State<Favorites> {
                                           Text(
                                             "Edit",
                                             style: TextStyle(
-                                                color: Color(0xFF2C2D2F),
-                                                fontSize: 12),
+                                              color: Color(0xFF2C2D2F),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -189,7 +191,7 @@ class _FavoritesState extends State<Favorites> {
                                           Text(
                                             "Add places",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Color(0xFFFFFDF4),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 12,
                                             ),

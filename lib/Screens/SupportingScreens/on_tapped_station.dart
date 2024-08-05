@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/ratings_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/star_ratings.dart';
 
@@ -502,6 +503,8 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 4, 20, 4),
                                   minimumSize: const Size(70, 22),
                                   backgroundColor: const Color(0xFF018D5C),
                                   shape: RoundedRectangleBorder(
@@ -512,13 +515,35 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                   children: [
                                     const Text(
                                       "Petrol",
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                        color: Color(0xFFFFFDF4),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10,
+                                      ),
                                     ),
                                     if (height >= 0.55)
-                                      const Text(
-                                        "# 700",
-                                        style: TextStyle(color: Colors.white),
-                                      )
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/icons/money.svg',
+                                            width: 12.0,
+                                            height: 12.0,
+                                            colorFilter: const ColorFilter.mode(
+                                              Color(0xFFC9C9C9),
+                                              BlendMode.srcIn,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          const Text(
+                                            "700",
+                                            style: TextStyle(
+                                              color: Color(0xFFFFFDF4),
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                   ],
                                 ),
                               ),
@@ -526,6 +551,8 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 4, 20, 4),
                                   minimumSize: const Size(70, 22),
                                   backgroundColor: const Color(0xFFE15623),
                                   shape: RoundedRectangleBorder(
@@ -536,13 +563,35 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                   children: [
                                     const Text(
                                       "Gas",
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                        color: Color(0xFFFFFDF4),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10,
+                                      ),
                                     ),
                                     if (height >= 0.55)
-                                      const Text(
-                                        "# 1100",
-                                        style: TextStyle(color: Colors.white),
-                                      )
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/icons/money.svg',
+                                            width: 12.0,
+                                            height: 12.0,
+                                            colorFilter: const ColorFilter.mode(
+                                              Color(0xFFFFFDF4),
+                                              BlendMode.srcIn,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          const Text(
+                                            "1100",
+                                            style: TextStyle(
+                                              color: Color(0xFFFFFDF4),
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                   ],
                                 ),
                               ),
@@ -550,6 +599,8 @@ class _OnTappedStationState extends State<OnTappedStation> {
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 4, 20, 4),
                                   minimumSize: const Size(70, 22),
                                   backgroundColor: const Color(0xFF018D5C),
                                   shape: RoundedRectangleBorder(
@@ -560,15 +611,35 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                   children: [
                                     const Text(
                                       "Diesel",
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                        color: Color(0xFFFFFDF4),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10,
+                                      ),
                                     ),
                                     if (height >= 0.55)
-                                      const Text(
-                                        "# 1700",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      )
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/icons/money.svg',
+                                            width: 12.0,
+                                            height: 12.0,
+                                            colorFilter: const ColorFilter.mode(
+                                              Color(0xFFC9C9C9),
+                                              BlendMode.srcIn,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          const Text(
+                                            "1700",
+                                            style: TextStyle(
+                                              color: Color(0xFFFFFDF4),
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                   ],
                                 ),
                               ),

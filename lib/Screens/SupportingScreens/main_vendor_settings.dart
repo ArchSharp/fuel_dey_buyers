@@ -146,7 +146,11 @@ class MainVendorSettings extends StatelessWidget {
                   ),
                   Text(
                     "Edit",
-                    style: TextStyle(color: Color(0xFF2C2D2F), fontSize: 12),
+                    style: TextStyle(
+                      color: Color(0xFF2C2D2F),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),

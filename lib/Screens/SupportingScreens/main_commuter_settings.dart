@@ -149,15 +149,14 @@ class MainCommuterSettings extends StatelessWidget {
                     style: TextStyle(
                       color: Color(0xFF2C2D2F),
                       fontSize: 12,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 15),
-            const Divider(
-              color: Color(0xFFC1C1C1),
-            ),
+            const Divider(color: Color(0xFFC1C1C1)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(

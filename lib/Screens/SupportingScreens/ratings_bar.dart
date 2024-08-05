@@ -49,6 +49,7 @@ class _RatingsBarState extends State<RatingsBar> {
   Widget build(BuildContext context) {
     // if (_tappedIndex != null) {
     //   print("tip: ${widget.tips[_tappedIndex!]}");
+    double deviceWidth = MediaQuery.of(context).size.width - 138;
     // }
     return Stack(
       children: [
@@ -74,7 +75,7 @@ class _RatingsBarState extends State<RatingsBar> {
             left: 0,
             // right: 0,
             child: Container(
-              width: 200,
+              width: deviceWidth,
               // height: 20,
               padding: const EdgeInsets.all(2.0),
               color: Colors.black.withOpacity(0.7),
@@ -95,7 +96,7 @@ class _RatingsBarState extends State<RatingsBar> {
 class RatingBar extends StatelessWidget {
   final double rating;
   final String tip;
-  static const double barLength = 150.0;
+  static double barLength = 150.0;
   static const double barHeight = 7.0;
   final VoidCallback onTap;
 
@@ -108,6 +109,8 @@ class RatingBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width - 68;
+    barLength = deviceWidth - 70;
 //    print("tip: $tip");
 
     return GestureDetector(

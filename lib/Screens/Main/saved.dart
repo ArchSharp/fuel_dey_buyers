@@ -36,7 +36,7 @@ class _SavedState extends State<Saved> {
                         "Saved",
                         style: TextStyle(
                           fontSize: 32,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                           color: Color(0xFFECB920),
                         ),
                       ),
@@ -54,7 +54,11 @@ class _SavedState extends State<Saved> {
                         ),
                         child: const Text(
                           "+ New List",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       )
                     ],

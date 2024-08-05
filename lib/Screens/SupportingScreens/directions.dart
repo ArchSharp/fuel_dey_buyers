@@ -139,10 +139,11 @@ class _DirectionsState extends State<Directions> {
                                             iconSize: 16,
                                             onPressed: () {},
                                             icon: const Icon(
-                                                Icons.directions_walk),
+                                              Icons.directions_walk,
+                                            ),
                                             color: Colors.white,
                                           ),
-                                        )
+                                        ),
                                       ],
                                     )
                                   ],
@@ -311,10 +312,12 @@ class _DirectionsState extends State<Directions> {
                                                     ),
                                                   ],
                                                 ),
-                                                trailing: const Icon(
-                                                  Icons.menu_rounded,
-                                                  size: 20,
-                                                ),
+                                                trailing: index < 2
+                                                    ? const Icon(
+                                                        Icons.menu_rounded,
+                                                        size: 20,
+                                                      )
+                                                    : null,
                                               ),
                                             ),
                                             const SizedBox(height: 15),

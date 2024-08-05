@@ -169,12 +169,13 @@ class _MainHomeState extends State<MainHome> {
         "${place.street} ${place.locality} state ${place.country}, postal code ${place.postalCode}";
 
     //print("Placemarks: " + placemarks.toString());
-
-    setState(() {
-      _currentPosition = position;
-      _address = address;
-      _userPlace = place;
-    });
+    if (mounted) {
+      setState(() {
+        _currentPosition = position;
+        _address = address;
+        _userPlace = place;
+      });
+    }
   }
 
   @override
