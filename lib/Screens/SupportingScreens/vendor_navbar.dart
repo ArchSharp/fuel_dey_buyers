@@ -26,11 +26,15 @@ class _VendorNavbarState extends State<VendorNavbar> {
           icon: Padding(
             padding: const EdgeInsets.only(bottom: 3),
             child: SvgPicture.asset(
-              'assets/svgs/home.svg',
+              _currentIndex == 0
+                  ? 'assets/svgs/home.svg'
+                  : 'assets/svgs/inactive_home.svg',
               width: 18.0,
               height: 19.0,
               colorFilter: ColorFilter.mode(
-                _currentIndex == 0 ? const Color(0xFFECB920) : Colors.grey,
+                _currentIndex == 0
+                    ? const Color(0xFFECB920)
+                    : const Color(0xFF2C2D2F),
                 BlendMode.srcIn,
               ),
             ),
@@ -42,14 +46,18 @@ class _VendorNavbarState extends State<VendorNavbar> {
             _currentIndex == 1
                 ? Icons.notifications
                 : Icons.notifications_outlined,
-            color: _currentIndex == 1 ? const Color(0xFFECB920) : Colors.grey,
+            color: _currentIndex == 1
+                ? const Color(0xFFECB920)
+                : const Color(0xFF2C2D2F),
           ),
           label: 'Notification',
         ),
         BottomNavigationBarItem(
           icon: Icon(
             _currentIndex == 2 ? Icons.settings_sharp : Icons.settings_outlined,
-            color: _currentIndex == 2 ? const Color(0xFFECB920) : Colors.grey,
+            color: _currentIndex == 2
+                ? const Color(0xFFECB920)
+                : const Color(0xFF2C2D2F),
           ),
           label: 'Setting',
         ),

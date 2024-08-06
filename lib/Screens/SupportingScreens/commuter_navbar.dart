@@ -27,13 +27,15 @@ class _CommuterNavbarState extends State<CommuterNavbar> {
           icon: Padding(
             padding: const EdgeInsets.only(bottom: 3),
             child: SvgPicture.asset(
-              'assets/svgs/home.svg',
+              widget.currentIndex == 0
+                  ? 'assets/svgs/home.svg'
+                  : 'assets/svgs/inactive_home.svg',
               width: 18.0,
               height: 19.0,
               colorFilter: ColorFilter.mode(
                 widget.currentIndex == 0
                     ? const Color(0xFFECB920)
-                    : Colors.grey,
+                    : const Color(0xFF2C2D2F),
                 BlendMode.srcIn,
               ),
             ),
@@ -47,7 +49,7 @@ class _CommuterNavbarState extends State<CommuterNavbar> {
                 : Icons.bookmark_border_sharp,
             color: widget.currentIndex == 1
                 ? const Color(0xFFECB920)
-                : Colors.grey,
+                : const Color(0xFF2C2D2F),
           ),
           label: 'Saved',
         ),
@@ -58,7 +60,7 @@ class _CommuterNavbarState extends State<CommuterNavbar> {
                 : Icons.notifications_outlined,
             color: widget.currentIndex == 2
                 ? const Color(0xFFECB920)
-                : Colors.grey,
+                : const Color(0xFF2C2D2F),
           ),
           label: 'Notification',
         ),
@@ -69,7 +71,7 @@ class _CommuterNavbarState extends State<CommuterNavbar> {
                 : Icons.settings_outlined,
             color: widget.currentIndex == 3
                 ? const Color(0xFFECB920)
-                : Colors.grey,
+                : const Color(0xFF2C2D2F),
           ),
           label: 'Setting',
         ),
