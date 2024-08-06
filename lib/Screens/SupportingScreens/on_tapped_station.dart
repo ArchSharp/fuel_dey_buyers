@@ -525,7 +525,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                       Row(
                                         children: [
                                           SvgPicture.asset(
-                                            'assets/icons/money.svg',
+                                            'assets/svgs/money.svg',
                                             width: 12.0,
                                             height: 12.0,
                                             colorFilter: const ColorFilter.mode(
@@ -573,7 +573,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                       Row(
                                         children: [
                                           SvgPicture.asset(
-                                            'assets/icons/money.svg',
+                                            'assets/svgs/money.svg',
                                             width: 12.0,
                                             height: 12.0,
                                             colorFilter: const ColorFilter.mode(
@@ -621,7 +621,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                       Row(
                                         children: [
                                           SvgPicture.asset(
-                                            'assets/icons/money.svg',
+                                            'assets/svgs/money.svg',
                                             width: 12.0,
                                             height: 12.0,
                                             colorFilter: const ColorFilter.mode(

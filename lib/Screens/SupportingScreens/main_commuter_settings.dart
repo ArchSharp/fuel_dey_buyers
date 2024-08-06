@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class MainCommuterSettings extends StatelessWidget {
+class MainCommuterSettings extends StatefulWidget {
   final ValueChanged<int> onIndexChanged;
 
   const MainCommuterSettings({
@@ -11,13 +14,46 @@ class MainCommuterSettings extends StatelessWidget {
   });
 
   @override
+  State<MainCommuterSettings> createState() => _MainCommuterSettingsState();
+}
+
+class _MainCommuterSettingsState extends State<MainCommuterSettings> {
+  File? _image;
+
+  Future<void> _pickImage() async {
+    // Request permission to access photos
+    // final status = await Permission.photos.request();
+    final status = await Permission.storage.request();
+    // print("gotten here");
+
+    if (status.isGranted) {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } else if (status.isDenied) {
+      // Handle permission denied
+      print('Permission denied');
+    } else if (status.isPermanentlyDenied) {
+      // Handle permission permanently denied
+      print('Permission permanently denied');
+      // Optionally, open the app settings
+      // openAppSettings();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
     double mtop = 0.07 * deviceHeight;
 
     return StoreConnector<AppState, dynamic>(
       converter: (store) => store, //store.state.user
-      builder: (context, state /*user*/) {
+      builder: (context, store) {
         var fname = store.state.user['firstname'];
         var lname = store.state.user['lastname'];
         var email = store.state.user['email'];
@@ -40,8 +76,9 @@ class MainCommuterSettings extends StatelessWidget {
                     CircleAvatar(
                       radius: 82.5,
                       backgroundColor: Colors.grey[300],
-                      backgroundImage:
-                          const AssetImage('assets/images/commuter.png'),
+                      backgroundImage: _image != null
+                          ? FileImage(_image!)
+                          : const AssetImage('assets/images/commuter.png'),
                       // child: const Icon(
                       //   Icons.help,
                       //   color: Colors.white, // Icon color
@@ -67,8 +104,8 @@ class MainCommuterSettings extends StatelessWidget {
                             color: Colors.black,
                           ),
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, '/commuter_signup');
+                            // print("Icon button pressed");
+                            _pickImage();
                           },
                         ),
                       ),
@@ -317,7 +354,7 @@ class MainCommuterSettings extends StatelessWidget {
                     children: [
                       TextButton(
                         onPressed: () {
-                          onIndexChanged(1);
+                          widget.onIndexChanged(1);
                         },
                         child: const Text(
                           "Privacy Policy",
@@ -331,7 +368,7 @@ class MainCommuterSettings extends StatelessWidget {
                       const SizedBox(width: 60),
                       TextButton(
                         onPressed: () {
-                          onIndexChanged(2);
+                          widget.onIndexChanged(2);
                         },
                         child: const Text(
                           "Terms and conditions",

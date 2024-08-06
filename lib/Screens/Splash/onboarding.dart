@@ -160,7 +160,8 @@ class _OnboardingState extends State<Onboarding> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    // Handle skip button press
+                                    Navigator.pushReplacementNamed(
+                                        context, Welcome.routeName);
                                   },
                                   child: const Text(
                                     "Skip",

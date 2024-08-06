@@ -42,7 +42,7 @@ class _FavoritesState extends State<Favorites> {
 
     return StoreConnector<AppState, dynamic>(
       converter: (store) => store, //store.state.user
-      builder: (context, state /*user*/) {
+      builder: (context, store /*user*/) {
         var fname = store.state.user['firstname'];
         return Positioned.fill(
           child: DraggableScrollableSheet(
@@ -103,10 +103,7 @@ class _FavoritesState extends State<Favorites> {
                                           Icons.favorite_outline_outlined,
                                           color: Color(0xFF2C2D2F),
                                         ),
-                                        onPressed: () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/commuter_signup');
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ),
                                     const SizedBox(width: 10),
@@ -234,10 +231,7 @@ class _FavoritesState extends State<Favorites> {
                                           Icons.favorite_outline_outlined,
                                           color: Color(0xFF2C2D2F),
                                         ),
-                                        onPressed: () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/commuter_signup');
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -322,10 +316,7 @@ class _FavoritesState extends State<Favorites> {
                                           Icons.favorite_outline_outlined,
                                           color: Color(0xFF2C2D2F),
                                         ),
-                                        onPressed: () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/commuter_signup');
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -410,10 +401,7 @@ class _FavoritesState extends State<Favorites> {
                                           Icons.favorite_outline_outlined,
                                           color: Color(0xFF2C2D2F),
                                         ),
-                                        onPressed: () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/commuter_signup');
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -498,10 +486,7 @@ class _FavoritesState extends State<Favorites> {
                                           Icons.favorite_outline_outlined,
                                           color: Color(0xFF2C2D2F),
                                         ),
-                                        onPressed: () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/commuter_signup');
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -586,10 +571,7 @@ class _FavoritesState extends State<Favorites> {
                                           Icons.favorite_outline_outlined,
                                           color: Color(0xFF2C2D2F),
                                         ),
-                                        onPressed: () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/commuter_signup');
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -674,10 +656,7 @@ class _FavoritesState extends State<Favorites> {
                                           Icons.favorite_outline_outlined,
                                           color: Color(0xFF2C2D2F),
                                         ),
-                                        onPressed: () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/commuter_signup');
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -762,10 +741,7 @@ class _FavoritesState extends State<Favorites> {
                                           Icons.favorite_outline_outlined,
                                           color: Color(0xFF2C2D2F),
                                         ),
-                                        onPressed: () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/commuter_signup');
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ),
                                     const SizedBox(width: 12),

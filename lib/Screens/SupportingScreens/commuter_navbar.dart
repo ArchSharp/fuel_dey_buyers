@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CommuterNavbar extends StatefulWidget {
   final ValueChanged<int> onIndexChanged;
@@ -23,11 +24,19 @@ class _CommuterNavbarState extends State<CommuterNavbar> {
       currentIndex: widget.currentIndex,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(
-            widget.currentIndex == 0 ? Icons.home : Icons.home_outlined,
-            color: widget.currentIndex == 0
-                ? const Color(0xFFECB920)
-                : Colors.grey,
+          icon: Padding(
+            padding: const EdgeInsets.only(bottom: 3),
+            child: SvgPicture.asset(
+              'assets/svgs/home.svg',
+              width: 18.0,
+              height: 19.0,
+              colorFilter: ColorFilter.mode(
+                widget.currentIndex == 0
+                    ? const Color(0xFFECB920)
+                    : Colors.grey,
+                BlendMode.srcIn,
+              ),
+            ),
           ),
           label: 'Home',
         ),

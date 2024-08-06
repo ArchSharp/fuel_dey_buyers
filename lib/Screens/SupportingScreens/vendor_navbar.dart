@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class VendorNavbar extends StatefulWidget {
   final ValueChanged<int> onIndexChanged;
@@ -22,21 +23,20 @@ class _VendorNavbarState extends State<VendorNavbar> {
       currentIndex: _currentIndex,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(
-            _currentIndex == 0 ? Icons.home : Icons.home_outlined,
-            color: _currentIndex == 0 ? const Color(0xFFECB920) : Colors.grey,
+          icon: Padding(
+            padding: const EdgeInsets.only(bottom: 3),
+            child: SvgPicture.asset(
+              'assets/svgs/home.svg',
+              width: 18.0,
+              height: 19.0,
+              colorFilter: ColorFilter.mode(
+                _currentIndex == 0 ? const Color(0xFFECB920) : Colors.grey,
+                BlendMode.srcIn,
+              ),
+            ),
           ),
           label: 'Home',
         ),
-        // BottomNavigationBarItem(
-        //   icon: Icon(
-        //     _currentIndex == 1
-        //         ? Icons.bookmark_sharp
-        //         : Icons.bookmark_border_sharp,
-        //     color: _currentIndex == 1 ? const Color(0xFF2C2D2F) : Colors.grey,
-        //   ),
-        //   label: 'Favorite',
-        // ),
         BottomNavigationBarItem(
           icon: Icon(
             _currentIndex == 1
