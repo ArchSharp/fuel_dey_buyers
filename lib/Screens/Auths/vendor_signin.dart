@@ -37,11 +37,32 @@ class _VendorSigninState extends State<VendorSignin> {
       isLoading = true;
     });
 
+    final firstChar = _emailController.text[0];
+    final isNumber = RegExp(r'[0-9]').hasMatch(firstChar);
+    var processedText = _emailController.text;
+    if (isNumber) {
+      // Check if the first character is a '+'
+      if (processedText[0] == '+') {
+        processedText = processedText.substring(1);
+      }
+      // Check if the first three characters are '234'
+      if (processedText.length >= 3 && processedText.substring(0, 3) == '234') {
+        processedText = processedText.substring(3);
+      }
+
+      // Check if the first character is '0'
+      if (processedText.isNotEmpty && processedText[0] == '0') {
+        processedText = processedText.substring(1);
+      }
+    }
+
     // Create an instance of UserPayload
     UserSignInPayload userPayload = UserSignInPayload(
-      email: _emailController.text.toLowerCase(),
+      email: "+234$processedText",
       password: _passwordController.text,
     );
+
+    // print("email: ${userPayload.email}");
 
     try {
       store.dispatch(InitialiseEmail(userPayload.email));
@@ -453,6 +474,12 @@ class _VendorSigninState extends State<VendorSignin> {
       ),
       keyboardType: keyboardType,
       textInputAction: TextInputAction.next,
+      onChanged: (text) {
+        controller.value = controller.value.copyWith(
+          text: text.toLowerCase(),
+          selection: TextSelection.collapsed(offset: text.length),
+        );
+      },
     );
   }
 

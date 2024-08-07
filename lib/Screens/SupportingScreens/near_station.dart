@@ -86,8 +86,8 @@ class NearStation extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.grey,
-                  Colors.black,
+                  Color(0xFFFFFDF4),
+                  Color(0xFFFFFDF4),
                 ],
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,

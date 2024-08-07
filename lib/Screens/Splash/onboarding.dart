@@ -95,7 +95,7 @@ class _OnboardingState extends State<Onboarding> {
                       itemCount: _contents.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
                             // mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -153,13 +153,14 @@ class _OnboardingState extends State<Onboarding> {
                     left: 0,
                     right: 0,
                     child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.only(
+                          left: 13, top: 0, right: 13, bottom: 16),
                       child: _currentPage < 2
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                TextButton(
-                                  onPressed: () {
+                                GestureDetector(
+                                  onTap: () {
                                     Navigator.pushReplacementNamed(
                                         context, Welcome.routeName);
                                   },
@@ -189,8 +190,7 @@ class _OnboardingState extends State<Onboarding> {
                                     width: 35,
                                     height: 35,
                                     decoration: BoxDecoration(
-                                      color: const Color(
-                                          0xFFFFFDF4), //Colors.black.withOpacity(0.8),
+                                      color: const Color(0xFFFFFDF4),
                                       shape: BoxShape.rectangle,
                                       borderRadius: BorderRadius.circular(4),
                                     ),

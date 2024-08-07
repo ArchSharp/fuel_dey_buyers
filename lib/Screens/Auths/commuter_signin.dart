@@ -434,6 +434,12 @@ class _CommuterSigninState extends State<CommuterSignin> {
       ),
       keyboardType: keyboardType,
       textInputAction: TextInputAction.next,
+      onChanged: (text) {
+        controller.value = controller.value.copyWith(
+          text: text.toLowerCase(),
+          selection: TextSelection.collapsed(offset: text.length),
+        );
+      },
     );
   }
 
