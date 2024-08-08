@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
@@ -34,6 +37,12 @@ class _VendorSignupState extends State<VendorSignup> {
   String errorText = '';
   bool isLoading = false;
   late Tuple2<int, String> result;
+
+  Map<String, dynamic> nigeriaData = {};
+  List<dynamic> states = [];
+  String? selectedState;
+  List<dynamic> lgas = [];
+  String? selectedLGA;
 
   Future<void> handleSignUp() async {
     setState(() {
@@ -92,6 +101,7 @@ class _VendorSignupState extends State<VendorSignup> {
     super.initState();
     // Initialize the text controller with the initial date
     _initializeTextControllers();
+    loadNigeriaData();
   }
 
   final TextEditingController _stationNameController = TextEditingController();
@@ -158,6 +168,16 @@ class _VendorSignupState extends State<VendorSignup> {
   void _updateHomeIndex(int newIndex) {
     setState(() {
       _signupIndex = newIndex;
+    });
+  }
+
+  Future<void> loadNigeriaData() async {
+    final String response =
+        await rootBundle.loadString('assets/data/nigeria.json');
+    final data = await json.decode(response);
+    setState(() {
+      nigeriaData = data;
+      states = nigeriaData['states'];
     });
   }
 
@@ -233,22 +253,89 @@ class _VendorSignupState extends State<VendorSignup> {
                             fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                       const SizedBox(height: 5),
-                      _buildTextField(
-                        controller: _stateController,
-                        label: 'State',
-                        error: _errors['state'],
+                      // _buildTextField(
+                      //   controller: _stateController,
+                      //   label: 'State',
+                      //   error: _errors['state'],
+                      // ),
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                            isExpanded: true,
+                            padding: const EdgeInsets.only(left: 10),
+                            hint: const Text('Select State'),
+                            value: selectedState,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedState = newValue;
+                                lgas = states.firstWhere((state) =>
+                                    state['name'] ==
+                                    newValue)['local_government_areas'];
+                                selectedLGA = null;
+                              });
+                            },
+                            items:
+                                states.map<DropdownMenuItem<String>>((state) {
+                              return DropdownMenuItem<String>(
+                                value: state['name'],
+                                child: Text("${state['name']} State"),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 8),
                       const Text(
                         "LGA",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                       const SizedBox(height: 5),
-                      _buildTextField(
-                        controller: _lgaController,
-                        label: 'LGA',
-                        error: _errors['lga'],
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                            isExpanded: true,
+                            padding: const EdgeInsets.only(left: 10),
+                            hint: const Text(
+                              'Select LGA',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            value: selectedLGA,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedLGA = newValue;
+                              });
+                            },
+                            items: lgas.map<DropdownMenuItem<String>>((lga) {
+                              return DropdownMenuItem<String>(
+                                value: lga['name'],
+                                child: Text("${lga['name']} LGA"),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 8),
                       const Text(
