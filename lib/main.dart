@@ -20,8 +20,14 @@ import 'package:fuel_dey_buyers/Screens/Splash/onboarding.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/welcome.dart';
 import 'package:fuel_dey_buyers/Screens/Main/home.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  bool permissionGranted = await checkLocationPermission();
+  print(permissionGranted); // Will print the current permission status
+
   await dotenv.load(fileName: ".env");
 
   SystemChrome.setPreferredOrientations([
@@ -78,5 +84,20 @@ class MyApp extends StatelessWidget {
         LogoSplash.routeName: (ctx) => const LogoSplash(),
       },
     );
+  }
+}
+
+Future<bool> checkLocationPermission() async {
+  var status = await Permission.location.status;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  if (status.isGranted) {
+    // Permission is granted, you can update SharedPreferences here
+    await prefs.setBool('location_permission_granted', true);
+    return true;
+  } else {
+    // Permission is not granted, update SharedPreferences
+    await prefs.setBool('location_permission_granted', false);
+    return false;
   }
 }

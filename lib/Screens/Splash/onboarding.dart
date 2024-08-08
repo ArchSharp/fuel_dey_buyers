@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/welcome.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingContent {
   final String title;
@@ -22,6 +24,7 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  bool? _hasPermission;
 
   final List<OnboardingContent> _contents = [
     OnboardingContent(
@@ -40,6 +43,89 @@ class _OnboardingState extends State<Onboarding> {
           "Our intuitive map and search features guides you there effortlessly and helps you quickly locate the nearest fuel stations to get petrol, diesel, or gas.",
     ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermission();
+  }
+
+  Future<void> _checkPermission() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? permissionGranted = prefs.getBool('location_permission_granted');
+
+    print(permissionGranted);
+    if (permissionGranted == null) {
+      // First time asking for permission
+      _showPermissionDialog();
+    } else {
+      setState(() {
+        _hasPermission = permissionGranted;
+      });
+    }
+  }
+
+  void _showPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        title: const Center(
+          child: Text('Allow Location Access', style: TextStyle(fontSize: 14)),
+        ),
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(
+                'Do you want to allow location access? Allowing access will help us give you real-time, high quality services such as filling station with good litre measurement, ',
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextButton(
+                onPressed: () => _onPermissionGranted(),
+                child: const Text('Yes'),
+              ),
+              TextButton(
+                onPressed: () => _onPermissionDenied(),
+                child: const Text('No'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void _onPermissionDenied() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('location_permission_granted', false);
+    setState(() {
+      _hasPermission = false;
+    });
+    Navigator.of(context).pop();
+  }
+
+  void _onPermissionGranted() async {
+    PermissionStatus permissionStatus = await Permission.location.request();
+    bool isGranted = permissionStatus == PermissionStatus.granted;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('location_permission_granted', isGranted);
+
+    setState(() {
+      _hasPermission = isGranted;
+    });
+
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,8 +247,12 @@ class _OnboardingState extends State<Onboarding> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, Welcome.routeName);
+                                    if (_hasPermission == true) {
+                                      Navigator.pushReplacementNamed(
+                                          context, Welcome.routeName);
+                                    } else {
+                                      _showPermissionDialog();
+                                    }
                                   },
                                   child: const Text(
                                     "Skip",
@@ -205,8 +295,12 @@ class _OnboardingState extends State<Onboarding> {
                             )
                           : ElevatedButton(
                               onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                    context, Welcome.routeName);
+                                if (_hasPermission == true) {
+                                  Navigator.pushReplacementNamed(
+                                      context, Welcome.routeName);
+                                } else {
+                                  _showPermissionDialog();
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 fixedSize: Size(exploreBtnWidth, 55),
