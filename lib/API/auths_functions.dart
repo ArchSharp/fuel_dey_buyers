@@ -321,8 +321,8 @@ Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
   return result;
 }
 
-Future<Tuple2<int, String>> fetchUserWalletFn(email) async {
-  String apiUrl = '$baseUrl/api/FetchUserWallet?email=$email';
+Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
+  String apiUrl = '$baseUrl/api/CommuterGetAllVendors';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": 'Bearer ${store.state.userToken["accesstoken"]}',
@@ -330,22 +330,22 @@ Future<Tuple2<int, String>> fetchUserWalletFn(email) async {
 
   var result = const Tuple2(0, "");
   try {
-    final response = await http.get(Uri.parse(apiUrl), headers: headers);
+    final response = await http.post(Uri.parse(apiUrl),
+        headers: headers, body: json.encode(payload.toJson()));
 
-    Map<String, dynamic> data = json.decode(response.body);
+    final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
-      store.dispatch(SaveUserWallet(data["body"]));
-      // print(data);
-      result = const Tuple2(1, "wallet fetched");
+      print(data);
+      store.dispatch(GetAllVendors(data['body']));
+      result = Tuple2(1, data['message']);
     } else {
-      // print(
-      //     'Request failed with status: ${response.statusCode} response payload: $data');
-
-      String msg = data['body'];
-      if (msg.contains("not found")) {
-        result = Tuple2(2, msg);
-      } else if (msg.contains("verify")) {
-        result = Tuple2(3, msg);
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      // print('check error: $data');
+      if (data['error'].toString().contains("parsing time")) {
+        result = const Tuple2(2, 'There is error in date');
+      } else {
+        result = Tuple2(3, data['body']);
       }
     }
   } catch (e) {

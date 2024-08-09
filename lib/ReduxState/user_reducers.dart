@@ -17,13 +17,13 @@ AppState userReducer(AppState state, dynamic action) {
     return state..userWallet = action.userWallet;
   }
 
-  if (action is GetBanks) {
-    return state..banks = action.banks;
+  if (action is GetAllVendors) {
+    return state..allVendors = action.allVendors;
   }
 
   if (action is LogOut) {
     return AppState(
-        email: "", user: {}, userToken: {}, userWallet: {}, banks: []);
+        email: "", user: {}, userToken: {}, userWallet: {}, allVendors: []);
   }
 
   return state;

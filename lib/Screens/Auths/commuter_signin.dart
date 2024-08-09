@@ -20,7 +20,6 @@ class CommuterSignin extends StatefulWidget {
 
 class _CommuterSigninState extends State<CommuterSignin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController dateController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -57,7 +56,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
       Tuple2<int, String> result = await signInCommuterFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "success");
             Navigator.pushReplacementNamed(context, Home.routeName);
           }
@@ -69,7 +68,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
           // You might want to navigate to another screen or perform user registration
         } else {
           // Failed sign-up
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "error");
             if (result.item1 == 2) {
               Navigator.pushReplacementNamed(

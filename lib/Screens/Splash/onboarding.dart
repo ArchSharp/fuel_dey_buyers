@@ -110,7 +110,10 @@ class _OnboardingState extends State<Onboarding> {
     setState(() {
       _hasPermission = false;
     });
-    Navigator.of(context).pop();
+
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _onPermissionGranted() async {
@@ -124,7 +127,9 @@ class _OnboardingState extends State<Onboarding> {
       _hasPermission = isGranted;
     });
 
-    Navigator.of(context).pop();
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -212,7 +217,7 @@ class _OnboardingState extends State<Onboarding> {
                   ),
                   // ),
                   Positioned(
-                    bottom: _currentPage < 2 ? 90 : 110,
+                    bottom: _currentPage < 2 ? 80 : 110,
                     left: 0,
                     right: 0,
                     child: Row(

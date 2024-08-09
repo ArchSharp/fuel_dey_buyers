@@ -6,14 +6,14 @@ class AppState {
   late Map<String, dynamic> userToken;
   late Map<String, dynamic> userWallet;
   late String email;
-  late List<dynamic> banks;
+  late List<dynamic> allVendors;
 
   AppState({
     required this.email,
     required this.user,
     required this.userToken,
     required this.userWallet,
-    required this.banks,
+    required this.allVendors,
   });
 }
 
@@ -23,6 +23,6 @@ final combinedReducers = combineReducers<AppState>([userReducer]);
 // Create the Redux store
 final Store<AppState> store = Store<AppState>(
   combinedReducers,
-  initialState:
-      AppState(email: '', user: {}, userToken: {}, userWallet: {}, banks: []),
+  initialState: AppState(
+      email: '', user: {}, userToken: {}, userWallet: {}, allVendors: []),
 );

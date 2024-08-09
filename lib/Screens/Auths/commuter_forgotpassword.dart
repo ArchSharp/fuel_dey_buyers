@@ -38,7 +38,7 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
       Tuple2<int, String> result = await forgotPasswordFn(email, false);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "success");
             Navigator.of(context)
                 .pushNamed(ResetPassword.routeName, arguments: 'Commuter');
@@ -51,7 +51,7 @@ class _CommuterForgotpasswordState extends State<CommuterForgotpassword> {
           // You might want to navigate to another screen or perform user registration
         } else {
           // Failed sign-up
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "error");
             if (result.item1 == 3) {
               Navigator.of(context).pushNamed(CommuterVerifyEmail.routeName,

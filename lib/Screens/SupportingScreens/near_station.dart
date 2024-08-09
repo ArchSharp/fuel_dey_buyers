@@ -8,6 +8,8 @@ class NearStation extends StatelessWidget {
   final IconData icon;
   final bool isFuelAvailable;
   final ValueChanged<int> onIndexChanged;
+  final Function(dynamic) onTappedChanged;
+  final dynamic vendor;
 
   const NearStation({
     super.key,
@@ -18,6 +20,8 @@ class NearStation extends StatelessWidget {
     required this.icon,
     required this.isFuelAvailable,
     required this.onIndexChanged,
+    required this.onTappedChanged,
+    required this.vendor,
   });
 
   @override
@@ -140,6 +144,7 @@ class NearStation extends StatelessWidget {
                 ),
                 onPressed: () {
                   onIndexChanged(1);
+                  onTappedChanged(vendor);
                 },
               ),
             ),

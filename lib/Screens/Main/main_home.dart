@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
+import 'package:fuel_dey_buyers/API/helpers.dart';
+import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Main/search.dart';
+import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/all_near_fuel_stations.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/directions.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/on_tapped_station.dart';
@@ -9,6 +13,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tuple/tuple.dart';
 
 const LatLng currentLocation = LatLng(25.1193, 55.3773);
 
@@ -32,6 +37,8 @@ class _MainHomeState extends State<MainHome> {
   bool? _hasPermission;
   String? _address;
   int _homeIndex = 0;
+  bool? isLoading;
+  var tappedStation;
 
   void _updateHomeIndex(int newIndex) {
     setState(() {
@@ -45,6 +52,12 @@ class _MainHomeState extends State<MainHome> {
         widget.onIndexChanged(1);
       }
       _homeIndex = newIndex;
+    });
+  }
+
+  void _updateTappedStation(var station) {
+    setState(() {
+      tappedStation = station;
     });
   }
 
@@ -101,18 +114,56 @@ class _MainHomeState extends State<MainHome> {
     //print("Placemarks: " + placemarks.toString());
     if (mounted) {
       print("address: $address");
+      print("place: $place");
       setState(() {
         _currentPosition = position;
         _address = address;
         _userPlace = place;
+      });
+
+      GetAllVendorsPayload payload = GetAllVendorsPayload(
+        state: place.locality!,
+        lga: place.subAdministrativeArea!,
+        latitude: position.latitude.toString(),
+        longitude: position.longitude.toString(),
+      );
+
+      handleGetAllVendors(payload);
+    }
+  }
+
+  Future<void> handleGetAllVendors(GetAllVendorsPayload payload) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      // print("payload: $userPayload");
+      Tuple2<int, String> result = await getAllVendors(payload);
+
+      if (result.item1 == 1) {
+        if (mounted) {
+          myNotificationBar(context, result.item2, "success");
+        }
+
+        // You might want to navigate to another screen or perform user registration
+      } else {
+        // Failed sign-up
+        if (mounted) {
+          myNotificationBar(context, result.item2, "error");
+        }
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    FocusScope.of(context)
-        .unfocus(); // Close the keyboard when this screen is built
+    // Close the keyboard when this screen is built
+    FocusScope.of(context).unfocus();
 
     // double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -249,11 +300,16 @@ class _MainHomeState extends State<MainHome> {
                 ),
               // const Spacer(),
               _homeIndex == 0
-                  ? AllNearFuelStations(onIndexChangedFunc: _updateHomeIndex)
+                  ? AllNearFuelStations(
+                      onIndexChangedFunc: _updateHomeIndex,
+                      onTappedChangedFunc: _updateTappedStation,
+                    )
                   : _homeIndex == 1
                       ? OnTappedStation(
-                          stationName: 'Oando Fuel Station',
-                          location: 'Eti-Osa, Lagos, Nigeria',
+                          stationName: capitalize(tappedStation['stationname']),
+                          location:
+                              "${capitalize(tappedStation['address'])} ${tappedStation['lga']} ${tappedStation['state']}",
+                          phone: tappedStation['phonenumber'],
                           estimatedTime: '8 mins',
                           distance: '2 km',
                           icon: Icons.access_time_outlined,

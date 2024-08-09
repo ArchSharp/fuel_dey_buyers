@@ -63,7 +63,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
       Tuple2<int, String> result = await signupCommuterFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "success");
             Navigator.pushReplacementNamed(
                 context, CommuterVerifyEmail.routeName);
@@ -77,7 +77,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
           // You might want to navigate to another screen or perform user registration
         } else {
           // Failed sign-up
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "error");
           }
           setState(() {
@@ -494,6 +494,14 @@ class _CommuterSignupState extends State<CommuterSignup> {
       ),
       keyboardType: keyboardType,
       textInputAction: TextInputAction.next,
+      onChanged: (text) {
+        if (controller == _emailController) {
+          controller.value = controller.value.copyWith(
+            text: text.toLowerCase(),
+            selection: TextSelection.collapsed(offset: text.length),
+          );
+        }
+      },
     );
   }
 

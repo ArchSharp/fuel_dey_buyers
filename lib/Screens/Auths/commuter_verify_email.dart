@@ -41,7 +41,7 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
       var email = store.state.email;
       // print("email: $email");
       Tuple2<int, String> result = await verifyEmailFn(email, otp, false);
-      if (context.mounted) {
+      if (mounted) {
         if (result.item1 == 1) {
           Navigator.of(context).pushNamed(
             CommuterSignin.routeName,
@@ -73,7 +73,7 @@ class _VerifyEmailState extends State<CommuterVerifyEmail> {
       var email = store.state.email;
       // print("email: $email");
       Tuple2<int, String> result = await resendVerifyEmailFn(email, false);
-      if (context.mounted) {
+      if (mounted) {
         if (result.item1 == 1) {
           setState(() {
             resendOtp = false;

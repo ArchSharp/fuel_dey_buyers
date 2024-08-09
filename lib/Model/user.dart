@@ -121,6 +121,41 @@ class VendorSignUpPayload {
     );
   }
 }
+
+class GetAllVendorsPayload {
+  String state;
+  String lga;
+  String latitude;
+  String longitude;
+
+  GetAllVendorsPayload({
+    required this.state,
+    required this.lga,
+    required this.latitude,
+    required this.longitude,
+  });
+
+  // Convert UserPayload to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      "state": state,
+      "lga": lga,
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+  }
+
+  // Create UserPayload from JSON
+  factory GetAllVendorsPayload.fromJson(Map<String, dynamic> json) {
+    return GetAllVendorsPayload(
+      state: json['state'],
+      lga: json['lga'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+    );
+  }
+}
+
 // void main() {
 //   // Sample payload data
 //   String email = 'john.doe@example.com';

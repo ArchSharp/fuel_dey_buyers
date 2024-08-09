@@ -42,6 +42,8 @@ class _VendorSignupState extends State<VendorSignup> {
   String? selectedState;
   List<dynamic> lgas = [];
   String? selectedLGA;
+  String? lgaLatitude;
+  String? lgaLongitude;
 
   Future<void> handleSignUp() async {
     setState(() {
@@ -52,10 +54,10 @@ class _VendorSignupState extends State<VendorSignup> {
     VendorSignUpPayload userPayload = VendorSignUpPayload(
       stationname: _stationNameController.text,
       address: _addressController.text,
-      latitude: '4.37065',
-      longitude: '5.01262',
-      state: _stateController.text,
-      lga: _lgaController.text,
+      latitude: lgaLatitude!,
+      longitude: lgaLongitude!,
+      state: selectedState!,
+      lga: selectedLGA!,
       email: _emailController.text,
       phonenumber: "+234${_phoneController.text}",
       password: _passwordController.text,
@@ -66,7 +68,7 @@ class _VendorSignupState extends State<VendorSignup> {
       Tuple2<int, String> result = await vendorsignupFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "success");
             Navigator.pushReplacementNamed(
                 context, VendorVerifyEmail.routeName);
@@ -79,7 +81,7 @@ class _VendorSignupState extends State<VendorSignup> {
           // You might want to navigate to another screen or perform user registration
         } else {
           // Failed sign-up
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "error");
           }
           setState(() {
@@ -325,6 +327,15 @@ class _VendorSignupState extends State<VendorSignup> {
                             onChanged: (newValue) {
                               setState(() {
                                 selectedLGA = newValue;
+
+                                // Find the selected LGA and set its latitude and longitude
+                                final selectedLGAData = lgas.firstWhere(
+                                    (lga) => lga['name'] == newValue);
+                                lgaLatitude = selectedLGAData['latitude'];
+                                lgaLongitude = selectedLGAData['longitude'];
+
+                                // print('Selected LGA Latitude: $lgaLatitude');
+                                // print('Selected LGA Longitude: $lgaLongitude');
                               });
                             },
                             items: lgas.map<DropdownMenuItem<String>>((lga) {
@@ -577,6 +588,14 @@ class _VendorSignupState extends State<VendorSignup> {
       ),
       keyboardType: keyboardType,
       textInputAction: TextInputAction.next,
+      onChanged: (text) {
+        if (controller == _emailController) {
+          controller.value = controller.value.copyWith(
+            text: text.toLowerCase(),
+            selection: TextSelection.collapsed(offset: text.length),
+          );
+        }
+      },
     );
   }
 
@@ -616,10 +635,10 @@ class _VendorSignupState extends State<VendorSignup> {
           : null;
       _errors['address'] =
           _addressController.text.isEmpty ? 'Please enter your address' : null;
-      _errors['state'] =
-          _stateController.text.isEmpty ? 'Please enter your state' : null;
-      _errors['lga'] =
-          _lgaController.text.isEmpty ? 'Please enter your lga' : null;
+      // _errors['state'] =
+      //     _stateController.text.isEmpty ? 'Please enter your state' : null;
+      // _errors['lga'] =
+      //     _lgaController.text.isEmpty ? 'Please enter your lga' : null;
       _errors['email'] = _addressController.text.isEmpty
           ? 'Please enter your email address'
           : null;

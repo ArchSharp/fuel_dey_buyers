@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
@@ -25,8 +26,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  bool permissionGranted = await checkLocationPermission();
-  print(permissionGranted); // Will print the current permission status
+  await checkLocationPermission();
+  store.dispatch(LogOut());
 
   await dotenv.load(fileName: ".env");
 

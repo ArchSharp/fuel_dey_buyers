@@ -7,6 +7,7 @@ import 'package:fuel_dey_buyers/Screens/SupportingScreens/star_ratings.dart';
 class OnTappedStation extends StatefulWidget {
   final String stationName;
   final String location;
+  final String phone;
   final String estimatedTime;
   final String distance;
   final IconData icon;
@@ -17,6 +18,7 @@ class OnTappedStation extends StatefulWidget {
     super.key,
     required this.stationName,
     required this.location,
+    required this.phone,
     required this.estimatedTime,
     required this.distance,
     required this.icon,
@@ -258,18 +260,18 @@ class _OnTappedStationState extends State<OnTappedStation> {
                         ),
                         if (height >= 0.55) const SizedBox(height: 10),
                         if (height >= 0.55)
-                          const Row(
+                          Row(
                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.phone,
                                 color: Colors.black,
                                 size: 20,
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Text(
-                                "+234 810 153 2597",
-                                style: TextStyle(
+                                widget.phone,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),

@@ -41,7 +41,7 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
       var email = store.state.email;
       print(email);
       Tuple2<int, String> result = await verifyEmailFn(email, otp, true);
-      if (context.mounted) {
+      if (mounted) {
         if (result.item1 == 1) {
           Navigator.of(context).pushNamed(
             VendorSignin.routeName,
@@ -73,7 +73,7 @@ class _VendorVerifyEmailState extends State<VendorVerifyEmail> {
       var email = store.state.email;
       // print("email: $email");
       Tuple2<int, String> result = await resendVerifyEmailFn(email, true);
-      if (context.mounted) {
+      if (mounted) {
         if (result.item1 == 1) {
           setState(() {
             resendOtp = false;

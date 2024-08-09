@@ -26,8 +26,8 @@ class SaveUserWallet {
   SaveUserWallet(this.userWallet);
 }
 
-class GetBanks {
-  final List<dynamic> banks;
+class GetAllVendors {
+  final List<dynamic> allVendors;
 
-  GetBanks(this.banks);
+  GetAllVendors(this.allVendors);
 }

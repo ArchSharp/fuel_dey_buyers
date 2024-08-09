@@ -38,7 +38,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           await resetPasswordFn(otp, newPassword, isVendor);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "success");
             Navigator.pushNamed(
               context,
@@ -56,7 +56,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           // You might want to navigate to another screen or perform user registration
         } else {
           // Failed sign-up
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "error");
           }
           setState(() {

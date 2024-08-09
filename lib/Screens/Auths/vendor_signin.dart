@@ -70,7 +70,7 @@ class _VendorSigninState extends State<VendorSignin> {
       Tuple2<int, String> result = await signInVendorFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "success");
             Navigator.pushReplacementNamed(context, VendorHome.routeName);
           }
@@ -82,7 +82,7 @@ class _VendorSigninState extends State<VendorSignin> {
           // You might want to navigate to another screen or perform user registration
         } else {
           // Failed sign-up
-          if (context.mounted) {
+          if (mounted) {
             myNotificationBar(context, result.item2, "error");
             if (result.item1 == 2) {
               Navigator.pushReplacementNamed(
