@@ -313,8 +313,8 @@ class _CommuterSigninState extends State<CommuterSignin> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, CommuterSignup.routeName);
+                    // Navigator.pushReplacementNamed(
+                    //     context, CommuterSignup.routeName);
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(exploreBtnWidth, 55),
@@ -349,8 +349,8 @@ class _CommuterSigninState extends State<CommuterSignin> {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, CommuterSignup.routeName);
+                    // Navigator.pushReplacementNamed(
+                    //     context, CommuterSignup.routeName);
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(exploreBtnWidth, 55),

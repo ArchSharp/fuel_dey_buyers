@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class Directions extends StatefulWidget {
   final ValueChanged<int> onIndexChangedFunc;
+  final String stationname;
 
   const Directions({
     super.key,
     required this.onIndexChangedFunc,
+    required this.stationname,
   });
 
   @override
@@ -15,14 +17,7 @@ class Directions extends StatefulWidget {
 class _DirectionsState extends State<Directions> {
   bool showDots = true;
   // List of items
-  final List<String> items = [
-    'My Location',
-    'Oando Fuel Station',
-    // 'Mobil Fuel Station',
-    // 'NNPC Fuel Station',
-    // 'Total Fuel Station',
-    'Add Stop'
-  ];
+  final List<String> items = ['My Location', "", 'Add Stop'];
 
   final DraggableScrollableController _scrollableController =
       DraggableScrollableController();
@@ -32,6 +27,7 @@ class _DirectionsState extends State<Directions> {
   @override
   void initState() {
     super.initState();
+    items[1] = widget.stationname;
     _scrollableController.addListener(() {
       _heightPercentageNotifier.value = _scrollableController.size;
     });
@@ -249,7 +245,7 @@ class _DirectionsState extends State<Directions> {
                                           // key: ValueKey(items[index]),
                                           children: [
                                             SizedBox(
-                                              height: 30,
+                                              height: 20,
                                               child: ListTile(
                                                 contentPadding:
                                                     const EdgeInsets.only(

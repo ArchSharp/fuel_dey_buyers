@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
+import 'package:fuel_dey_buyers/Model/user.dart';
+import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/ratings_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/star_ratings.dart';
+import 'package:fuel_dey_buyers/Screens/SupportingScreens/user_star_rating.dart';
+import 'package:tuple/tuple.dart';
 
 class OnTappedStation extends StatefulWidget {
   final String stationName;
@@ -13,6 +19,7 @@ class OnTappedStation extends StatefulWidget {
   final IconData icon;
   final bool isFuelAvailable;
   final ValueChanged<int> onIndexChangedFunc;
+  final dynamic vendor;
 
   const OnTappedStation({
     super.key,
@@ -24,6 +31,7 @@ class OnTappedStation extends StatefulWidget {
     required this.icon,
     required this.isFuelAvailable,
     required this.onIndexChangedFunc,
+    required this.vendor,
   });
 
   @override
@@ -33,6 +41,7 @@ class OnTappedStation extends StatefulWidget {
 class _OnTappedStationState extends State<OnTappedStation> {
   bool showOpenCloseTime = false;
   bool showAllReview = false;
+  bool? isLoading;
 
   final DraggableScrollableController _scrollableController =
       DraggableScrollableController();
@@ -53,6 +62,34 @@ class _OnTappedStationState extends State<OnTappedStation> {
     _scrollableController.dispose();
     _heightPercentageNotifier.dispose();
     super.dispose();
+  }
+
+  Future<void> handleRateVendor(RateVendorPayload payload) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      // print("payload: $userPayload");
+      Tuple2<int, String> result = await rateVendor(payload);
+
+      if (result.item1 == 1) {
+        if (mounted) {
+          myNotificationBar(context, result.item2, "success");
+        }
+
+        // You might want to navigate to another screen or perform user registration
+      } else {
+        // Failed sign-up
+        if (mounted) {
+          myNotificationBar(context, result.item2, "error");
+        }
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -126,31 +163,35 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                       ),
                                     ],
                                   ),
-                                  const Row(
+                                  Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      SizedBox(width: 24),
+                                      const SizedBox(width: 24),
                                       Text(
-                                        '3.8',
-                                        style: TextStyle(
+                                        "${double.parse(widget.vendor['averagerating'].toString())}",
+                                        style: const TextStyle(
                                           color: Color(0xFF2C2D2F),
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
-                                      SizedBox(width: 5),
-                                      StarRatings(rating: 3.8, starSize: 12),
-                                      SizedBox(width: 5),
+                                      const SizedBox(width: 5),
+                                      StarRatings(
+                                          rating: double.parse(widget
+                                              .vendor['averagerating']
+                                              .toString()),
+                                          starSize: 12),
+                                      const SizedBox(width: 5),
                                       Text(
-                                        '(79)',
-                                        style: TextStyle(
+                                        '(${double.parse(widget.vendor['totalrater'].toString())})',
+                                        style: const TextStyle(
                                           color: Color(0xFF2C2D2F),
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
                               const Spacer(),
@@ -536,9 +577,10 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                             ),
                                           ),
                                           const SizedBox(width: 5),
-                                          const Text(
-                                            "700",
-                                            style: TextStyle(
+                                          Text(
+                                            widget.vendor['petrolprice']
+                                                .toString(),
+                                            style: const TextStyle(
                                               color: Color(0xFFFFFDF4),
                                               fontWeight: FontWeight.w700,
                                               fontSize: 10,
@@ -584,9 +626,10 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                             ),
                                           ),
                                           const SizedBox(width: 5),
-                                          const Text(
-                                            "1100",
-                                            style: TextStyle(
+                                          Text(
+                                            widget.vendor['gasprice']
+                                                .toString(),
+                                            style: const TextStyle(
                                               color: Color(0xFFFFFDF4),
                                               fontWeight: FontWeight.w700,
                                               fontSize: 10,
@@ -632,9 +675,10 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                             ),
                                           ),
                                           const SizedBox(width: 5),
-                                          const Text(
-                                            "1700",
-                                            style: TextStyle(
+                                          Text(
+                                            widget.vendor['dieselprice']
+                                                .toString(),
+                                            style: const TextStyle(
                                               color: Color(0xFFFFFDF4),
                                               fontWeight: FontWeight.w700,
                                               fontSize: 10,
@@ -663,24 +707,29 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              const Row(
+                              Row(
                                 children: [
                                   SizedBox(
                                     width: 68,
                                     child: Column(
                                       children: [
                                         Text(
-                                          "3.9",
-                                          style: TextStyle(
+                                          "${double.parse(widget.vendor['averagerating'].toString())}",
+                                          style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFF2C2D2F),
                                           ),
                                         ),
-                                        StarRatings(rating: 3.9, starSize: 12),
+                                        StarRatings(
+                                          rating: double.parse(widget
+                                              .vendor['averagerating']
+                                              .toString()),
+                                          starSize: 12,
+                                        ),
                                         Text(
-                                          "(79)",
-                                          style: TextStyle(
+                                          "(${widget.vendor['totalrater']})",
+                                          style: const TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w400,
                                             color: Color(0xFFC9C9C9),
@@ -689,8 +738,8 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                       ],
                                     ),
                                   ),
-                                  Spacer(),
-                                  RatingsBar(
+                                  const Spacer(),
+                                  const RatingsBar(
                                     ratings: [1, 0.6, 0.8, 0.4, 0.2],
                                     tips: [
                                       '35 people gave 5 star',
@@ -734,6 +783,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12,
+                                      color: Color(0xFF018D5C),
                                     ),
                                   ),
                                 ),
@@ -869,10 +919,24 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 ),
                               ),
                               const SizedBox(height: 5),
-                              const Row(
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  StarRatings(rating: 4),
+                                  UserStarRating(
+                                    initialRating: 4,
+                                    onRatingChanged: (newRating) {
+                                      RateVendorPayload payload =
+                                          RateVendorPayload(
+                                        userid: store.state.user['id'],
+                                        vendorid: widget.vendor['id'],
+                                        rating: newRating.toString(),
+                                        review: "review",
+                                      );
+                                      print(
+                                          'New rating: ${payload.userid} ${payload.vendorid} ${payload.rating} ${payload.review}');
+                                      handleRateVendor(payload);
+                                    },
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 5),

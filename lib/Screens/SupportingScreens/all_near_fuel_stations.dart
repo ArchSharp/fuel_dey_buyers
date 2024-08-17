@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fuel_dey_buyers/API/helpers.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/near_station.dart';
 
@@ -56,22 +55,40 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
       converter: (store) => store, //store.state.user
       builder: (context, state /*user*/) {
         var allVendors = store.state.allVendors;
+        allVendors.sort((a, b) {
+          // Prioritize vendors with diesel
+          if (a['isdiesel'] == true && b['isdiesel'] != true) {
+            return -1;
+          } else if (a['isdiesel'] != true && b['isdiesel'] == true) {
+            return 1;
+          }
+
+          // If diesel is the same, prioritize vendors with gas
+          if (a['isgas'] == true && b['isgas'] != true) {
+            return -1;
+          } else if (a['isgas'] != true && b['isgas'] == true) {
+            return 1;
+          }
+
+          // If diesel and gas are the same, prioritize vendors with petrol
+          if (a['ispetrol'] == true && b['ispetrol'] != true) {
+            return -1;
+          } else if (a['ispetrol'] != true && b['ispetrol'] == true) {
+            return 1;
+          }
+
+          // If all conditions are the same, keep the order
+          return 0;
+        });
 
         List<Widget>? nearStations = [];
         if (allVendors.isNotEmpty) {
           nearStations = allVendors.map((vendor) {
-            var stationname = capitalize(vendor['stationname']);
-            var location =
-                "${capitalize(vendor['address'])} ${vendor['lga']} ${vendor['state']}";
             return Padding(
               padding: const EdgeInsets.only(bottom: 15.0),
               child: NearStation(
-                stationName: stationname,
-                location: location,
                 estimatedTime: '8 mins away', // Update this as needed
-                distance: '2 km', // Update this as needed
-                icon: Icons.access_time_outlined,
-                isFuelAvailable: true, // Update this as needed
+                distance: '2 km',
                 onIndexChanged: widget.onIndexChangedFunc,
                 vendor: vendor,
                 onTappedChanged: (station) => changedTappedStation(station),

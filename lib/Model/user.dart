@@ -156,6 +156,42 @@ class GetAllVendorsPayload {
   }
 }
 
+class RateVendorPayload {
+  String userid;
+  String vendorid;
+  String rating;
+  String review;
+
+  RateVendorPayload({
+    required this.userid,
+    required this.vendorid,
+    required this.rating,
+    required this.review,
+  });
+
+  // Convert UserPayload to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      "state": userid,
+      "lga": vendorid,
+      "latitude": rating,
+      "longitude": review,
+    };
+  }
+
+  // Create UserPayload from JSON
+  factory RateVendorPayload.fromJson(Map<String, dynamic> json) {
+    return RateVendorPayload(
+      userid: json['userid'],
+      vendorid: json['vendorid'],
+      rating: json['rating'],
+      review: json['review'],
+    );
+  }
+}
+
+
+
 // void main() {
 //   // Sample payload data
 //   String email = 'john.doe@example.com';

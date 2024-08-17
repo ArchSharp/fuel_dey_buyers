@@ -121,9 +121,15 @@ class _MainHomeState extends State<MainHome> {
         _userPlace = place;
       });
 
+      String state = "";
+      // place.locality!;
+      if (state.isEmpty) {
+        var stateSplitted = place.administrativeArea!.split(' ');
+        state = stateSplitted[0];
+      }
       GetAllVendorsPayload payload = GetAllVendorsPayload(
-        state: place.locality!,
-        lga: place.subAdministrativeArea!,
+        state: state,
+        lga: place.subAdministrativeArea!.replaceAll("/", "-"),
         latitude: position.latitude.toString(),
         longitude: position.longitude.toString(),
       );
@@ -315,9 +321,11 @@ class _MainHomeState extends State<MainHome> {
                           icon: Icons.access_time_outlined,
                           isFuelAvailable: true,
                           onIndexChangedFunc: _updateHomeIndex,
+                          vendor: tappedStation,
                         )
                       : Directions(
                           onIndexChangedFunc: _updateHomeIndex,
+                          stationname: capitalize(tappedStation['stationname']),
                         ),
             ],
           );

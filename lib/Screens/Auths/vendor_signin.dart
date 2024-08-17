@@ -3,7 +3,7 @@ import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
-import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
+// import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
@@ -353,8 +353,8 @@ class _VendorSigninState extends State<VendorSignin> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, CommuterSignup.routeName);
+                    // Navigator.pushReplacementNamed(
+                    //     context, CommuterSignup.routeName);
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(exploreBtnWidth, 55),
@@ -388,8 +388,8 @@ class _VendorSigninState extends State<VendorSignin> {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, VendorSignup.routeName);
+                    // Navigator.pushReplacementNamed(
+                    //     context, VendorSignup.routeName);
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(exploreBtnWidth, 55),

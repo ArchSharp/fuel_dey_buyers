@@ -61,7 +61,7 @@ Future<Tuple2<int, String>> signInCommuterFn(UserSignInPayload payload) async {
         headers: headers, body: json.encode(payload));
 
     final Map<String, dynamic> data = json.decode(response.body);
-    // print("signin response: ${data["body"]}");
+    print("signin response: ${data["body"]}");
     if (response.statusCode == 200) {
       // print(data["extrainfo"]);
       store.dispatch(UpdateUserAction(data['body']));
@@ -341,7 +341,41 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
     } else {
       // Handle errors
       // print('Request failed with status: ${response.statusCode}');
-      // print('check error: $data');
+      print('check error: $data');
+      if (data['error'].toString().contains("parsing time")) {
+        result = const Tuple2(2, 'There is error in date');
+      } else {
+        result = Tuple2(3, data['body']);
+      }
+    }
+  } catch (e) {
+    print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> rateVendor(RateVendorPayload payload) async {
+  String apiUrl = '$baseUrl/api/CommuterRateVendor';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": 'Bearer ${store.state.userToken["accesstoken"]}',
+  };
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.post(Uri.parse(apiUrl),
+        headers: headers, body: json.encode(payload.toJson()));
+
+    final Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      print(data);
+      // store.dispatch(GetAllVendors(data['body']));
+      result = Tuple2(1, data['message']);
+    } else {
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      print('check error: $data');
       if (data['error'].toString().contains("parsing time")) {
         result = const Tuple2(2, 'There is error in date');
       } else {
