@@ -23,7 +23,7 @@ class NearStation extends StatefulWidget {
 
 class _NearStationState extends State<NearStation> {
   bool isFuelAvailable = false;
-  String station_address = "";
+  String stationAddress = "";
 
   @override
   void initState() {
@@ -41,11 +41,11 @@ class _NearStationState extends State<NearStation> {
 
   @override
   Widget build(BuildContext context) {
-    station_address =
+    stationAddress =
         "${capitalize(widget.vendor['address'])} ${widget.vendor['lga']} ${widget.vendor['state']}";
 
-    if (station_address.length > 23) {
-      station_address = "${station_address.substring(0, 23)}...";
+    if (stationAddress.length > 23) {
+      stationAddress = "${stationAddress.substring(0, 23)}...";
     }
 
     return Container(
@@ -136,7 +136,7 @@ class _NearStationState extends State<NearStation> {
                 ),
               ),
               Text(
-                station_address,
+                stationAddress,
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,

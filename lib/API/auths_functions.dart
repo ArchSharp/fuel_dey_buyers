@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:fuel_dey_buyers/API/utils.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
@@ -12,13 +14,15 @@ Future<Tuple2<int, String>> signInVendorFn(UserSignInPayload payload) async {
   String apiUrl = '$baseUrl/api/SignInVendor';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY",
+    "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
   };
 
   var result = const Tuple2(0, "");
   try {
     final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload));
+        headers: headers,
+        body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
+    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     // print("signin response: ${data["body"]}");
@@ -52,16 +56,18 @@ Future<Tuple2<int, String>> signInCommuterFn(UserSignInPayload payload) async {
   String apiUrl = '$baseUrl/api/SignInCommuter';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY",
+    "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
   };
 
   var result = const Tuple2(0, "");
   try {
     final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload));
+        headers: headers,
+        body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
+    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
-    print("signin response: ${data["body"]}");
+    // print("signin response: ${data["body"]}");
     if (response.statusCode == 200) {
       // print(data["extrainfo"]);
       store.dispatch(UpdateUserAction(data['body']));
@@ -92,7 +98,7 @@ Future<Tuple2<int, String>> signupCommuterFn(CommuterPayload payload) async {
   String apiUrl = '$baseUrl/api/NewCommuter';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY",
+    "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
   };
 
   // print(payload);
@@ -100,7 +106,9 @@ Future<Tuple2<int, String>> signupCommuterFn(CommuterPayload payload) async {
   var result = const Tuple2(0, "");
   try {
     final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload.toJson()));
+        headers: headers,
+        body: json
+            .encode(payload.toJson())); //.timeout(const Duration(seconds: 10));
 
     final Map<String, dynamic> data = json.decode(response.body);
 
@@ -130,7 +138,7 @@ Future<Tuple2<int, String>> vendorsignupFn(VendorSignUpPayload payload) async {
   String apiUrl = '$baseUrl/api/NewVendor';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY",
+    "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
   };
 
   // print(payload);
@@ -138,7 +146,9 @@ Future<Tuple2<int, String>> vendorsignupFn(VendorSignUpPayload payload) async {
   var result = const Tuple2(0, "");
   try {
     final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload.toJson()));
+        headers: headers,
+        body: json
+            .encode(payload.toJson())); //.timeout(const Duration(seconds: 10));
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 201) {
@@ -167,7 +177,7 @@ Future<Tuple2<int, String>> verifyEmailFn(email, otp, isVendor) async {
   if (isVendor == true) apiUrl = '$baseUrl/api/VendorVerifyEmail';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY",
+    "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
   };
 
   final Map<String, dynamic> payload = {"email": email, "otp": otp};
@@ -175,7 +185,9 @@ Future<Tuple2<int, String>> verifyEmailFn(email, otp, isVendor) async {
   var result = const Tuple2(0, "");
   try {
     final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload));
+        headers: headers,
+        body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
+    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -204,7 +216,7 @@ Future<Tuple2<int, String>> resendVerifyEmailFn(email, isVendor) async {
   if (isVendor == true) apiUrl = '$baseUrl/api/VendorResendVerifyEmail';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY",
+    "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
   };
 
   final Map<String, dynamic> payload = {"email": email};
@@ -212,7 +224,9 @@ Future<Tuple2<int, String>> resendVerifyEmailFn(email, isVendor) async {
   var result = const Tuple2(0, "");
   try {
     final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload));
+        headers: headers,
+        body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
+    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -245,12 +259,14 @@ Future<Tuple2<int, String>> forgotPasswordFn(email, isVendor) async {
 
   final Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY",
+    "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
   };
 
   var result = const Tuple2(0, "");
   try {
-    final response = await http.get(Uri.parse(apiUrl), headers: headers);
+    final response = await http.get(Uri.parse(apiUrl),
+        headers: headers); //.timeout(const Duration(seconds: 10));
+    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -280,7 +296,7 @@ Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
   String apiUrl = '$baseUrl/api/$type';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY",
+    "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
   };
   var email = store.state.email;
   email = isVendor == true ? email.replaceAll(RegExp(r'%2B'), "+") : email;
@@ -293,7 +309,9 @@ Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
   var result = const Tuple2(0, "");
   try {
     final response = await http.patch(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload));
+        headers: headers,
+        body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
+    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -322,31 +340,22 @@ Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
 }
 
 Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
-  String apiUrl = '$baseUrl/api/CommuterGetAllVendors';
-  final Map<String, String> headers = {
-    "Content-Type": "application/json",
-    "Authorization": 'Bearer ${store.state.userToken["accesstoken"]}',
-  };
+  String path = '/api/CommuterGetAllVendors';
 
   var result = const Tuple2(0, "");
   try {
-    final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload.toJson()));
+    Response response = await dio.post(path, data: payload.toJson());
 
-    final Map<String, dynamic> data = json.decode(response.body);
+    final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
-      print(data);
+      // print(data);
       store.dispatch(GetAllVendors(data['body']));
       result = Tuple2(1, data['message']);
     } else {
       // Handle errors
       // print('Request failed with status: ${response.statusCode}');
       print('check error: $data');
-      if (data['error'].toString().contains("parsing time")) {
-        result = const Tuple2(2, 'There is error in date');
-      } else {
-        result = Tuple2(3, data['body']);
-      }
+      result = const Tuple2(2, "No Vendors");
     }
   } catch (e) {
     print('Error: $e');
@@ -356,18 +365,22 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
 }
 
 Future<Tuple2<int, String>> rateVendor(RateVendorPayload payload) async {
-  String apiUrl = '$baseUrl/api/CommuterRateVendor';
-  final Map<String, String> headers = {
-    "Content-Type": "application/json",
-    "Authorization": 'Bearer ${store.state.userToken["accesstoken"]}',
-  };
+  String path = '/api/CommuterRateVendor';
 
   var result = const Tuple2(0, "");
   try {
-    final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload.toJson()));
+    Response response = await dio.post(
+      path,
+      data: payload.toJson(),
+      options: Options(
+        validateStatus: (status) {
+          return status != null &&
+              status < 500; // Accept all status codes < 500
+        },
+      ),
+    );
 
-    final Map<String, dynamic> data = json.decode(response.body);
+    final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
       print(data);
       // store.dispatch(GetAllVendors(data['body']));
@@ -376,14 +389,14 @@ Future<Tuple2<int, String>> rateVendor(RateVendorPayload payload) async {
       // Handle errors
       // print('Request failed with status: ${response.statusCode}');
       print('check error: $data');
-      if (data['error'].toString().contains("parsing time")) {
-        result = const Tuple2(2, 'There is error in date');
+      if (response.statusCode == 400) {
+        result = const Tuple2(2, "Commuter can rate a vendor once");
       } else {
-        result = Tuple2(3, data['body']);
+        result = const Tuple2(2, "Rating error");
       }
     }
   } catch (e) {
-    print('Error: $e');
+    print('Errorf: $e');
     result = const Tuple2(-1, "Network error");
   }
   return result;

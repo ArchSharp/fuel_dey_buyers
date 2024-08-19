@@ -42,6 +42,17 @@ class _OnTappedStationState extends State<OnTappedStation> {
   bool showOpenCloseTime = false;
   bool showAllReview = false;
   bool? isLoading;
+  String fiveStarNum = "";
+  String fourStarNum = "";
+  String threeStarNum = "";
+  String twoStarNum = "";
+  String oneStarNum = "";
+
+  double fiveStarPercent = 0;
+  double fourStarPercent = 0;
+  double threeStarPercent = 0;
+  double twoStarPercent = 0;
+  double oneStarPercent = 0;
 
   final DraggableScrollableController _scrollableController =
       DraggableScrollableController();
@@ -100,6 +111,25 @@ class _OnTappedStationState extends State<OnTappedStation> {
     double initialHeight = 0.5;
     double minHeight = 0.5;
     double maxHeight = 0.8;
+
+    fiveStarNum = widget.vendor['ratingcount'][0]['totalraters'].toString();
+
+    fourStarNum = widget.vendor['ratingcount'][1]['totalraters'].toString();
+    threeStarNum = widget.vendor['ratingcount'][2]['totalraters'].toString();
+    twoStarNum = widget.vendor['ratingcount'][3]['totalraters'].toString();
+    oneStarNum = widget.vendor['ratingcount'][4]['totalraters'].toString();
+
+    fiveStarPercent = widget.vendor['ratingcount'][0]['totalraters'] /
+        widget.vendor['totalrater'];
+
+    fourStarPercent = widget.vendor['ratingcount'][1]['totalraters'] /
+        widget.vendor['totalrater'];
+    threeStarPercent = widget.vendor['ratingcount'][2]['totalraters'] /
+        widget.vendor['totalrater'];
+    twoStarPercent = widget.vendor['ratingcount'][3]['totalraters'] /
+        widget.vendor['totalrater'];
+    oneStarPercent = widget.vendor['ratingcount'][4]['totalraters'] /
+        widget.vendor['totalrater'];
 
     return DraggableScrollableSheet(
       controller: _scrollableController,
@@ -739,14 +769,30 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     ),
                                   ),
                                   const Spacer(),
-                                  const RatingsBar(
-                                    ratings: [1, 0.6, 0.8, 0.4, 0.2],
+                                  RatingsBar(
+                                    ratings: [
+                                      fiveStarPercent.isNaN
+                                          ? 0.0
+                                          : fiveStarPercent,
+                                      fourStarPercent.isNaN
+                                          ? 0.0
+                                          : fourStarPercent,
+                                      threeStarPercent.isNaN
+                                          ? 0.0
+                                          : threeStarPercent,
+                                      twoStarPercent.isNaN
+                                          ? 0.0
+                                          : twoStarPercent,
+                                      oneStarPercent.isNaN
+                                          ? 0.0
+                                          : oneStarPercent
+                                    ],
                                     tips: [
-                                      '35 people gave 5 star',
-                                      '20 people gave 4 star',
-                                      '13 people gave 3 star',
-                                      '11 people gave 2 star',
-                                      '4 people gave 1 star',
+                                      '$fiveStarNum people gave 5 star',
+                                      '$fourStarNum people gave 4 star',
+                                      '$threeStarNum people gave 3 star',
+                                      '$twoStarNum people gave 2 star',
+                                      '$oneStarNum people gave 1 star',
                                     ],
                                   ),
                                 ],
@@ -923,13 +969,15 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   UserStarRating(
-                                    initialRating: 4,
+                                    initialRating: double.parse(widget
+                                        .vendor['commuterrating']
+                                        .toString()),
                                     onRatingChanged: (newRating) {
                                       RateVendorPayload payload =
                                           RateVendorPayload(
                                         userid: store.state.user['id'],
                                         vendorid: widget.vendor['id'],
-                                        rating: newRating.toString(),
+                                        rating: newRating.toInt(),
                                         review: "review",
                                       );
                                       print(

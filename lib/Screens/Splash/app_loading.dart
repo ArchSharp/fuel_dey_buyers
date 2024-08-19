@@ -15,7 +15,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     // Example: Delay for 3 seconds and then navigate to the next screen
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, LogoSplash.routeName);
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, LogoSplash.routeName);
+      }
     });
 
     super.initState();

@@ -123,12 +123,14 @@ class VendorSignUpPayload {
 }
 
 class GetAllVendorsPayload {
+  String userid;
   String state;
   String lga;
   String latitude;
   String longitude;
 
   GetAllVendorsPayload({
+    required this.userid,
     required this.state,
     required this.lga,
     required this.latitude,
@@ -138,6 +140,7 @@ class GetAllVendorsPayload {
   // Convert UserPayload to JSON
   Map<String, dynamic> toJson() {
     return {
+      "userid": userid,
       "state": state,
       "lga": lga,
       "latitude": latitude,
@@ -148,6 +151,7 @@ class GetAllVendorsPayload {
   // Create UserPayload from JSON
   factory GetAllVendorsPayload.fromJson(Map<String, dynamic> json) {
     return GetAllVendorsPayload(
+      userid: json['userid'],
       state: json['state'],
       lga: json['lga'],
       latitude: json['latitude'],
@@ -159,7 +163,7 @@ class GetAllVendorsPayload {
 class RateVendorPayload {
   String userid;
   String vendorid;
-  String rating;
+  int rating;
   String review;
 
   RateVendorPayload({
@@ -172,10 +176,10 @@ class RateVendorPayload {
   // Convert UserPayload to JSON
   Map<String, dynamic> toJson() {
     return {
-      "state": userid,
-      "lga": vendorid,
-      "latitude": rating,
-      "longitude": review,
+      "userid": userid,
+      "vendorid": vendorid,
+      "rating": rating,
+      "review": review,
     };
   }
 

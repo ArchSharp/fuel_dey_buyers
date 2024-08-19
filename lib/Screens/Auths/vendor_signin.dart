@@ -572,7 +572,9 @@ class _VendorSigninState extends State<VendorSignin> {
     _emailFocusNode.unfocus();
     // Set focus again
     Future.delayed(const Duration(milliseconds: 100), () {
-      FocusScope.of(context).requestFocus(_emailFocusNode);
+      if (mounted) {
+        FocusScope.of(context).requestFocus(_emailFocusNode);
+      }
     });
   }
 }

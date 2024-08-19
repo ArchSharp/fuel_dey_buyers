@@ -244,8 +244,12 @@ class _OnboardingState extends State<Onboarding> {
                     left: 0,
                     right: 0,
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 0, top: 0, right: 13, bottom: 16),
+                      padding: EdgeInsets.only(
+                        left: _currentPage < 2 ? 0 : 13,
+                        top: 0,
+                        right: 13,
+                        bottom: 16,
+                      ),
                       child: _currentPage < 2
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

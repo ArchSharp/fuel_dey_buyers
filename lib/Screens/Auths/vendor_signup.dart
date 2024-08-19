@@ -57,7 +57,7 @@ class _VendorSignupState extends State<VendorSignup> {
       latitude: lgaLatitude!,
       longitude: lgaLongitude!,
       state: selectedState!,
-      lga: selectedLGA!,
+      lga: selectedLGA!.replaceAll("/", "-"),
       email: _emailController.text,
       phonenumber: "+234${_phoneController.text}",
       password: _passwordController.text,
