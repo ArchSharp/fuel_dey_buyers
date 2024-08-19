@@ -54,6 +54,8 @@ class _OnTappedStationState extends State<OnTappedStation> {
   double twoStarPercent = 0;
   double oneStarPercent = 0;
 
+  List<dynamic> allVendorReviews = [];
+
   final DraggableScrollableController _scrollableController =
       DraggableScrollableController();
   final ValueNotifier<double> _heightPercentageNotifier =
@@ -77,8 +79,8 @@ class _OnTappedStationState extends State<OnTappedStation> {
   }
 
   Future<void> _getVendorReviews() async {
-    print("gotten here: ${widget.vendor['id']}");
-    VendorGetReviewPayload payload = VendorGetReviewPayload(
+    // print("gotten here: ${widget.vendor['id']}");
+    VendorReviewsPayload payload = VendorReviewsPayload(
       vendorId: widget.vendor['id'],
     );
     //get vendor reviews
@@ -830,6 +832,13 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 child: TextButton(
                                   onPressed: () {
                                     setState(() {
+                                      var reviews =
+                                          store.state.allVendorReviews;
+
+                                      if (reviews.isNotEmpty) {
+                                        allVendorReviews = reviews;
+                                      }
+
                                       showAllReview = !showAllReview;
                                     });
                                   },
@@ -845,124 +854,40 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 ),
                               ),
                               if (showAllReview)
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.account_circle,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 6),
-                                          Text(
-                                            "“...very close to the main road for easy access”",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
+                                    children: allVendorReviews.map((review) {
+                                      String reviewText = "${review['review']}";
+                                      if (reviewText.length > 35) {
+                                        reviewText =
+                                            "${reviewText.substring(0, 40)}...";
+                                      }
+
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.account_circle,
+                                              size: 18,
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.account_circle,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 6),
-                                          Text(
-                                            "“...very close to the main road for easy access”",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              "“$reviewText”",
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.account_circle,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 6),
-                                          Text(
-                                            "“...very close to the main road for easy access”",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.account_circle,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 6),
-                                          Text(
-                                            "“...very close to the main road for easy access”",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.account_circle,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 6),
-                                          Text(
-                                            "“...very close to the main road for easy access”",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.account_circle,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 6),
-                                          Text(
-                                            "“...very close to the main road for easy access”",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
                                   ),
                                 ),
                               const Divider(),

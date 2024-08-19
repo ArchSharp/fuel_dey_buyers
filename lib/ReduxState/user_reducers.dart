@@ -21,9 +21,19 @@ AppState userReducer(AppState state, dynamic action) {
     return state..allVendors = action.allVendors;
   }
 
+  if (action is GetAllVendorReviews) {
+    return state..allVendorReviews = action.allVendorReviews;
+  }
+
   if (action is LogOut) {
     return AppState(
-        email: "", user: {}, userToken: {}, userWallet: {}, allVendors: []);
+      email: "",
+      user: {},
+      userToken: {},
+      userWallet: {},
+      allVendors: [],
+      allVendorReviews: [],
+    );
   }
 
   return state;

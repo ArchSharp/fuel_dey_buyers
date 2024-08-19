@@ -194,10 +194,10 @@ class RateVendorPayload {
   }
 }
 
-class VendorGetReviewPayload {
+class VendorReviewsPayload {
   String vendorId;
 
-  VendorGetReviewPayload({
+  VendorReviewsPayload({
     required this.vendorId,
   });
 
@@ -209,8 +209,8 @@ class VendorGetReviewPayload {
   }
 
   // Create UserPayload from JSON
-  factory VendorGetReviewPayload.fromJson(Map<String, dynamic> json) {
-    return VendorGetReviewPayload(
+  factory VendorReviewsPayload.fromJson(Map<String, dynamic> json) {
+    return VendorReviewsPayload(
       vendorId: json['vendorid'],
     );
   }

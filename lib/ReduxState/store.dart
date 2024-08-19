@@ -7,6 +7,7 @@ class AppState {
   late Map<String, dynamic> userWallet;
   late String email;
   late List<dynamic> allVendors;
+  late List<dynamic> allVendorReviews;
 
   AppState({
     required this.email,
@@ -14,6 +15,7 @@ class AppState {
     required this.userToken,
     required this.userWallet,
     required this.allVendors,
+    required this.allVendorReviews,
   });
 }
 
@@ -24,5 +26,11 @@ final combinedReducers = combineReducers<AppState>([userReducer]);
 final Store<AppState> store = Store<AppState>(
   combinedReducers,
   initialState: AppState(
-      email: '', user: {}, userToken: {}, userWallet: {}, allVendors: []),
+    email: '',
+    user: {},
+    userToken: {},
+    userWallet: {},
+    allVendors: [],
+    allVendorReviews: [],
+  ),
 );

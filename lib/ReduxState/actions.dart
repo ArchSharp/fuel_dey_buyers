@@ -31,3 +31,9 @@ class GetAllVendors {
 
   GetAllVendors(this.allVendors);
 }
+
+class GetAllVendorReviews {
+  final List<dynamic> allVendorReviews;
+
+  GetAllVendorReviews(this.allVendorReviews);
+}

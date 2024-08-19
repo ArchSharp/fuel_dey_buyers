@@ -348,7 +348,7 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
 
     final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
-      print(data);
+      // print(data);
       store.dispatch(GetAllVendors(data['body']));
       result = Tuple2(1, data['message']);
     } else {
@@ -365,7 +365,7 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
 }
 
 Future<Tuple2<int, String>> getAllVendorReviewsById(
-    VendorGetReviewPayload payload) async {
+    VendorReviewsPayload payload) async {
   String path = '/api/GetAllVendorReviewsById?vendorId=${payload.vendorId}';
 
   var result = const Tuple2(0, "");
@@ -382,8 +382,8 @@ Future<Tuple2<int, String>> getAllVendorReviewsById(
 
     final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
-      print("vendor reviews: $data");
-      // store.dispatch(GetAllVendors(data['body']));
+      // print("vendor reviews: $data");
+      store.dispatch(GetAllVendorReviews(data['body']));
       result = Tuple2(1, data['message']);
     } else {
       // Handle errors
