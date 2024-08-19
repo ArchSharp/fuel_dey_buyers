@@ -194,6 +194,30 @@ class RateVendorPayload {
   }
 }
 
+class VendorGetReviewPayload {
+  String vendorId;
+
+  VendorGetReviewPayload({
+    required this.vendorId,
+  });
+
+  // Convert UserPayload to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      "vendorid": vendorId,
+    };
+  }
+
+  // Create UserPayload from JSON
+  factory VendorGetReviewPayload.fromJson(Map<String, dynamic> json) {
+    return VendorGetReviewPayload(
+      vendorId: json['vendorid'],
+    );
+  }
+}
+
+
+
 
 
 // void main() {

@@ -125,7 +125,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
     double mtop = deviceHeight * 0.03;
-    double exploreBtnWidth = deviceWidth - 40;
+    double exploreBtnWidth = deviceWidth - 32;
 
     return Scaffold(
       // appBar: AppBar(

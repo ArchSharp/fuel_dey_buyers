@@ -114,7 +114,7 @@ class _MainHomeState extends State<MainHome> {
     //print("Placemarks: " + placemarks.toString());
     if (mounted) {
       print("address: $address");
-      // print("place: $place");
+      print("place: $place");
       setState(() {
         _currentPosition = position;
         _address = address;

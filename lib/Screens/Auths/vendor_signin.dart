@@ -165,7 +165,7 @@ class _VendorSigninState extends State<VendorSignin> {
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
     double mtop = deviceHeight * 0.03;
-    double exploreBtnWidth = deviceWidth - 40;
+    double exploreBtnWidth = deviceWidth - 32;
 
     return Scaffold(
       // appBar: AppBar(

@@ -348,7 +348,7 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
 
     final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
-      // print(data);
+      print(data);
       store.dispatch(GetAllVendors(data['body']));
       result = Tuple2(1, data['message']);
     } else {
@@ -359,6 +359,40 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
     }
   } catch (e) {
     print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> getAllVendorReviewsById(
+    VendorGetReviewPayload payload) async {
+  String path = '/api/GetAllVendorReviewsById?vendorId=${payload.vendorId}';
+
+  var result = const Tuple2(0, "");
+  try {
+    Response response = await dio.post(
+      path,
+      data: payload.toJson(),
+      options: Options(
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
+      ),
+    );
+
+    final Map<String, dynamic> data = response.data;
+    if (response.statusCode == 200) {
+      print("vendor reviews: $data");
+      // store.dispatch(GetAllVendors(data['body']));
+      result = Tuple2(1, data['message']);
+    } else {
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      print('check error: $data');
+      result = const Tuple2(2, "No Vendors");
+    }
+  } catch (e) {
+    print('Review Error: $e');
     result = const Tuple2(-1, "Network error");
   }
   return result;

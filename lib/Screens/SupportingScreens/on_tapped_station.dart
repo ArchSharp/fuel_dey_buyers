@@ -62,6 +62,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
   @override
   void initState() {
     super.initState();
+    _getVendorReviews();
     _scrollableController.addListener(() {
       _heightPercentageNotifier.value = _scrollableController.size;
     });
@@ -73,6 +74,15 @@ class _OnTappedStationState extends State<OnTappedStation> {
     _scrollableController.dispose();
     _heightPercentageNotifier.dispose();
     super.dispose();
+  }
+
+  Future<void> _getVendorReviews() async {
+    print("gotten here: ${widget.vendor['id']}");
+    VendorGetReviewPayload payload = VendorGetReviewPayload(
+      vendorId: widget.vendor['id'],
+    );
+    //get vendor reviews
+    await getAllVendorReviewsById(payload);
   }
 
   Future<void> handleRateVendor(RateVendorPayload payload) async {
