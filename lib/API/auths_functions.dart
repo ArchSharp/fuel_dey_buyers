@@ -22,7 +22,6 @@ Future<Tuple2<int, String>> signInVendorFn(UserSignInPayload payload) async {
     final response = await http.post(Uri.parse(apiUrl),
         headers: headers,
         body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
-    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     // print("signin response: ${data["body"]}");
@@ -382,7 +381,7 @@ Future<Tuple2<int, String>> getAllVendorReviewsById(
 
     final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
-      // print("vendor reviews: $data");
+      print("vendor reviews: $data");
       store.dispatch(GetAllVendorReviews(data['body']));
       result = Tuple2(1, data['message']);
     } else {

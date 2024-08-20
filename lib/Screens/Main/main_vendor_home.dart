@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fuel_dey_buyers/ReduxState/store.dart';
 
 class MainVendorHome extends StatefulWidget {
   const MainVendorHome({super.key});
@@ -63,205 +65,233 @@ class _MainVendorHomeState extends State<MainVendorHome> {
     // double imageWidth = deviceWidth * 0.8;
     double mtop = deviceHeight * 0.07;
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: mtop),
-            const Text(
-              "Set Fuel Price",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Text(
-              "Availability of Fuel",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return StoreConnector<AppState, dynamic>(
+      converter: (store) => store, //store.state.user
+      builder: (context, state /*user*/) {
+        var ispetrol = store.state.user['ispetrol'];
+        var isdiesel = store.state.user['isdiesel'];
+        var isgas = store.state.user['isgas'];
+        var dieselprice = store.state.user['dieselprice'];
+        var gasprice = store.state.user['gasprice'];
+        var petrolprice = store.state.user['petrolprice'];
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            setState(() {
+              _isDiesel = isdiesel;
+              _isGas = isgas;
+              _isPetrol = ispetrol;
+              _dieselController.text = "₦${dieselprice.toString()}";
+              _gasController.text = "₦${gasprice.toString()}";
+              _petrolController.text = "₦${petrolprice.toString()}";
+            });
+          }
+        });
+
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: mtop),
                 const Text(
-                  "Petrol",
+                  "Set Fuel Price",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                CustomSwitch(
-                  value: _isPetrol,
-                  onChanged: (value) {
-                    setState(() {
-                      _isPetrol = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
                 const Text(
-                  "Diesel",
+                  "Availability of Fuel",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                CustomSwitch(
-                  value: _isDiesel,
-                  onChanged: (value) {
-                    setState(() {
-                      _isDiesel = value;
-                    });
-                  },
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Petrol",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    CustomSwitch(
+                      value: _isPetrol,
+                      onChanged: (value) {
+                        setState(() {
+                          _isPetrol = value;
+                        });
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Diesel",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    CustomSwitch(
+                      value: _isDiesel,
+                      onChanged: (value) {
+                        setState(() {
+                          _isDiesel = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Gas",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    CustomSwitch(
+                      value: _isGas,
+                      onChanged: (value) {
+                        setState(() {
+                          _isGas = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 25),
                 const Text(
-                  "Gas",
+                  "Input Prices",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                CustomSwitch(
-                  value: _isGas,
-                  onChanged: (value) {
-                    setState(() {
-                      _isGas = value;
-                    });
-                  },
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Diesel Price Per Litre",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      width: 80,
+                      height: 39,
+                      child: _buildTextField(
+                        controller: _dieselController,
+                        error: _errors['diesel'],
+                        label: "₦",
+                        maxLines: 1,
+                      ),
+                    )
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 25),
-            const Text(
-              "Input Prices",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Petrol Price Per Litre",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      width: 80,
+                      height: 39,
+                      child: _buildTextField(
+                        controller: _petrolController,
+                        error: _errors['petrol'],
+                        label: "₦",
+                        maxLines: 1,
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Gas Price Per Litre",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      width: 80,
+                      height: 39,
+                      child: _buildTextField(
+                        controller: _gasController,
+                        error: _errors['gas'],
+                        label: "₦",
+                        maxLines: 1,
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 15),
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // _validateInputs();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(116, 40),
+                      backgroundColor: const Color(0xFFECB920),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    child: const Text(
+                      "Update Changes",
+                      style: TextStyle(
+                        color: Color(0xFF2C2D2F),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
                 const Text(
-                  "Diesel Price Per Litre",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  width: 80,
-                  height: 39,
-                  child: _buildTextField(
-                    controller: _dieselController,
-                    error: _errors['diesel'],
-                    label: "₦",
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Petrol Price Per Litre",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  width: 80,
-                  height: 39,
-                  child: _buildTextField(
-                    controller: _petrolController,
-                    error: _errors['petrol'],
-                    label: "₦",
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Gas Price Per Litre",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  width: 80,
-                  height: 39,
-                  child: _buildTextField(
-                    controller: _gasController,
-                    error: _errors['gas'],
-                    label: "₦",
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 15),
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                onPressed: () {
-                  // _validateInputs();
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(116, 40),
-                  backgroundColor: const Color(0xFFECB920),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                child: const Text(
-                  "Update Changes",
+                  "Details about station",
                   style: TextStyle(
-                    color: Color(0xFF2C2D2F),
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
+                    color: Color(0xFF2C2D2F),
                   ),
                 ),
-              ),
+                const SizedBox(height: 5),
+                SizedBox(
+                  height: 132,
+                  child: _buildTextField(
+                    controller: _detailsController,
+                    error: _errors['gas'],
+                    label: "",
+                    maxLines: 8,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 15),
-            const Text(
-              "Details about station",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF2C2D2F),
-              ),
-            ),
-            const SizedBox(height: 5),
-            SizedBox(
-              height: 132,
-              child: _buildTextField(
-                controller: _detailsController,
-                error: _errors['gas'],
-                label: "",
-                maxLines: 8,
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -58,7 +58,7 @@ class _VendorSigninState extends State<VendorSignin> {
 
     // Create an instance of UserPayload
     UserSignInPayload userPayload = UserSignInPayload(
-      email: "+234$processedText",
+      email: isNumber?"+234$processedText": processedText,
       password: _passwordController.text,
     );
 

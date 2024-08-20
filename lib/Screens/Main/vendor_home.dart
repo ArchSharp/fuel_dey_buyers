@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
+import 'package:fuel_dey_buyers/Model/user.dart';
+import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Main/main_vendor_home.dart';
 import 'package:fuel_dey_buyers/Screens/Main/vendor_notification.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/vendor_navbar.dart';
@@ -19,6 +22,21 @@ class _VendorHomeState extends State<VendorHome> {
     setState(() {
       _navbarIndex = newIndex;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getVendorReviews();
+  }
+
+  Future<void> _getVendorReviews() async {
+    // print("gotten here: ${widget.vendor['id']}");
+    VendorReviewsPayload payload = VendorReviewsPayload(
+      vendorId: store.state.user['id'],
+    );
+    //get vendor reviews
+    await getAllVendorReviewsById(payload);
   }
 
   @override
