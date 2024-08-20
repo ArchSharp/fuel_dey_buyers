@@ -381,7 +381,7 @@ Future<Tuple2<int, String>> getAllVendorReviewsById(
 
     final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
-      print("vendor reviews: $data");
+      // print("vendor reviews: $data");
       store.dispatch(GetAllVendorReviews(data['body']));
       result = Tuple2(1, data['message']);
     } else {

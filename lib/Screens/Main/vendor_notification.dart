@@ -23,10 +23,15 @@ class _VendorNotificationState extends State<VendorNotification> {
 
         List<Widget> generatedWidgets =
             List.generate(allreviews.length, (index) {
+          var reviewername = "${allreviews[index]['reviewername']}";
+          if (reviewername.length > 20) {
+            reviewername =
+                "${"${allreviews[index]['reviewername']}".substring(0, 20)}...";
+          }
           return Padding(
             padding: const EdgeInsets.only(bottom: 15),
             child: VendorNotificationCard(
-              reviewer: "Yemi Lade",
+              reviewer: reviewername,
               location: "Eti-Osa, Lagos, Nigeria",
               review: "“${allreviews[index]['review']}...”",
               imageUrl: "commuter.png",
