@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
+import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
+import 'package:tuple/tuple.dart';
 
 class MainVendorHome extends StatefulWidget {
   const MainVendorHome({super.key});
@@ -12,6 +16,7 @@ class _MainVendorHomeState extends State<MainVendorHome> {
   bool _isPetrol = false;
   bool _isDiesel = false;
   bool _isGas = false;
+  bool isLoading = false;
 
   Widget _buildTextField({
     required TextEditingController controller,
@@ -53,10 +58,60 @@ class _MainVendorHomeState extends State<MainVendorHome> {
   final TextEditingController _detailsController = TextEditingController();
 
   final Map<String, String?> _errors = {
-    'diesel': null,
-    'gas': null,
-    'petrol': null,
+    'isdiesel': null,
+    'isgas': null,
+    'ispetrol': null,
+    'dieselprice': null,
+    'gasprice': null,
+    'petrolprice': null,
   };
+
+  Future<void> handleUpdateVendor() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    String dieselprice = _dieselController.text.replaceAll("₦", "");
+
+    String petrolprice = _petrolController.text.replaceAll("₦", "");
+
+    String gasprice = _gasController.text.replaceAll("₦", "");
+
+    // Create an instance of UserPayload
+    UpdateVendorPayload userPayload = UpdateVendorPayload(
+      vendorId: store.state.user['id'],
+      gasPrice: double.parse(gasprice),
+      dieselPrice: double.parse(dieselprice),
+      petrolPrice: double.parse(petrolprice),
+      isgas: _isGas,
+      isdiesel: _isDiesel,
+      ispetrol: _isPetrol,
+    );
+
+    print("isdiesel: ${userPayload.isdiesel}");
+
+    try {
+      // print("payload: ${userPayload.email}");
+      Tuple2<int, String> result = await updateVendor(userPayload);
+      if (result.item1 == 1) {
+        if (mounted) {
+          myNotificationBar(context, result.item2, "success");
+          await getVendorById(userPayload.vendorId);
+        }
+
+        // You might want to navigate to another screen or perform user registration
+      } else {
+        // Failed sign-up
+        if (mounted) {
+          myNotificationBar(context, result.item2, "error");
+        }
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -67,6 +122,8 @@ class _MainVendorHomeState extends State<MainVendorHome> {
     var dieselprice = store.state.user['dieselprice'];
     var gasprice = store.state.user['gasprice'];
     var petrolprice = store.state.user['petrolprice'];
+
+    // print(store.state.user);
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     // if (mounted) {
@@ -80,6 +137,21 @@ class _MainVendorHomeState extends State<MainVendorHome> {
     });
     // }
     // });
+  }
+
+  void _validateInputs() {
+    setState(() {
+      _errors['gasprice'] =
+          _gasController.text.isEmpty ? 'Please enter gas price' : null;
+      _errors['petrolprice'] =
+          _petrolController.text.isEmpty ? 'Please enter petrol price' : null;
+      _errors['dieselprice'] =
+          _dieselController.text.isEmpty ? 'Please enter diesel price' : null;
+    });
+
+    if (_errors.values.every((error) => error == null)) {
+      handleUpdateVendor();
+    }
   }
 
   @override
@@ -246,7 +318,8 @@ class _MainVendorHomeState extends State<MainVendorHome> {
               alignment: Alignment.center,
               child: ElevatedButton(
                 onPressed: () {
-                  // _validateInputs();
+                  FocusScope.of(context).unfocus();
+                  _validateInputs();
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(116, 40),

@@ -441,7 +441,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed(
+                              Navigator.of(context).popAndPushNamed(
                                   CommuterSignin.routeName,
                                   arguments: 'Passing data from SignIn');
                             },

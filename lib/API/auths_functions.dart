@@ -397,6 +397,71 @@ Future<Tuple2<int, String>> getAllVendorReviewsById(
   return result;
 }
 
+Future<Tuple2<int, String>> updateVendor(UpdateVendorPayload payload) async {
+  String path = '/api/UpdateVendorById?vendorId=${payload.vendorId}';
+
+  var result = const Tuple2(0, "");
+  try {
+    Response response = await dio.post(
+      path,
+      data: payload.toJson(),
+      options: Options(
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
+      ),
+    );
+
+    final Map<String, dynamic> data = response.data;
+    if (response.statusCode == 200) {
+      print("vendor update: $data");
+      // store.dispatch(GetAllVendorReviews(data['body']));
+      result = Tuple2(1, data['message']);
+    } else {
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      print('check error: $data');
+      result = const Tuple2(2, "No Vendors");
+    }
+  } catch (e) {
+    print('Update vendor Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> getVendorById(String vendorId) async {
+  String path = '/api/GetVendorById?vendorId=$vendorId';
+
+  var result = const Tuple2(0, "");
+  try {
+    Response response = await dio.get(
+      path,
+      options: Options(
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
+      ),
+    );
+
+    final Map<String, dynamic> data = response.data;
+    if (response.statusCode == 200) {
+      print("get vendor: ${data['body']}");
+      store.dispatch(UpdateUserAction(data['body']));
+      result = Tuple2(1, data['message']);
+    } else {
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      print('check error: $data');
+      result = const Tuple2(2, "No Vendors");
+    }
+  } catch (e) {
+    print('Get vendor Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
 Future<Tuple2<int, String>> rateVendor(RateVendorPayload payload) async {
   String path = '/api/CommuterRateVendor';
 

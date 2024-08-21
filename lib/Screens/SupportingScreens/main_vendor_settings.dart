@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:fuel_dey_buyers/API/helpers.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -52,7 +53,7 @@ class _MainVendorSettingsState extends State<MainVendorSettings> {
     return StoreConnector<AppState, dynamic>(
       converter: (store) => store, //store.state.user
       builder: (context, store /*user*/) {
-        var stationname = store.state.user['stationname'];
+        var stationname = capitalize(store.state.user['stationname']);
         var email = store.state.user['email'];
         var phonenumber = store.state.user['phonenumber'];
         return Column(

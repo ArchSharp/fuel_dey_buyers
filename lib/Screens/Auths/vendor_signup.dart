@@ -539,7 +539,7 @@ class _VendorSignupState extends State<VendorSignup> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed(
+                              Navigator.of(context).popAndPushNamed(
                                   VendorSignin.routeName,
                                   arguments: 'Passing data from SignIn');
                             },

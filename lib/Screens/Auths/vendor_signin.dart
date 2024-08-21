@@ -58,7 +58,7 @@ class _VendorSigninState extends State<VendorSignin> {
 
     // Create an instance of UserPayload
     UserSignInPayload userPayload = UserSignInPayload(
-      email: isNumber?"+234$processedText": processedText,
+      email: isNumber ? "+234$processedText" : processedText,
       password: _passwordController.text,
     );
 
@@ -72,7 +72,7 @@ class _VendorSigninState extends State<VendorSignin> {
         if (result.item1 == 1) {
           if (mounted) {
             myNotificationBar(context, result.item2, "success");
-            Navigator.pushReplacementNamed(context, VendorHome.routeName);
+            Navigator.popAndPushNamed(context, VendorHome.routeName);
           }
           setState(() {
             isButtonClicked = true;
@@ -430,7 +430,7 @@ class _VendorSigninState extends State<VendorSignin> {
                     TextButton(
                       onPressed: () {
                         if (!isLoading) {
-                          Navigator.of(context).pushNamed(
+                          Navigator.of(context).popAndPushNamed(
                               VendorSignup.routeName,
                               arguments: 'Passing data from SignIn');
                         }

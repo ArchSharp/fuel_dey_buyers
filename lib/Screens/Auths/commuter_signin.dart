@@ -58,7 +58,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
         if (result.item1 == 1) {
           if (mounted) {
             myNotificationBar(context, result.item2, "success");
-            Navigator.pushReplacementNamed(context, Home.routeName);
+            Navigator.popAndPushNamed(context, Home.routeName);
           }
           setState(() {
             isButtonClicked = true;
@@ -391,7 +391,7 @@ class _CommuterSigninState extends State<CommuterSignin> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(
+                        Navigator.of(context).popAndPushNamed(
                             CommuterSignup.routeName,
                             arguments: 'Passing data from SignIn');
                       },

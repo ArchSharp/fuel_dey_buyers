@@ -216,6 +216,52 @@ class VendorReviewsPayload {
   }
 }
 
+class UpdateVendorPayload {
+  double gasPrice;
+  double petrolPrice;
+  double dieselPrice;
+  bool isdiesel;
+  bool ispetrol;
+  bool isgas;
+  String vendorId;
+
+  UpdateVendorPayload({
+    required this.vendorId,
+    required this.gasPrice,
+    required this.dieselPrice,
+    required this.petrolPrice,
+    required this.isdiesel,
+    required this.isgas,
+    required this.ispetrol,
+  });
+
+  // Convert UserPayload to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      "vendorid": vendorId,
+      "gasprice": gasPrice,
+      "petrolprice": petrolPrice,
+      "dieselprice": dieselPrice,
+      "isgas": isgas,
+      "isdiesel": isdiesel,
+      "ispetrol": ispetrol,
+    };
+  }
+
+  // Create UserPayload from JSON
+  factory UpdateVendorPayload.fromJson(Map<String, dynamic> json) {
+    return UpdateVendorPayload(
+      vendorId: json['vendorid'],
+      dieselPrice: json['dieselprice'],
+      gasPrice: json['gasprice'],
+      petrolPrice: json['petrolprice'],
+      isgas: json['isgas'],
+      ispetrol: json['ispetrol'],
+      isdiesel: json['isdiesel'],
+    );
+  }
+}
+
 
 
 
