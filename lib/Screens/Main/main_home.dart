@@ -114,7 +114,7 @@ class _MainHomeState extends State<MainHome> {
     //print("Placemarks: " + placemarks.toString());
     if (mounted) {
       print("address: $address");
-      print("place: $place");
+      // print("place: $place");
       setState(() {
         _currentPosition = position;
         _address = address;
@@ -185,6 +185,9 @@ class _MainHomeState extends State<MainHome> {
         converter: (store) => store, //store.state.user
         builder: (context, state /*user*/) {
           var fname = store.state.user['firstname'];
+          var imageUrl = store.state.user['imageurl'];
+          String commuterImage =
+              "https://drive.google.com/thumbnail?id=$imageUrl";
           return Stack(
             children: [
               MainWidget(onIndexChangedFunc: _updateHomeIndex),
@@ -260,8 +263,9 @@ class _MainHomeState extends State<MainHome> {
                           child: CircleAvatar(
                             radius: 25,
                             backgroundColor: Colors.grey[300],
-                            backgroundImage:
-                                const AssetImage('assets/images/commuter.png'),
+                            backgroundImage: imageUrl == null || imageUrl == ""
+                                ? const AssetImage('assets/images/commuter.png')
+                                : NetworkImage(commuterImage) as ImageProvider,
                           ),
                         ),
                       ],

@@ -1,5 +1,7 @@
 // import 'dart:convert';
 
+import 'dart:io';
+
 class CommuterPayload {
   String email;
   String password;
@@ -262,6 +264,35 @@ class UpdateVendorPayload {
   }
 }
 
+class UploadImagePayload {
+  File file;
+  bool isVendor;
+  String userId;
+
+  UploadImagePayload({
+    required this.userId,
+    required this.file,
+    required this.isVendor,
+  });
+
+  // Convert UserPayload to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      "userid": userId,
+      "file": file,
+      "isvendor": isVendor,
+    };
+  }
+
+  // Create UserPayload from JSON
+  factory UploadImagePayload.fromJson(Map<String, dynamic> json) {
+    return UploadImagePayload(
+      userId: json['userid'],
+      file: json['file'],
+      isVendor: json['isvendor'],
+    );
+  }
+}
 
 
 

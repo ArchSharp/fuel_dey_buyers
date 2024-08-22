@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:path/path.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fuel_dey_buyers/API/utils.dart';
@@ -446,7 +447,7 @@ Future<Tuple2<int, String>> getVendorById(String vendorId) async {
 
     final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
-      print("get vendor: ${data['body']}");
+      // print("get vendor: ${data['body']}");
       store.dispatch(UpdateUserAction(data['body']));
       result = Tuple2(1, data['message']);
     } else {
@@ -457,6 +458,38 @@ Future<Tuple2<int, String>> getVendorById(String vendorId) async {
     }
   } catch (e) {
     print('Get vendor Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> getCommuterById(String commuterId) async {
+  String path = '/api/GetCommuterById?commuterId=$commuterId';
+
+  var result = const Tuple2(0, "");
+  try {
+    Response response = await dio.get(
+      path,
+      options: Options(
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
+      ),
+    );
+
+    final Map<String, dynamic> data = response.data;
+    if (response.statusCode == 200) {
+      // print("get commuter: ${data['body']}");
+      store.dispatch(UpdateUserAction(data['body']));
+      result = Tuple2(1, data['message']);
+    } else {
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      print('check error: $data');
+      result = const Tuple2(2, "No Vendors");
+    }
+  } catch (e) {
+    print('Get commuter Error: $e');
     result = const Tuple2(-1, "Network error");
   }
   return result;
@@ -497,6 +530,48 @@ Future<Tuple2<int, String>> rateVendor(RateVendorPayload payload) async {
     print('Errorf: $e');
     result = const Tuple2(-1, "Network error");
   }
+  return result;
+}
+
+Future<Tuple2<int, String>> uploadImgToDrive(UploadImagePayload payload) async {
+  String path =
+      '/api/UploadFileToGoogleDrive?userId=${payload.userId}&isVendor=${payload.isVendor}';
+  var result = const Tuple2(0, "");
+
+  try {
+    String fileName = basename(payload.file.path);
+
+    FormData formData = FormData.fromMap({
+      "userId": payload.userId,
+      "isVendor": payload.isVendor,
+      "File":
+          await MultipartFile.fromFile(payload.file.path, filename: fileName),
+    });
+
+    Response response = await dio.post(
+      path,
+      data: formData,
+      options: Options(
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      ),
+    );
+
+    final Map<String, dynamic> data = response.data;
+
+    if (response.statusCode == 200) {
+      print("File uploaded successfully: ${response.data}");
+      result = Tuple2(1, data['message']);
+    } else {
+      print("Failed to upload file: ${response.statusCode}");
+      result = const Tuple2(2, "Upload image failed");
+    }
+  } catch (e) {
+    print("Error uploading file: $e");
+    result = const Tuple2(-1, "Network error");
+  }
+
   return result;
 }
 

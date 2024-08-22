@@ -1,9 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
+import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tuple/tuple.dart';
 
 class MainCommuterSettings extends StatefulWidget {
   final ValueChanged<int> onIndexChanged;
@@ -19,30 +23,61 @@ class MainCommuterSettings extends StatefulWidget {
 
 class _MainCommuterSettingsState extends State<MainCommuterSettings> {
   File? _image;
+  bool isLoading = false;
 
   Future<void> _pickImage() async {
-    // Request permission to access photos
-    // final status = await Permission.photos.request();
-    final status = await Permission.storage.request();
-    // print("gotten here");
+    setState(() {
+      isLoading = true;
+    });
 
-    if (status.isGranted) {
-      final picker = ImagePicker();
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    try {
+      // Request permission to access photos
+      // final status = await Permission.photos.request();
+      final status = await Permission.storage.request();
+      // print("gotten here");
 
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
+      if (status.isGranted) {
+        final picker = ImagePicker();
+        final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+        if (pickedFile != null) {
+          setState(() {
+            _image = File(pickedFile.path);
+          });
+
+          var commuterId = store.state.user['id'];
+          UploadImagePayload payload = UploadImagePayload(
+            file: File(pickedFile.path),
+            isVendor: false,
+            userId: commuterId,
+          );
+          Tuple2<int, String> result = await uploadImgToDrive(payload);
+
+          if (mounted) {
+            if (result.item1 == 1) {
+              myNotificationBar(
+                  context, "Image Uploaded successfully", "success");
+              await getCommuterById(commuterId);
+            }
+          }
+        }
+      } else if (status.isDenied) {
+        // Permission is denied, you can request it again
+        print('Permission denied');
+        await Permission.storage.request();
+      } else if (status.isPermanentlyDenied) {
+        // Permission is permanently denied, show a dialog guiding the user to settings
+        print('Permission permanently denied');
+        bool opened = await openAppSettings();
+        if (!opened) {
+          // Optionally handle the case where the settings could not be opened
+          print('Failed to open app settings');
+        }
       }
-    } else if (status.isDenied) {
-      // Handle permission denied
-      print('Permission denied');
-    } else if (status.isPermanentlyDenied) {
-      // Handle permission permanently denied
-      print('Permission permanently denied');
-      // Optionally, open the app settings
-      // openAppSettings();
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -54,6 +89,10 @@ class _MainCommuterSettingsState extends State<MainCommuterSettings> {
     return StoreConnector<AppState, dynamic>(
       converter: (store) => store, //store.state.user
       builder: (context, store) {
+        // print("this commuter ${store.state.user}");
+        var imageUrl = store.state.user['imageurl'];
+        String commuterImage =
+            "https://drive.google.com/thumbnail?id=$imageUrl";
         var fname = store.state.user['firstname'];
         var lname = store.state.user['lastname'];
         var email = store.state.user['email'];
@@ -78,13 +117,22 @@ class _MainCommuterSettingsState extends State<MainCommuterSettings> {
                       backgroundColor: Colors.grey[300],
                       backgroundImage: _image != null
                           ? FileImage(_image!)
-                          : const AssetImage('assets/images/commuter.png'),
-                      // child: const Icon(
-                      //   Icons.help,
-                      //   color: Colors.white, // Icon color
-                      //   size: 30, // Icon size
-                      // ),
+                          : imageUrl == null || imageUrl == ""
+                              ? const AssetImage('assets/images/commuter.png')
+                              : NetworkImage(commuterImage) as ImageProvider,
                     ),
+                    if (isLoading == true)
+                      const Positioned(
+                        top: 72.5,
+                        left: 72.5,
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ),
                     Positioned(
                       top: 10,
                       right: 10,
