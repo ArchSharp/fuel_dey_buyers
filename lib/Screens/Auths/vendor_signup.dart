@@ -65,7 +65,7 @@ class _VendorSignupState extends State<VendorSignup> {
 
     try {
       store.dispatch(InitialiseEmail(userPayload.email));
-      Tuple2<int, String> result = await vendorsignupFn(userPayload);
+      Tuple2<int, String> result = await signupVendorFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (mounted) {
