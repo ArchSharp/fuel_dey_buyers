@@ -348,7 +348,7 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
 
     final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
-      // print(data);
+      //print("all vendors: ${data['body']}");
       store.dispatch(GetAllVendors(data['body']));
       result = Tuple2(1, data['message']);
     } else {

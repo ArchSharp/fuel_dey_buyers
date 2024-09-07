@@ -35,7 +35,7 @@ class _MainHomeState extends State<MainHome> {
   Position? _currentPosition;
   Placemark? _userPlace;
   bool? _hasPermission;
-  String? _address;
+  // String? _address;
   int _homeIndex = 0;
   bool? isLoading;
   var tappedStation;
@@ -117,7 +117,7 @@ class _MainHomeState extends State<MainHome> {
       // print("place: $place");
       setState(() {
         _currentPosition = position;
-        _address = address;
+        // _address = address;
         _userPlace = place;
       });
 
@@ -188,9 +188,15 @@ class _MainHomeState extends State<MainHome> {
           var imageUrl = store.state.user['imageurl'];
           String commuterImage =
               "https://drive.google.com/thumbnail?id=$imageUrl";
+          var allvendors = store.state.allVendors;
           return Stack(
             children: [
-              MainWidget(onIndexChangedFunc: _updateHomeIndex),
+              MainWidget(
+                onIndexChangedFunc: _updateHomeIndex,
+                allvendors: allvendors,
+                userPlace: _userPlace,
+                userLocation: _currentPosition,
+              ),
               if (_homeIndex == 0)
                 Positioned(
                   top: 0, //mtop,
@@ -340,10 +346,16 @@ class _MainHomeState extends State<MainHome> {
 
 class MainWidget extends StatefulWidget {
   final ValueChanged<int> onIndexChangedFunc;
+  final List<dynamic> allvendors;
+  final Position? userLocation;
+  final Placemark? userPlace;
 
   const MainWidget({
     super.key,
     required this.onIndexChangedFunc,
+    required this.allvendors,
+    required this.userLocation,
+    required this.userPlace,
   });
 
   @override
@@ -352,67 +364,163 @@ class MainWidget extends StatefulWidget {
 
 class _MainWidgetState extends State<MainWidget> {
   late GoogleMapController mapController;
-
   final LatLng _center = const LatLng(-33.86, 151.20);
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+  final Map<String, Marker> _markers = {};
+  bool markersAdded = false; // Flag to check if markers are added
 
-    addMarker("Sydney", currentLocation);
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeMarkers(); // Initialize markers when the widget is loaded
+    });
   }
 
-  Map<String, Marker> _makers = {};
+  @override
+  void didUpdateWidget(MainWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Check if allvendors list has changed
+    if (widget.allvendors != oldWidget.allvendors) {
+      List<Vendor> vendors = parseVendors(widget.allvendors);
+      _addVendorsMarkers(vendors); // Update markers
+    }
+
+    //Check when user location change
+    if (widget.userLocation != oldWidget.userLocation &&
+        widget.userLocation?.latitude != null) {
+      print("user location changed");
+      _addUserMarker();
+    }
+  }
+
+  void _initializeMarkers() {
+    // Ensure markers are only added once
+    if (!markersAdded) {
+      if (widget.userLocation?.latitude != null) {
+        _addUserMarker();
+      }
+
+      if (widget.allvendors.isNotEmpty) {
+        List<Vendor> vendors = parseVendors(widget.allvendors);
+        _addVendorsMarkers(vendors);
+      }
+
+      markersAdded = true; // Mark as added after setting markers
+    }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    // _addUserMarker();
+
+    // Ensure markers are added once the map is created
+    if (widget.allvendors.isNotEmpty) {
+      List<Vendor> vendors = parseVendors(widget.allvendors);
+      _addVendorsMarkers(vendors);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // if (widget.userLocation?.latitude != null) {
+    //   _addUserMarker();
+    // }
+
     return GestureDetector(
       onTap: () {
-        print("Map is tapped");
         setState(() {
           widget.onIndexChangedFunc(0);
         });
       },
       onDoubleTap: () {
         setState(() {
-          print("Map is double tapped");
-          setState(() {
-            // widget.onIndexChanged(0);
-          });
+          widget.onIndexChangedFunc(0);
         });
       },
       child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.orange[600],
-          child: const Center(
-            child: Text("Map is here"),
-          )
-          // GoogleMap(
-          //   onMapCreated: _onMapCreated,
-          //   initialCameraPosition: CameraPosition(
-          //     target: _center,
-          //     zoom: 11.0,
-          //   ),
-          //   markers: _makers.values.toSet(),
-          // ),
-          ),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.orange[600],
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            return
+                // widget.allvendors.isNotEmpty
+                //     ?
+                GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 15.0,
+              ),
+              markers: _markers.values.toSet(),
+              onTap: (argument) {
+                print(
+                    "The tapped Latitude: ${argument.latitude}, Longitude: ${argument.longitude}");
+              },
+            );
+            // : const Center(
+            //     child: Text("Map is Here"),
+            //   );
+          },
+        ),
+      ),
     );
   }
 
-  addMarker(String id, LatLng location) async {
-    var markerIcon = await BitmapDescriptor.asset(
-        const ImageConfiguration(), 'assets/icons/book_icon.png');
-    var maker = Marker(
-      markerId: MarkerId(id),
-      position: location,
-      infoWindow: const InfoWindow(
-        title: "Place title",
-        snippet: "place description",
-      ),
-      icon: markerIcon,
-    );
+  void _addUserMarker() {
+    print("check: ${widget.userLocation?.latitude}");
+    if (widget.userLocation?.latitude != null) {
+      LatLng userLocation =
+          LatLng(widget.userLocation!.latitude, widget.userLocation!.longitude);
+      Marker userMarker = Marker(
+        markerId: MarkerId(store.state.user['id'].toString()),
+        position: userLocation,
+        infoWindow: InfoWindow(
+          title: store.state.user['firstname'],
+          snippet:
+              "${widget.userPlace!.street} ${widget.userPlace!.locality} state",
+        ),
+        icon: BitmapDescriptor.defaultMarker,
+      );
+
+      setState(() {
+        _markers[store.state.user['id'].toString()] = userMarker;
+      });
+    }
+  }
+
+  void _addVendorsMarkers(List<Vendor> vendors) async {
+    Map<String, Marker> newMarkers = {};
+
+    for (var vendor in vendors) {
+      LatLng vendorLocation = LatLng(vendor.latitude, vendor.longitude);
+      var markerIcon = await BitmapDescriptor.asset(
+        const ImageConfiguration(size: Size(25.0, 30.0)),
+        vendor.isDiesel || vendor.isGas || vendor.isPetrol
+            ? 'assets/images/green_station.png'
+            : 'assets/images/red_station.png',
+      );
+      Marker marker = Marker(
+        markerId: MarkerId(vendor.id.toString()),
+        position: vendorLocation,
+        infoWindow: InfoWindow(
+          title: vendor.stationName,
+          snippet: "${vendor.address} ${vendor.lga} ${vendor.state}",
+        ),
+        icon: markerIcon,
+      );
+      newMarkers[vendor.id.toString()] = marker;
+    }
 
     setState(() {
-      _makers[id] = maker;
+      _markers.addAll(newMarkers); // Update the markers on the map.
+
+      mapController.animateCamera(
+        CameraUpdate.newLatLngZoom(
+            LatLng(vendors[0].latitude, vendors[0].longitude), 15.0),
+      );
     });
   }
 }

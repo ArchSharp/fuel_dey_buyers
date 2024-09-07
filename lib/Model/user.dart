@@ -294,6 +294,102 @@ class UploadImagePayload {
   }
 }
 
+class Vendor {
+  final String id;
+  final String stationName;
+  final String address;
+  final double latitude;
+  final double longitude;
+  final bool isPetrol;
+  final int petrolPrice;
+  final bool isGas;
+  final int gasPrice;
+  final bool isDiesel;
+  final int dieselPrice;
+  final int averageRating;
+  final int totalRaters;
+  final int commuterRating;
+  final List<RatingCount> ratingCount;
+  final String state;
+  final String lga;
+  final String email;
+  final String phoneNumber;
+  final DateTime updatedAt;
+  final DateTime createdAt;
+
+  Vendor({
+    required this.id,
+    required this.stationName,
+    required this.address,
+    required this.latitude,
+    required this.longitude,
+    required this.isPetrol,
+    required this.petrolPrice,
+    required this.isGas,
+    required this.gasPrice,
+    required this.isDiesel,
+    required this.dieselPrice,
+    required this.averageRating,
+    required this.totalRaters,
+    required this.commuterRating,
+    required this.ratingCount,
+    required this.state,
+    required this.lga,
+    required this.email,
+    required this.phoneNumber,
+    required this.updatedAt,
+    required this.createdAt,
+  });
+
+  // Factory method to create a Vendor object from JSON
+  factory Vendor.fromJson(Map<String, dynamic> json) {
+    return Vendor(
+      id: json['id'] as String,
+      stationName: json['stationname'] as String,
+      address: json['address'] as String,
+      latitude: double.parse(json['latitude']),
+      longitude: double.parse(json['longitude']),
+      isPetrol: json['ispetrol'] as bool,
+      petrolPrice: json['petrolprice'] as int,
+      isGas: json['isgas'] as bool,
+      gasPrice: json['gasprice'] as int,
+      isDiesel: json['isdiesel'] as bool,
+      dieselPrice: json['dieselprice'] as int,
+      averageRating: json['averagerating'] as int,
+      totalRaters: json['totalrater'] as int,
+      commuterRating: json['commuterrating'] as int,
+      ratingCount: (json['ratingcount'] as List)
+          .map((e) => RatingCount.fromJson(e))
+          .toList(),
+      state: json['state'] as String,
+      lga: json['lga'] as String,
+      email: json['email'] as String,
+      phoneNumber: json['phonenumber'] as String,
+      updatedAt: DateTime.parse(json['updatedat'] as String),
+      createdAt: DateTime.parse(json['createdat'] as String),
+    );
+  }
+}
+
+class RatingCount {
+  final int rating;
+  final int totalRaters;
+
+  RatingCount({
+    required this.rating,
+    required this.totalRaters,
+  });
+
+  // Factory method to create a RatingCount object from JSON
+  factory RatingCount.fromJson(Map<String, dynamic> json) {
+    return RatingCount(
+      rating: json['rating'] as int,
+      totalRaters: json['totalraters'] as int,
+    );
+  }
+}
+
+
 
 
 
