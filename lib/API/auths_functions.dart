@@ -583,13 +583,13 @@ void logoutFn() {
 
 Future<Map<String, String>> fetchTravelDetails(
     LatLng origin, LatLng destination,
-    {String travel_mode = "driving"}) async {
+    {String travelMode = "driving"}) async {
   final from = '${origin.latitude},${origin.longitude}';
   final to = '${destination.latitude},${destination.longitude}';
   // Change to 'walking', 'bicycling', or 'transit' as needed
 
   final url =
-      '${matrixBaseUrl}origins=$from&destinations=$to&mode=$travel_mode&key=$googleMapsApiKey';
+      '${matrixBaseUrl}origins=$from&destinations=$to&mode=$travelMode&key=$googleMapsApiKey';
 
   final response = await http.get(Uri.parse(url));
 

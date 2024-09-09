@@ -392,7 +392,7 @@ class RatingCount {
 class DistanceMatrixResponse {
   final List<String> destinationAddresses;
   final List<String> originAddresses;
-  final List<Row> rows;
+  final List<MatrixRow> rows;
   final String status;
 
   DistanceMatrixResponse({
@@ -406,19 +406,21 @@ class DistanceMatrixResponse {
     return DistanceMatrixResponse(
       destinationAddresses: List<String>.from(json['destination_addresses']),
       originAddresses: List<String>.from(json['origin_addresses']),
-      rows: (json['rows'] as List).map((item) => Row.fromJson(item)).toList(),
+      rows: (json['rows'] as List)
+          .map((item) => MatrixRow.fromJson(item))
+          .toList(),
       status: json['status'],
     );
   }
 }
 
-class Row {
+class MatrixRow {
   final List<Element> elements;
 
-  Row({required this.elements});
+  MatrixRow({required this.elements});
 
-  factory Row.fromJson(Map<String, dynamic> json) {
-    return Row(
+  factory MatrixRow.fromJson(Map<String, dynamic> json) {
+    return MatrixRow(
       elements: (json['elements'] as List)
           .map((item) => Element.fromJson(item))
           .toList(),
@@ -427,8 +429,8 @@ class Row {
 }
 
 class Element {
-  final Distance distance;
-  final Duration duration;
+  final MatrixDistance distance;
+  final MatrixDuration duration;
   final String status;
 
   Element({
@@ -439,35 +441,35 @@ class Element {
 
   factory Element.fromJson(Map<String, dynamic> json) {
     return Element(
-      distance: Distance.fromJson(json['distance']),
-      duration: Duration.fromJson(json['duration']),
+      distance: MatrixDistance.fromJson(json['distance']),
+      duration: MatrixDuration.fromJson(json['duration']),
       status: json['status'],
     );
   }
 }
 
-class Distance {
+class MatrixDistance {
   final String text;
   final int value;
 
-  Distance({required this.text, required this.value});
+  MatrixDistance({required this.text, required this.value});
 
-  factory Distance.fromJson(Map<String, dynamic> json) {
-    return Distance(
+  factory MatrixDistance.fromJson(Map<String, dynamic> json) {
+    return MatrixDistance(
       text: json['text'],
       value: json['value'],
     );
   }
 }
 
-class Duration {
+class MatrixDuration {
   final String text;
   final int value;
 
-  Duration({required this.text, required this.value});
+  MatrixDuration({required this.text, required this.value});
 
-  factory Duration.fromJson(Map<String, dynamic> json) {
-    return Duration(
+  factory MatrixDuration.fromJson(Map<String, dynamic> json) {
+    return MatrixDuration(
       text: json['text'],
       value: json['value'],
     );
