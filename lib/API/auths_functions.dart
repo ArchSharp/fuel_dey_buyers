@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path/path.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,6 +11,8 @@ import 'package:http/http.dart' as http;
 import 'package:tuple/tuple.dart';
 
 String? baseUrl = dotenv.env['BASE_URL'];
+String? googleMapsApiKey = dotenv.env['GOOGLE_MAP_API_KEY'];
+String? matrixBaseUrl = dotenv.env['GOOGLE_MATRIX_BASE_URL'];
 
 Future<Tuple2<int, String>> signInVendorFn(UserSignInPayload payload) async {
   String apiUrl = '$baseUrl/api/SignInVendor';
@@ -64,7 +67,6 @@ Future<Tuple2<int, String>> signInCommuterFn(UserSignInPayload payload) async {
     final response = await http.post(Uri.parse(apiUrl),
         headers: headers,
         body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
-    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     // print("signin response: ${data["body"]}");
@@ -187,7 +189,6 @@ Future<Tuple2<int, String>> verifyEmailFn(email, otp, isVendor) async {
     final response = await http.post(Uri.parse(apiUrl),
         headers: headers,
         body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
-    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -226,7 +227,6 @@ Future<Tuple2<int, String>> resendVerifyEmailFn(email, isVendor) async {
     final response = await http.post(Uri.parse(apiUrl),
         headers: headers,
         body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
-    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -266,7 +266,6 @@ Future<Tuple2<int, String>> forgotPasswordFn(email, isVendor) async {
   try {
     final response = await http.get(Uri.parse(apiUrl),
         headers: headers); //.timeout(const Duration(seconds: 10));
-    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -311,7 +310,6 @@ Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
     final response = await http.patch(Uri.parse(apiUrl),
         headers: headers,
         body: json.encode(payload)); //.timeout(const Duration(seconds: 10));
-    ;
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -580,5 +578,36 @@ void logoutFn() {
     store.dispatch(LogOut());
   } catch (e) {
     print('Error: $e');
+  }
+}
+
+Future<Map<String, String>> fetchTravelDetails(
+    LatLng origin, LatLng destination,
+    {String travel_mode = "driving"}) async {
+  final from = '${origin.latitude},${origin.longitude}';
+  final to = '${destination.latitude},${destination.longitude}';
+  // Change to 'walking', 'bicycling', or 'transit' as needed
+
+  final url =
+      '${matrixBaseUrl}origins=$from&destinations=$to&mode=$travel_mode&key=$googleMapsApiKey';
+
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    final jsonResponse = jsonDecode(response.body);
+    DistanceMatrixResponse distanceMatrixResponse =
+        DistanceMatrixResponse.fromJson(jsonResponse);
+
+    // Extract the distance and duration
+    final distance = distanceMatrixResponse.rows[0].elements[0].distance.text;
+    final duration = distanceMatrixResponse.rows[0].elements[0].duration.text;
+
+    // Return the results as a map
+    return {
+      'distance': distance,
+      'duration': duration,
+    };
+  } else {
+    throw Exception('Failed to load travel details');
   }
 }

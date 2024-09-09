@@ -389,6 +389,91 @@ class RatingCount {
   }
 }
 
+class DistanceMatrixResponse {
+  final List<String> destinationAddresses;
+  final List<String> originAddresses;
+  final List<Row> rows;
+  final String status;
+
+  DistanceMatrixResponse({
+    required this.destinationAddresses,
+    required this.originAddresses,
+    required this.rows,
+    required this.status,
+  });
+
+  factory DistanceMatrixResponse.fromJson(Map<String, dynamic> json) {
+    return DistanceMatrixResponse(
+      destinationAddresses: List<String>.from(json['destination_addresses']),
+      originAddresses: List<String>.from(json['origin_addresses']),
+      rows: (json['rows'] as List).map((item) => Row.fromJson(item)).toList(),
+      status: json['status'],
+    );
+  }
+}
+
+class Row {
+  final List<Element> elements;
+
+  Row({required this.elements});
+
+  factory Row.fromJson(Map<String, dynamic> json) {
+    return Row(
+      elements: (json['elements'] as List)
+          .map((item) => Element.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class Element {
+  final Distance distance;
+  final Duration duration;
+  final String status;
+
+  Element({
+    required this.distance,
+    required this.duration,
+    required this.status,
+  });
+
+  factory Element.fromJson(Map<String, dynamic> json) {
+    return Element(
+      distance: Distance.fromJson(json['distance']),
+      duration: Duration.fromJson(json['duration']),
+      status: json['status'],
+    );
+  }
+}
+
+class Distance {
+  final String text;
+  final int value;
+
+  Distance({required this.text, required this.value});
+
+  factory Distance.fromJson(Map<String, dynamic> json) {
+    return Distance(
+      text: json['text'],
+      value: json['value'],
+    );
+  }
+}
+
+class Duration {
+  final String text;
+  final int value;
+
+  Duration({required this.text, required this.value});
+
+  factory Duration.fromJson(Map<String, dynamic> json) {
+    return Duration(
+      text: json['text'],
+      value: json['value'],
+    );
+  }
+}
+
 
 
 

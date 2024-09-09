@@ -81,7 +81,7 @@ class _MainWidgetState extends State<MainWidget> {
     addMarker("Sydney", currentLocation);
   }
 
-  Map<String, Marker> _makers = {};
+  final Map<String, Marker> _makers = {};
 
   @override
   Widget build(BuildContext context) {

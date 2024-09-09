@@ -15,10 +15,10 @@ class UserStarRating extends StatefulWidget {
   });
 
   @override
-  _StarRatingsState createState() => _StarRatingsState();
+  State<UserStarRating> createState() => _UserStarRatingState();
 }
 
-class _StarRatingsState extends State<UserStarRating> {
+class _UserStarRatingState extends State<UserStarRating> {
   late double _currentRating;
 
   @override

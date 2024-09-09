@@ -51,6 +51,8 @@
     <string>We need your location to provide better services.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location when in the background.</string>
+	<string>NSLocationAlwaysAndWhenInUseUsageDescription</string>
+	<key>To display and track location</key>
 	
 	<!-- Phone Gallery usage description -->
 	<key>NSPhotoLibraryUsageDescription</key>

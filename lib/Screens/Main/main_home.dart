@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/API/helpers.dart';
@@ -14,8 +15,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
-const LatLng currentLocation = LatLng(25.1193, 55.3773);
+String? googleMapsApiKey = dotenv.env['GOOGLE_MAP_API_KEY'];
 
 class MainHome extends StatefulWidget {
   final ValueChanged<int> onIndexChanged;
@@ -137,6 +139,43 @@ class _MainHomeState extends State<MainHome> {
 
       handleGetAllVendors(payload);
     }
+  }
+
+  Future<void> _fetchLocationUpdates() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Request location service
+      serviceEnabled = await Geolocator.openLocationSettings();
+      if (!serviceEnabled) {
+        return; // Exit if the service is still not enabled
+      }
+    }
+
+    // Check for location permissions
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      // Request permission if denied
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return; // Exit if permission is denied
+      }
+    }
+
+    // Start listening for location changes
+    Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+    ).listen((Position? position) {
+      if (position != null) {
+        setState(() {
+          _currentPosition = position;
+        });
+      }
+    });
   }
 
   Future<void> handleGetAllVendors(GetAllVendorsPayload payload) async {
@@ -364,17 +403,18 @@ class MainWidget extends StatefulWidget {
 
 class _MainWidgetState extends State<MainWidget> {
   late GoogleMapController mapController;
-  final LatLng _center = const LatLng(-33.86, 151.20);
+  final LatLng _nigeriaCoordinate = const LatLng(10.0, 8.0);
   final Map<String, Marker> _markers = {};
+  Map<PolylineId, Polyline> polylines = {};
   bool markersAdded = false; // Flag to check if markers are added
+  bool isLocationChanged = false;
 
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeMarkers(); // Initialize markers when the widget is loaded
-    });
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) async => _initializeMarkers());
   }
 
   @override
@@ -382,24 +422,34 @@ class _MainWidgetState extends State<MainWidget> {
     super.didUpdateWidget(oldWidget);
 
     // Check if allvendors list has changed
-    if (widget.allvendors != oldWidget.allvendors) {
+    if (widget.allvendors != oldWidget.allvendors &&
+        widget.allvendors.isNotEmpty) {
       List<Vendor> vendors = parseVendors(widget.allvendors);
       _addVendorsMarkers(vendors); // Update markers
+      setState(() {
+        isLocationChanged = true;
+      });
     }
 
     //Check when user location change
     if (widget.userLocation != oldWidget.userLocation &&
         widget.userLocation?.latitude != null) {
-      print("user location changed");
+      // print("user location changed");
       _addUserMarker();
+    }
+
+    if (widget.allvendors.isNotEmpty && widget.userLocation?.latitude != null) {
+      print(
+          "Calling polyline function: ${widget.userLocation?.latitude}, ${widget.allvendors[0]['latitude']}");
+      _drawDirectionPolyLines();
     }
   }
 
-  void _initializeMarkers() {
+  Future<void> _initializeMarkers() async {
     // Ensure markers are only added once
     if (!markersAdded) {
       if (widget.userLocation?.latitude != null) {
-        _addUserMarker();
+        // _addUserMarker();
       }
 
       if (widget.allvendors.isNotEmpty) {
@@ -424,10 +474,6 @@ class _MainWidgetState extends State<MainWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // if (widget.userLocation?.latitude != null) {
-    //   _addUserMarker();
-    // }
-
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -445,24 +491,19 @@ class _MainWidgetState extends State<MainWidget> {
         color: Colors.orange[600],
         child: StatefulBuilder(
           builder: (context, setState) {
-            return
-                // widget.allvendors.isNotEmpty
-                //     ?
-                GoogleMap(
+            return GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 15.0,
+                target: _nigeriaCoordinate,
+                zoom: widget.allvendors.isEmpty ? 7.5 : 15.0,
               ),
               markers: _markers.values.toSet(),
+              polylines: Set<Polyline>.of(polylines.values),
               onTap: (argument) {
                 print(
                     "The tapped Latitude: ${argument.latitude}, Longitude: ${argument.longitude}");
               },
             );
-            // : const Center(
-            //     child: Text("Map is Here"),
-            //   );
           },
         ),
       ),
@@ -470,7 +511,7 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   void _addUserMarker() {
-    print("check: ${widget.userLocation?.latitude}");
+    // print("check: ${widget.userLocation?.latitude}");
     if (widget.userLocation?.latitude != null) {
       LatLng userLocation =
           LatLng(widget.userLocation!.latitude, widget.userLocation!.longitude);
@@ -522,5 +563,55 @@ class _MainWidgetState extends State<MainWidget> {
             LatLng(vendors[0].latitude, vendors[0].longitude), 15.0),
       );
     });
+  }
+
+  void _drawDirectionPolyLines() async {
+    // print("about to call _fetchPolylinePoints function");
+    List<LatLng> polylinePoints = await _fetchPolylinePoints();
+    if (polylinePoints.isNotEmpty) {
+      // print("about to call _generatePolyLineFromPoints function");
+      await _generatePolyLineFromPoints(polylinePoints);
+    }
+  }
+
+  Future<List<LatLng>> _fetchPolylinePoints() async {
+    final polylinePoints = PolylinePoints();
+
+    final result = await polylinePoints.getRouteBetweenCoordinates(
+        googleApiKey: googleMapsApiKey,
+        request: PolylineRequest(
+          mode: TravelMode.driving,
+          origin: PointLatLng(
+            widget.userLocation!.latitude,
+            widget.userLocation!.longitude,
+          ),
+          destination: PointLatLng(
+            double.parse(widget.allvendors[0]['latitude']),
+            double.parse(widget.allvendors[0]['longitude']),
+          ),
+        ));
+
+    if (result.points.isNotEmpty) {
+      return result.points
+          .map((point) => LatLng(point.latitude, point.longitude))
+          .toList();
+    } else {
+      debugPrint(result.errorMessage);
+      return [];
+    }
+  }
+
+  Future<void> _generatePolyLineFromPoints(
+      List<LatLng> polylineCoordinates) async {
+    const id = PolylineId('polyline');
+
+    final polyline = Polyline(
+      polylineId: id,
+      color: Colors.blueAccent,
+      points: polylineCoordinates,
+      width: 5,
+    );
+
+    setState(() => polylines[id] = polyline);
   }
 }
