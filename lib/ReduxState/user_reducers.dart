@@ -1,5 +1,6 @@
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:geolocator/geolocator.dart';
 
 AppState userReducer(AppState state, dynamic action) {
   if (action is UpdateUserAction) {
@@ -25,6 +26,10 @@ AppState userReducer(AppState state, dynamic action) {
     return state..allVendorReviews = action.allVendorReviews;
   }
 
+  if (action is SaveUserLocation) {
+    return state..userLocation = action.userLocation;
+  }
+
   if (action is LogOut) {
     return AppState(
       email: "",
@@ -33,6 +38,18 @@ AppState userReducer(AppState state, dynamic action) {
       userWallet: {},
       allVendors: [],
       allVendorReviews: [],
+      userLocation: Position(
+        latitude: 0.0,
+        longitude: 0.0,
+        timestamp: DateTime.now(),
+        accuracy: 0.0,
+        altitude: 0.0,
+        heading: 0.0,
+        speed: 0.0,
+        speedAccuracy: 0.0,
+        altitudeAccuracy: 0.0,
+        headingAccuracy: 0.0,
+      ),
     );
   }
 

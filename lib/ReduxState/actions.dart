@@ -1,3 +1,5 @@
+import 'package:geolocator/geolocator.dart';
+
 class UpdateUserAction {
   final Map<String, dynamic> newUser;
 
@@ -36,4 +38,10 @@ class GetAllVendorReviews {
   final List<dynamic> allVendorReviews;
 
   GetAllVendorReviews(this.allVendorReviews);
+}
+
+class SaveUserLocation {
+  final Position userLocation;
+
+  SaveUserLocation(this.userLocation);
 }

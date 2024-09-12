@@ -1,4 +1,5 @@
 import 'package:fuel_dey_buyers/ReduxState/user_reducers.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:redux/redux.dart';
 
 class AppState {
@@ -8,6 +9,7 @@ class AppState {
   late String email;
   late List<dynamic> allVendors;
   late List<dynamic> allVendorReviews;
+  late Position userLocation;
 
   AppState({
     required this.email,
@@ -16,6 +18,7 @@ class AppState {
     required this.userWallet,
     required this.allVendors,
     required this.allVendorReviews,
+    required this.userLocation,
   });
 }
 
@@ -32,5 +35,17 @@ final Store<AppState> store = Store<AppState>(
     userWallet: {},
     allVendors: [],
     allVendorReviews: [],
+    userLocation: Position(
+      latitude: 0.0,
+      longitude: 0.0,
+      timestamp: DateTime.now(),
+      accuracy: 0.0,
+      altitude: 0.0,
+      heading: 0.0,
+      speed: 0.0,
+      speedAccuracy: 0.0,
+      altitudeAccuracy: 0.0,
+      headingAccuracy: 0.0,
+    ),
   ),
 );

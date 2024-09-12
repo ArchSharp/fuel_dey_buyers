@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_dey_buyers/ReduxState/actions.dart';
+import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/welcome.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,6 +69,26 @@ class _OnboardingState extends State<Onboarding> {
     }
   }
 
+  Future<void> _getCurrentLocation() async {
+    print("here-4");
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    Placemark place = placemarks[0];
+    String address =
+        "${place.street} ${place.locality} state ${place.country}, postal code ${place.postalCode}";
+
+    //print("Placemarks: " + placemarks.toString());
+    if (mounted) {
+      print("address: $address");
+      // print("place: $place");
+
+      store.dispatch(SaveUserLocation(position));
+    }
+  }
+
   void _showPermissionDialog() {
     showDialog(
       context: context,
@@ -126,6 +150,8 @@ class _OnboardingState extends State<Onboarding> {
     setState(() {
       _hasPermission = isGranted;
     });
+
+    await _getCurrentLocation();
 
     if (mounted) {
       Navigator.of(context).pop();

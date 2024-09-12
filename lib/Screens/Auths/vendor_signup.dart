@@ -11,6 +11,10 @@ import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/privacy_policy.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/terms_conditions.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
 
 class VendorSignup extends StatefulWidget {
@@ -36,6 +40,12 @@ class _VendorSignupState extends State<VendorSignup> {
   String errorText = '';
   bool isLoading = false;
   late Tuple2<int, String> result;
+  bool _isLoading = false;
+
+  bool _revealPassword = false;
+  bool _isAgreeTermsCondition = false;
+  bool _isConfirmAddress = false;
+  Position? _currentPosition;
 
   Map<String, dynamic> nigeriaData = {};
   List<dynamic> states = [];
@@ -103,6 +113,7 @@ class _VendorSignupState extends State<VendorSignup> {
     // Initialize the text controller with the initial date
     _initializeTextControllers();
     loadNigeriaData();
+    _checkPermission();
   }
 
   final TextEditingController _stationNameController = TextEditingController();
@@ -146,9 +157,6 @@ class _VendorSignupState extends State<VendorSignup> {
     }
   }
 
-  bool _revealPassword = false;
-  bool _isAgreeTermsCondition = false;
-
   final Map<String, String?> _errors = {
     'station_name': null,
     'address': null,
@@ -182,9 +190,158 @@ class _VendorSignupState extends State<VendorSignup> {
     });
   }
 
+  Future<void> _checkPermission() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? permissionGranted = prefs.getBool('location_permission_granted');
+    if (permissionGranted != null) {
+      if (permissionGranted) {
+        _getCurrentLocation();
+      }
+    }
+  }
+
+  Future<void> _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    Placemark place = placemarks[0];
+    String address =
+        "${place.street} ${place.locality} state ${place.country}, postal code ${place.postalCode}";
+
+    //print("Placemarks: " + placemarks.toString());
+    if (mounted) {
+      print("address: $address");
+      // print("place: $place");
+      setState(() {
+        _currentPosition = position;
+      });
+    }
+  }
+
+  // Function to show the modal popup
+  void _showModalPopup() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          backgroundColor: Colors.transparent,
+          content: Center(child: CircularProgressIndicator()),
+        );
+      },
+    );
+
+    await _getCurrentLocation();
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    // Close the progress dialog and show the map
+    Navigator.of(context, rootNavigator: true).pop();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        double deviceWidth = MediaQuery.of(context).size.width * 0.95;
+
+        // print(
+        //     "deviceWidth: $deviceWidth, ${deviceWidth * 0.9}, ${_currentPosition?.latitude}");
+
+        // // Future to simulate the delay of obtaining user location
+        // Future<Position?> userLocationFuture = Future.delayed(
+        //   const Duration(seconds: 1),
+        //   () =>
+        //       _currentPosition, // Replace this with your method to get user location
+        // );
+        return UnconstrainedBox(
+          constrainedAxis: Axis.horizontal,
+          child: SizedBox(
+            width: deviceWidth,
+            child: Dialog(
+              backgroundColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: Container(
+                height: 430,
+                padding: const EdgeInsets.all(0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    MainWidget(
+                      userLocation: _currentPosition,
+                      height: 310,
+                      width: deviceWidth,
+                    ),
+                    const Spacer(),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 55),
+                        backgroundColor: const Color(0XFFFFFDF4)
+                            .withOpacity(_isAgreeTermsCondition ? 1 : 0.3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Adjust map pin",
+                            style: TextStyle(
+                              color: Color(0xFF2C2D2F),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 55),
+                        backgroundColor: const Color(0XFFFFFDF4)
+                            .withOpacity(_isAgreeTermsCondition ? 1 : 0.3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Continue",
+                            style: TextStyle(
+                              color: Color(0xFF2C2D2F),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
     double mtop = deviceHeight * 0.03;
@@ -236,128 +393,170 @@ class _VendorSignupState extends State<VendorSignup> {
                         error: _errors['stationname'],
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        "Address",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
-                      ),
-                      const SizedBox(height: 5),
-                      _buildTextField(
-                        controller: _addressController,
-                        label: 'Address',
-                        error: _errors['address'],
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "State",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
-                      ),
-                      const SizedBox(height: 5),
-                      // _buildTextField(
-                      //   controller: _stateController,
-                      //   label: 'State',
-                      //   error: _errors['state'],
-                      // ),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                              fontSize: 14,
-                            ),
-                            isExpanded: true,
-                            padding: const EdgeInsets.only(left: 10),
-                            hint: const Text('Select State'),
-                            value: selectedState,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedState = newValue;
-                                lgas = states.firstWhere((state) =>
-                                    state['name'] ==
-                                    newValue)['local_government_areas'];
-                                selectedLGA = null;
-                              });
-                            },
-                            items:
-                                states.map<DropdownMenuItem<String>>((state) {
-                              return DropdownMenuItem<String>(
-                                value: state['name'],
-                                child: Text("${state['name']} State"),
-                              );
-                            }).toList(),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Email",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              SizedBox(
+                                width: (deviceWidth - 42) / 2,
+                                child: _buildTextField(
+                                  controller: _emailController,
+                                  label: 'Email',
+                                  error: _errors['email'],
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "LGA",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                              fontSize: 14,
-                            ),
-                            isExpanded: true,
-                            padding: const EdgeInsets.only(left: 10),
-                            hint: const Text(
-                              'Select LGA',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            value: selectedLGA,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedLGA = newValue;
-
-                                // Find the selected LGA and set its latitude and longitude
-                                final selectedLGAData = lgas.firstWhere(
-                                    (lga) => lga['name'] == newValue);
-                                lgaLatitude = selectedLGAData['latitude'];
-                                lgaLongitude = selectedLGAData['longitude'];
-
-                                // print('Selected LGA Latitude: $lgaLatitude');
-                                // print('Selected LGA Longitude: $lgaLongitude');
-                              });
-                            },
-                            items: lgas.map<DropdownMenuItem<String>>((lga) {
-                              return DropdownMenuItem<String>(
-                                value: lga['name'],
-                                child: Text("${lga['name']} LGA"),
-                              );
-                            }).toList(),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Address",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              SizedBox(
+                                width: (deviceWidth - 42) / 2,
+                                child: _buildTextField(
+                                  controller: _addressController,
+                                  label: 'Address',
+                                  error: _errors['address'],
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
+                        ],
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        "Email",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
-                      ),
-                      const SizedBox(height: 5),
-                      _buildTextField(
-                        controller: _emailController,
-                        label: 'Email',
-                        error: _errors['email'],
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "State",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                      ),
+                                      isExpanded: true,
+                                      padding: const EdgeInsets.only(left: 10),
+                                      hint: const Text('Select State'),
+                                      value: selectedState,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          selectedState = newValue;
+                                          lgas = states.firstWhere((state) =>
+                                                  state['name'] == newValue)[
+                                              'local_government_areas'];
+                                          selectedLGA = null;
+                                        });
+                                      },
+                                      items: states
+                                          .map<DropdownMenuItem<String>>(
+                                              (state) {
+                                        return DropdownMenuItem<String>(
+                                          value: state['name'],
+                                          child: Text("${state['name']} State"),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "LGA",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                                const SizedBox(height: 5),
+                                Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                      ),
+                                      isExpanded: true,
+                                      padding: const EdgeInsets.only(left: 10),
+                                      hint: const Text(
+                                        'Select LGA',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      value: selectedLGA,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          selectedLGA = newValue;
+
+                                          // Find the selected LGA and set its latitude and longitude
+                                          final selectedLGAData =
+                                              lgas.firstWhere((lga) =>
+                                                  lga['name'] == newValue);
+                                          lgaLatitude =
+                                              selectedLGAData['latitude'];
+                                          lgaLongitude =
+                                              selectedLGAData['longitude'];
+                                        });
+                                      },
+                                      items: lgas
+                                          .map<DropdownMenuItem<String>>((lga) {
+                                        return DropdownMenuItem<String>(
+                                          value: lga['name'],
+                                          child: Text("${lga['name']} LGA"),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 8),
                       const Text(
@@ -493,7 +692,11 @@ class _VendorSignupState extends State<VendorSignup> {
                       ElevatedButton(
                         onPressed: () {
                           if (_isAgreeTermsCondition && !isLoading) {
-                            _validateInputs();
+                            if (_isConfirmAddress) {
+                              _validateInputs();
+                            } else if (!_isConfirmAddress) {
+                              _showModalPopup();
+                            }
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -583,7 +786,10 @@ class _VendorSignupState extends State<VendorSignup> {
         errorText: error,
         errorStyle: const TextStyle(color: Colors.red),
         border: const OutlineInputBorder(
-          borderSide: BorderSide(style: BorderStyle.solid),
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey,
+          ),
         ),
       ),
       keyboardType: keyboardType,
@@ -665,5 +871,166 @@ class _VendorSignupState extends State<VendorSignup> {
     _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+}
+
+class MainWidget extends StatefulWidget {
+  late Position? userLocation;
+  final double width;
+  final double height;
+
+  MainWidget({
+    super.key,
+    required this.userLocation,
+    required this.height,
+    required this.width,
+  });
+
+  @override
+  State<MainWidget> createState() => _MainWidgetState();
+}
+
+class _MainWidgetState extends State<MainWidget> {
+  late GoogleMapController mapController;
+  final LatLng _nigeriaCoordinate = const LatLng(10.0, 8.0);
+  final Map<String, Marker> _markers = {};
+  bool markersAdded = false; // Flag to check if markers are added
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) async => _initializeMarkers());
+  }
+
+  @override
+  void didUpdateWidget(MainWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Check when user location changes
+    if (widget.userLocation != oldWidget.userLocation &&
+        widget.userLocation?.latitude != null) {
+      _addUserMarker();
+    }
+  }
+
+  Future<void> _initializeMarkers() async {
+    // Ensure markers are only added once
+    if (!markersAdded && widget.userLocation?.latitude != null) {
+      if (widget.userLocation?.latitude != null) {
+        _addUserMarker();
+      }
+
+      markersAdded = true; // Mark as added after setting markers
+    }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+
+    // print(
+    //     "lat: ${widget.userLocation?.latitude}, long: ${widget.userLocation?.longitude}");
+    // Ensure markers are added once the map is created
+    if (widget.userLocation?.latitude != null) {
+      _addUserMarker();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // print(
+    //     "lat: ${widget.userLocation?.latitude}, long: ${widget.userLocation?.longitude}");
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          //
+        });
+      },
+      onDoubleTap: () {
+        setState(() {
+          //
+        });
+      },
+      child: Container(
+        height: widget.height,
+        width: widget.width,
+        color: Colors.orange[600],
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            return GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _nigeriaCoordinate,
+                zoom: 15.0,
+              ),
+              markers: _markers.values.toSet(),
+              onTap: (LatLng coordinates) {
+                setState(() {
+                  // Remove the old marker and add a new one with the updated position
+                  if (_markers.isNotEmpty) {
+                    // Assume you are updating the first marker in the map
+                    String markerId = _markers.keys.first;
+
+                    Marker updatedMarker = Marker(
+                      markerId: MarkerId(markerId),
+                      position: coordinates, // New position
+                      infoWindow: InfoWindow(
+                        title: 'New Location',
+                        snippet:
+                            'Latitude: ${coordinates.latitude}, Longitude: ${coordinates.longitude}',
+                      ),
+                      icon: BitmapDescriptor.defaultMarker,
+                    );
+
+                    // Update the map with the new marker
+                    _markers[markerId] = updatedMarker;
+                  }
+                });
+
+                mapController.animateCamera(
+                  CameraUpdate.newLatLngZoom(
+                      LatLng(coordinates.latitude, coordinates.longitude),
+                      15.0),
+                );
+                print(
+                    "The tapped Latitude: ${coordinates.latitude}, Longitude: ${coordinates.longitude}");
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void _addUserMarker() {
+    if (widget.userLocation?.latitude != null) {
+      LatLng userLocation =
+          LatLng(widget.userLocation!.latitude, widget.userLocation!.longitude);
+      Marker userMarker = Marker(
+        markerId: MarkerId(
+            widget.userLocation.toString()), // Use userLocation for markerId
+        position: userLocation,
+        infoWindow: InfoWindow(
+          title: 'Your Location',
+          snippet:
+              'Latitude: ${widget.userLocation!.latitude}, Longitude: ${widget.userLocation!.longitude}',
+        ),
+        icon: BitmapDescriptor.defaultMarker,
+      );
+
+      setState(() {
+        _markers[widget.userLocation.toString()] = userMarker;
+
+        mapController.animateCamera(
+          CameraUpdate.newLatLngZoom(
+              LatLng(userLocation.latitude, userLocation.longitude), 15.0),
+        );
+      });
+
+      // print(
+      //     "latitude: ${widget.userLocation?.latitude}, longitude: ${widget.userLocation?.longitude}, markers: ${_markers.length}");
+    }
   }
 }

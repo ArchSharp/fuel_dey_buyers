@@ -591,6 +591,21 @@ class _MainWidgetState extends State<MainWidget> {
           ),
         ));
 
+    LatLng origin = LatLng(
+      widget.userLocation!.latitude,
+      widget.userLocation!.longitude,
+    );
+
+    LatLng destination = LatLng(
+      double.parse(widget.allvendors[0]['latitude']),
+      double.parse(widget.allvendors[0]['longitude']),
+    );
+
+// Fetch travel details using the origin and destination
+    final travelDetails = await fetchTravelDetails(origin, destination);
+    print('Distance: ${travelDetails['distance']}');
+    print('Duration: ${travelDetails['duration']}');
+
     if (result.points.isNotEmpty) {
       return result.points
           .map((point) => LatLng(point.latitude, point.longitude))
