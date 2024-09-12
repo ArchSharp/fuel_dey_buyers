@@ -40,12 +40,12 @@ class _VendorSignupState extends State<VendorSignup> {
   String errorText = '';
   bool isLoading = false;
   late Tuple2<int, String> result;
-  bool _isLoading = false;
 
   bool _revealPassword = false;
   bool _isAgreeTermsCondition = false;
   bool _isConfirmAddress = false;
   Position? _currentPosition;
+  LatLng? _stationPosition;
 
   Map<String, dynamic> nigeriaData = {};
   List<dynamic> states = [];
@@ -220,114 +220,64 @@ class _VendorSignupState extends State<VendorSignup> {
     }
   }
 
+  Future<void> _getCoordinatesFromAddress(String address) async {
+    try {
+      List<Location> locations = await locationFromAddress(address);
+      if (locations.isNotEmpty) {
+        double latitude = locations.first.latitude;
+        double longitude = locations.first.longitude;
+
+        setState(() {
+          _stationPosition = LatLng(latitude, longitude);
+        });
+
+        print('$address Geocoding Latitude: $latitude, Longitude: $longitude');
+      } else {
+        print('No location found for the given address.');
+      }
+    } catch (e) {
+      print('Error occurred while converting address to coordinates: $e');
+    }
+  }
+
   // Function to show the modal popup
   void _showModalPopup() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AlertDialog(
-          backgroundColor: Colors.transparent,
-          content: Center(child: CircularProgressIndicator()),
-        );
-      },
-    );
-
-    await _getCurrentLocation();
-
-    setState(() {
-      _isLoading = false;
-    });
-
-    // Close the progress dialog and show the map
-    Navigator.of(context, rootNavigator: true).pop();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        double deviceWidth = MediaQuery.of(context).size.width * 0.95;
-
-        // print(
-        //     "deviceWidth: $deviceWidth, ${deviceWidth * 0.9}, ${_currentPosition?.latitude}");
-
-        // // Future to simulate the delay of obtaining user location
-        // Future<Position?> userLocationFuture = Future.delayed(
-        //   const Duration(seconds: 1),
-        //   () =>
-        //       _currentPosition, // Replace this with your method to get user location
-        // );
         return UnconstrainedBox(
           constrainedAxis: Axis.horizontal,
           child: SizedBox(
-            width: deviceWidth,
+            width: 200,
             child: Dialog(
               backgroundColor: Colors.transparent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4.0),
               ),
               child: Container(
-                height: 430,
-                padding: const EdgeInsets.all(0),
-                child: Column(
+                color: Colors.white,
+                height: 200,
+                padding: const EdgeInsets.all(12),
+                child: const Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    MainWidget(
-                      userLocation: _currentPosition,
-                      height: 310,
-                      width: deviceWidth,
-                    ),
-                    const Spacer(),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 55),
-                        backgroundColor: const Color(0XFFFFFDF4)
-                            .withOpacity(_isAgreeTermsCondition ? 1 : 0.3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Adjust map pin",
-                            style: TextStyle(
-                              color: Color(0xFF2C2D2F),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: CircularProgressIndicator(
+                        color: Colors.orange,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 55),
-                        backgroundColor: const Color(0XFFFFFDF4)
-                            .withOpacity(_isAgreeTermsCondition ? 1 : 0.3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
+                    SizedBox(height: 15),
+                    Text(
+                      "A map with your address (red pin) will be displayed soon. Please confirm if it's correct. If not, adjust the map by dragging, or zooming, and then tap the closest point that matches your station address.",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Continue",
-                            style: TextStyle(
-                              color: Color(0xFF2C2D2F),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
+                      textAlign: TextAlign.justify,
                     ),
                   ],
                 ),
@@ -337,6 +287,120 @@ class _VendorSignupState extends State<VendorSignup> {
         );
       },
     );
+
+    await _getCurrentLocation();
+
+    String address =
+        "${_addressController.text} ${_lgaController.text} ${_stateController.text} Nigeria";
+    await _getCoordinatesFromAddress(address);
+
+    // Introduce a 10-seconds delay before closing the progress dialog
+    await Future.delayed(const Duration(seconds: 20));
+
+    // Close the progress dialog and show the map
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          double deviceWidth = MediaQuery.of(context).size.width * 0.95;
+
+          // print(
+          //     "deviceWidth: $deviceWidth, ${deviceWidth * 0.9}, ${_currentPosition?.latitude}");
+
+          // // Future to simulate the delay of obtaining user location
+          // Future<Position?> userLocationFuture = Future.delayed(
+          //   const Duration(seconds: 1),
+          //   () =>
+          //       _currentPosition, // Replace this with your method to get user location
+          // );
+          return UnconstrainedBox(
+            constrainedAxis: Axis.horizontal,
+            child: SizedBox(
+              width: deviceWidth,
+              child: Dialog(
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: Container(
+                  height: 430,
+                  padding: const EdgeInsets.all(0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      MainWidget(
+                        userLocation: _currentPosition,
+                        stationCoordinate: _stationPosition,
+                        height: 310,
+                        width: deviceWidth,
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 55),
+                          backgroundColor: const Color(0XFFFFFDF4)
+                              .withOpacity(_isAgreeTermsCondition ? 1 : 0.3),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Adjust map pin",
+                              style: TextStyle(
+                                color: Color(0xFF2C2D2F),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 55),
+                          backgroundColor: const Color(0XFFFFFDF4)
+                              .withOpacity(_isAgreeTermsCondition ? 1 : 0.3),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Continue",
+                              style: TextStyle(
+                                color: Color(0xFF2C2D2F),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -476,6 +540,7 @@ class _VendorSignupState extends State<VendorSignup> {
                                       onChanged: (newValue) {
                                         setState(() {
                                           selectedState = newValue;
+                                          _stateController.text = newValue!;
                                           lgas = states.firstWhere((state) =>
                                                   state['name'] == newValue)[
                                               'local_government_areas'];
@@ -532,7 +597,7 @@ class _VendorSignupState extends State<VendorSignup> {
                                       onChanged: (newValue) {
                                         setState(() {
                                           selectedLGA = newValue;
-
+                                          _lgaController.text = newValue!;
                                           // Find the selected LGA and set its latitude and longitude
                                           final selectedLGAData =
                                               lgas.firstWhere((lga) =>
@@ -875,13 +940,15 @@ class _VendorSignupState extends State<VendorSignup> {
 }
 
 class MainWidget extends StatefulWidget {
-  late Position? userLocation;
+  final Position? userLocation;
+  final LatLng? stationCoordinate;
   final double width;
   final double height;
 
-  MainWidget({
+  const MainWidget({
     super.key,
     required this.userLocation,
+    required this.stationCoordinate,
     required this.height,
     required this.width,
   });
@@ -919,7 +986,7 @@ class _MainWidgetState extends State<MainWidget> {
     // Ensure markers are only added once
     if (!markersAdded && widget.userLocation?.latitude != null) {
       if (widget.userLocation?.latitude != null) {
-        _addUserMarker();
+        // _addUserMarker();
       }
 
       markersAdded = true; // Mark as added after setting markers
@@ -1005,9 +1072,11 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   void _addUserMarker() {
-    if (widget.userLocation?.latitude != null) {
-      LatLng userLocation =
-          LatLng(widget.userLocation!.latitude, widget.userLocation!.longitude);
+    if (/*widget.userLocation?.latitude != null*/ widget
+            .stationCoordinate?.latitude !=
+        0) {
+      LatLng userLocation = LatLng(widget.stationCoordinate!.latitude,
+          widget.stationCoordinate!.longitude);
       Marker userMarker = Marker(
         markerId: MarkerId(
             widget.userLocation.toString()), // Use userLocation for markerId
@@ -1015,17 +1084,20 @@ class _MainWidgetState extends State<MainWidget> {
         infoWindow: InfoWindow(
           title: 'Your Location',
           snippet:
-              'Latitude: ${widget.userLocation!.latitude}, Longitude: ${widget.userLocation!.longitude}',
+              'Latitude: ${widget.stationCoordinate!.latitude}, Longitude: ${widget.stationCoordinate!.longitude}',
         ),
         icon: BitmapDescriptor.defaultMarker,
       );
 
       setState(() {
-        _markers[widget.userLocation.toString()] = userMarker;
+        _markers[widget.stationCoordinate.toString()] = userMarker;
 
         mapController.animateCamera(
           CameraUpdate.newLatLngZoom(
-              LatLng(userLocation.latitude, userLocation.longitude), 15.0),
+            LatLng(widget.stationCoordinate!.latitude,
+                widget.stationCoordinate!.longitude),
+            15.0,
+          ),
         );
       });
 

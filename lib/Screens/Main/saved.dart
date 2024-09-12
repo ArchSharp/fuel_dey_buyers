@@ -37,7 +37,7 @@ class _SavedState extends State<Saved> {
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFFECB920),
+                          color: Color(0xFF2C2D2F),
                         ),
                       ),
                       ElevatedButton(

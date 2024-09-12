@@ -159,7 +159,7 @@ class _CommuterSignupState extends State<CommuterSignup> {
 
   @override
   Widget build(BuildContext context) {
-    // double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
     double mtop = deviceHeight * 0.03;
@@ -200,34 +200,54 @@ class _CommuterSignupState extends State<CommuterSignup> {
                       // Image.asset('assets/images/Ayib.jpg',
                       //     width: imageWidth, height: 250),
                       const SizedBox(height: 10),
-                      const Text(
-                        "First Name",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: Color(0xFF2C2D2F),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      _buildTextField(
-                        controller: _firstNameController,
-                        label: 'First Name',
-                        error: _errors['firstname'],
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "Last Name",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: Color(0xFF2C2D2F),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      _buildTextField(
-                        controller: _lastNameController,
-                        label: 'Last Name',
-                        error: _errors['lastname'],
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "First Name",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14,
+                                  color: Color(0xFF2C2D2F),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              SizedBox(
+                                width: (deviceWidth - 42) / 2,
+                                child: _buildTextField(
+                                  controller: _firstNameController,
+                                  label: 'First Name',
+                                  error: _errors['firstname'],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Last Name",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14,
+                                  color: Color(0xFF2C2D2F),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              SizedBox(
+                                width: (deviceWidth - 42) / 2,
+                                child: _buildTextField(
+                                  controller: _lastNameController,
+                                  label: 'Last Name',
+                                  error: _errors['lastname'],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 8),
                       // const Text(

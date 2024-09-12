@@ -54,7 +54,7 @@ class _VendorNotificationState extends State<VendorNotification> {
                     style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFFECB920)),
+                        color: Color(0xFF2C2D2F)),
                   ),
                 ),
                 const SizedBox(height: 5),
