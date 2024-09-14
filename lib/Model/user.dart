@@ -75,6 +75,7 @@ class VendorSignUpPayload {
   String address;
   String latitude;
   String longitude;
+  int postalcode;
   String state;
   String lga;
   String email;
@@ -86,6 +87,7 @@ class VendorSignUpPayload {
     required this.address,
     required this.latitude,
     required this.longitude,
+    required this.postalcode,
     required this.state,
     required this.lga,
     required this.email,
@@ -100,6 +102,7 @@ class VendorSignUpPayload {
       "address": address,
       "latitude": latitude,
       "longitude": longitude,
+      "postalcode": postalcode,
       "state": state,
       "lga": lga,
       "email": email,
@@ -115,6 +118,7 @@ class VendorSignUpPayload {
       address: json['address'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      postalcode: json['postalcode'],
       state: json['state'],
       lga: json['lga'],
       email: json['email'],
@@ -130,6 +134,7 @@ class GetAllVendorsPayload {
   String lga;
   String latitude;
   String longitude;
+  int postalcode;
 
   GetAllVendorsPayload({
     required this.userid,
@@ -137,6 +142,7 @@ class GetAllVendorsPayload {
     required this.lga,
     required this.latitude,
     required this.longitude,
+    required this.postalcode,
   });
 
   // Convert UserPayload to JSON
@@ -147,6 +153,7 @@ class GetAllVendorsPayload {
       "lga": lga,
       "latitude": latitude,
       "longitude": longitude,
+      "postalcode": postalcode,
     };
   }
 
@@ -158,6 +165,7 @@ class GetAllVendorsPayload {
       lga: json['lga'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      postalcode: json['postalcode'],
     );
   }
 }
@@ -300,6 +308,7 @@ class Vendor {
   final String address;
   final double latitude;
   final double longitude;
+  final int postalcode;
   final bool isPetrol;
   final int petrolPrice;
   final bool isGas;
@@ -323,6 +332,7 @@ class Vendor {
     required this.address,
     required this.latitude,
     required this.longitude,
+    required this.postalcode,
     required this.isPetrol,
     required this.petrolPrice,
     required this.isGas,
@@ -349,6 +359,7 @@ class Vendor {
       address: json['address'] as String,
       latitude: double.parse(json['latitude']),
       longitude: double.parse(json['longitude']),
+      postalcode: json['postalcode'] as int,
       isPetrol: json['ispetrol'] as bool,
       petrolPrice: json['petrolprice'] as int,
       isGas: json['isgas'] as bool,
@@ -476,6 +487,26 @@ class MatrixDuration {
   }
 }
 
+class TravelDetails {
+  final String distance;
+  final String time;
+
+  TravelDetails({required this.distance, required this.time});
+}
+
+class PostalCodeInfo {
+  final int postalCode;
+  final String latitude;
+  final String longitude;
+  final String googleLga;
+
+  PostalCodeInfo({
+    required this.postalCode,
+    required this.latitude,
+    required this.longitude,
+    required this.googleLga,
+  });
+}
 
 
 

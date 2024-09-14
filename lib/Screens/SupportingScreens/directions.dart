@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
+import 'package:fuel_dey_buyers/Model/user.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Directions extends StatefulWidget {
   final ValueChanged<int> onIndexChangedFunc;
   final String stationname;
+  final Position? userCoordinates;
+  final Vendor vendor;
 
   const Directions({
     super.key,
     required this.onIndexChangedFunc,
     required this.stationname,
+    required this.userCoordinates,
+    required this.vendor,
   });
 
   @override
@@ -16,6 +24,8 @@ class Directions extends StatefulWidget {
 
 class _DirectionsState extends State<Directions> {
   bool showDots = true;
+  String? estimatedTime = "";
+  String? distance = "";
   // List of items
   final List<String> items = ['My Location', "", 'Add Stop'];
 
@@ -27,6 +37,7 @@ class _DirectionsState extends State<Directions> {
   @override
   void initState() {
     super.initState();
+    _getVendorDistanceAndTime();
     items[1] = widget.stationname;
     _scrollableController.addListener(() {
       _heightPercentageNotifier.value = _scrollableController.size;
@@ -39,6 +50,22 @@ class _DirectionsState extends State<Directions> {
     _scrollableController.dispose();
     _heightPercentageNotifier.dispose();
     super.dispose();
+  }
+
+  Future<void> _getVendorDistanceAndTime() async {
+    LatLng origin = LatLng(
+        widget.userCoordinates!.latitude, widget.userCoordinates!.longitude);
+
+    LatLng destination =
+        LatLng(widget.vendor.latitude, widget.vendor.longitude);
+    // Fetch travel details using the origin and destination
+    final travelDetails = await fetchTravelDetails(origin, destination);
+    setState(() {
+      estimatedTime = travelDetails.time;
+      distance = travelDetails.distance;
+    });
+    print('DIRECTION Distance: ${travelDetails.distance}');
+    print('DIRECTION Duration: ${travelDetails.time}');
   }
 
   @override
@@ -171,19 +198,19 @@ class _DirectionsState extends State<Directions> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 RichText(
-                                  text: const TextSpan(
+                                  text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: '8 min',
-                                        style: TextStyle(
+                                        text: '$estimatedTime',
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
                                       ),
                                       TextSpan(
-                                        text: ' (1 km)',
-                                        style: TextStyle(
+                                        text: ' ($distance)',
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.normal,
                                           color: Colors.grey,

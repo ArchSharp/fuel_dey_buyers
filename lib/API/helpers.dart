@@ -45,7 +45,9 @@ bool isUpperCase(String input) {
 //   return parsed.map<Vendor>((json) => Vendor.fromJson(json)).toList();
 // }
 
-List<Vendor> parseVendors(List<dynamic> vendorList) {
+List<Vendor> parseVendors(List<Vendor> vendorList) {
   // Directly map the dynamic list to a list of Vendor objects
-  return vendorList.map<Vendor>((json) => Vendor.fromJson(json)).toList();
+  return vendorList
+      .map<Vendor>((json) => Vendor.fromJson(json as Map<String, dynamic>))
+      .toList();
 }

@@ -3408,31 +3408,36 @@
           "code": "GGE",
           "name": "Agege",
           "latitude": "6.63937",
-          "longitude": "3.30757"
+          "longitude": "3.30757",
+          "postal_code": "100005"
         },
         {
           "code": "AGL",
           "name": "Ajeromi-Ifelodun",
           "latitude": "6.4555",
-          "longitude": "3.3339"
+          "longitude": "3.3339",
+          "postal_code": "102103"
         },
         {
           "code": "KTU",
           "name": "Alimosho",
           "latitude": "6.5889",
-          "longitude": "3.24852"
+          "longitude": "3.24852",
+          "postal_code": "100006"
         },
         {
           "code": "FST",
           "name": "Amuwo-Odofin",
           "latitude": "6.472",
-          "longitude": "3.263"
+          "longitude": "3.263",
+          "postal_code": "102102"
         },
         {
           "code": "APP",
           "name": "Apapa",
           "latitude": "6.44",
-          "longitude": "3.364"
+          "longitude": "3.364",
+          "postal_code": "100005"
         },
         {
           "code": "BDG",

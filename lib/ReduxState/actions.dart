@@ -1,3 +1,4 @@
+import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:geolocator/geolocator.dart';
 
 class UpdateUserAction {
@@ -29,7 +30,7 @@ class SaveUserWallet {
 }
 
 class GetAllVendors {
-  final List<dynamic> allVendors;
+  final List<Vendor> allVendors;
 
   GetAllVendors(this.allVendors);
 }

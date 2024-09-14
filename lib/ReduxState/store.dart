@@ -1,3 +1,4 @@
+import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/user_reducers.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:redux/redux.dart';
@@ -7,7 +8,7 @@ class AppState {
   late Map<String, dynamic> userToken;
   late Map<String, dynamic> userWallet;
   late String email;
-  late List<dynamic> allVendors;
+  late List<Vendor> allVendors;
   late List<dynamic> allVendorReviews;
   late Position userLocation;
 

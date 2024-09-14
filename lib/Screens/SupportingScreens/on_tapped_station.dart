@@ -8,30 +8,30 @@ import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/ratings_bar.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/star_ratings.dart';
 import 'package:fuel_dey_buyers/Screens/SupportingScreens/user_star_rating.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tuple/tuple.dart';
 
 class OnTappedStation extends StatefulWidget {
   final String stationName;
   final String location;
   final String phone;
-  final String estimatedTime;
-  final String distance;
   final IconData icon;
   final bool isFuelAvailable;
   final ValueChanged<int> onIndexChangedFunc;
-  final dynamic vendor;
+  final Vendor vendor;
+  final Position? userCoordinates;
 
   const OnTappedStation({
     super.key,
     required this.stationName,
     required this.location,
     required this.phone,
-    required this.estimatedTime,
-    required this.distance,
     required this.icon,
     required this.isFuelAvailable,
     required this.onIndexChangedFunc,
     required this.vendor,
+    required this.userCoordinates,
   });
 
   @override
@@ -54,6 +54,9 @@ class _OnTappedStationState extends State<OnTappedStation> {
   double twoStarPercent = 0;
   double oneStarPercent = 0;
 
+  String? estimatedTime = "";
+  String? distance = "";
+
   List<dynamic> allVendorReviews = [];
 
   final DraggableScrollableController _scrollableController =
@@ -65,6 +68,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
   void initState() {
     super.initState();
     _getVendorReviews();
+    _getVendorDistanceAndTime();
     _scrollableController.addListener(() {
       _heightPercentageNotifier.value = _scrollableController.size;
     });
@@ -78,10 +82,26 @@ class _OnTappedStationState extends State<OnTappedStation> {
     super.dispose();
   }
 
+  Future<void> _getVendorDistanceAndTime() async {
+    LatLng origin = LatLng(
+        widget.userCoordinates!.latitude, widget.userCoordinates!.longitude);
+
+    LatLng destination =
+        LatLng(widget.vendor.latitude, widget.vendor.longitude);
+    // Fetch travel details using the origin and destination
+    final travelDetails = await fetchTravelDetails(origin, destination);
+    setState(() {
+      estimatedTime = travelDetails.time;
+      distance = travelDetails.distance;
+    });
+    print('OnTapped Station Distance: ${travelDetails.distance}');
+    print('OnTapped Station Duration: ${travelDetails.time}');
+  }
+
   Future<void> _getVendorReviews() async {
     // print("gotten here: ${widget.vendor['id']}");
     VendorReviewsPayload payload = VendorReviewsPayload(
-      vendorId: widget.vendor['id'],
+      vendorId: widget.vendor.id,
     );
     //get vendor reviews
     await getAllVendorReviewsById(payload);
@@ -124,24 +144,24 @@ class _OnTappedStationState extends State<OnTappedStation> {
     double minHeight = 0.5;
     double maxHeight = 0.8;
 
-    fiveStarNum = widget.vendor['ratingcount'][0]['totalraters'].toString();
+    fiveStarNum = widget.vendor.ratingCount[0].totalRaters.toString();
 
-    fourStarNum = widget.vendor['ratingcount'][1]['totalraters'].toString();
-    threeStarNum = widget.vendor['ratingcount'][2]['totalraters'].toString();
-    twoStarNum = widget.vendor['ratingcount'][3]['totalraters'].toString();
-    oneStarNum = widget.vendor['ratingcount'][4]['totalraters'].toString();
+    fourStarNum = widget.vendor.ratingCount[1].totalRaters.toString();
+    threeStarNum = widget.vendor.ratingCount[2].totalRaters.toString();
+    twoStarNum = widget.vendor.ratingCount[3].totalRaters.toString();
+    oneStarNum = widget.vendor.ratingCount[4].totalRaters.toString();
 
-    fiveStarPercent = widget.vendor['ratingcount'][0]['totalraters'] /
-        widget.vendor['totalrater'];
+    fiveStarPercent =
+        widget.vendor.ratingCount[0].totalRaters / widget.vendor.totalRaters;
 
-    fourStarPercent = widget.vendor['ratingcount'][1]['totalraters'] /
-        widget.vendor['totalrater'];
-    threeStarPercent = widget.vendor['ratingcount'][2]['totalraters'] /
-        widget.vendor['totalrater'];
-    twoStarPercent = widget.vendor['ratingcount'][3]['totalraters'] /
-        widget.vendor['totalrater'];
-    oneStarPercent = widget.vendor['ratingcount'][4]['totalraters'] /
-        widget.vendor['totalrater'];
+    fourStarPercent =
+        widget.vendor.ratingCount[1].totalRaters / widget.vendor.totalRaters;
+    threeStarPercent =
+        widget.vendor.ratingCount[2].totalRaters / widget.vendor.totalRaters;
+    twoStarPercent =
+        widget.vendor.ratingCount[3].totalRaters / widget.vendor.totalRaters;
+    oneStarPercent =
+        widget.vendor.ratingCount[4].totalRaters / widget.vendor.totalRaters;
 
     return DraggableScrollableSheet(
       controller: _scrollableController,
@@ -210,7 +230,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     children: [
                                       const SizedBox(width: 24),
                                       Text(
-                                        "${double.parse(widget.vendor['averagerating'].toString())}",
+                                        "${double.parse(widget.vendor.averageRating.toString())}",
                                         style: const TextStyle(
                                           color: Color(0xFF2C2D2F),
                                           fontSize: 10,
@@ -220,12 +240,12 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                       const SizedBox(width: 5),
                                       StarRatings(
                                           rating: double.parse(widget
-                                              .vendor['averagerating']
+                                              .vendor.averageRating
                                               .toString()),
                                           starSize: 12),
                                       const SizedBox(width: 5),
                                       Text(
-                                        '(${double.parse(widget.vendor['totalrater'].toString())})',
+                                        '(${double.parse(widget.vendor.totalRaters.toString())})',
                                         style: const TextStyle(
                                           color: Color(0xFF2C2D2F),
                                           fontSize: 10,
@@ -292,7 +312,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                   style: TextStyle(fontSize: 10),
                                 ),
                                 Text(
-                                  widget.distance,
+                                  distance ?? "",
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -308,7 +328,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 ),
                                 const SizedBox(width: 5),
                                 Text(
-                                  widget.estimatedTime,
+                                  estimatedTime ?? "",
                                   style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
@@ -620,7 +640,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                           ),
                                           const SizedBox(width: 5),
                                           Text(
-                                            widget.vendor['petrolprice']
+                                            widget.vendor.petrolPrice
                                                 .toString(),
                                             style: const TextStyle(
                                               color: Color(0xFFFFFDF4),
@@ -669,8 +689,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                           ),
                                           const SizedBox(width: 5),
                                           Text(
-                                            widget.vendor['gasprice']
-                                                .toString(),
+                                            widget.vendor.gasPrice.toString(),
                                             style: const TextStyle(
                                               color: Color(0xFFFFFDF4),
                                               fontWeight: FontWeight.w700,
@@ -718,7 +737,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                           ),
                                           const SizedBox(width: 5),
                                           Text(
-                                            widget.vendor['dieselprice']
+                                            widget.vendor.dieselPrice
                                                 .toString(),
                                             style: const TextStyle(
                                               color: Color(0xFFFFFDF4),
@@ -756,7 +775,7 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          "${double.parse(widget.vendor['averagerating'].toString())}",
+                                          "${double.parse(widget.vendor.averageRating.toString())}",
                                           style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -765,12 +784,12 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                         ),
                                         StarRatings(
                                           rating: double.parse(widget
-                                              .vendor['averagerating']
+                                              .vendor.averageRating
                                               .toString()),
                                           starSize: 12,
                                         ),
                                         Text(
-                                          "(${widget.vendor['totalrater']})",
+                                          "(${widget.vendor.totalRaters})",
                                           style: const TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w400,
@@ -905,13 +924,13 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                 children: [
                                   UserStarRating(
                                     initialRating: double.parse(widget
-                                        .vendor['commuterrating']
+                                        .vendor.commuterRating
                                         .toString()),
                                     onRatingChanged: (newRating) {
                                       RateVendorPayload payload =
                                           RateVendorPayload(
                                         userid: store.state.user['id'],
-                                        vendorid: widget.vendor['id'],
+                                        vendorid: widget.vendor.id,
                                         rating: newRating.toInt(),
                                         review: "review",
                                       );

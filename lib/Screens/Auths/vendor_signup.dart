@@ -54,6 +54,7 @@ class _VendorSignupState extends State<VendorSignup> {
   String? selectedLGA;
   String? lgaLatitude;
   String? lgaLongitude;
+  int? postalcode;
 
   Future<void> handleSignUp() async {
     setState(() {
@@ -66,6 +67,7 @@ class _VendorSignupState extends State<VendorSignup> {
       address: _addressController.text,
       latitude: lgaLatitude!,
       longitude: lgaLongitude!,
+      postalcode: postalcode!,
       state: selectedState!,
       lga: selectedLGA!.replaceAll("/", "-"),
       email: _emailController.text,
@@ -177,6 +179,15 @@ class _VendorSignupState extends State<VendorSignup> {
   void _updateHomeIndex(int newIndex) {
     setState(() {
       _signupIndex = newIndex;
+    });
+  }
+
+  void _getPostalCodeFunc(PostalCodeInfo info) {
+    setState(() {
+      postalcode = info.postalCode;
+      lgaLatitude = info.latitude;
+      lgaLongitude = info.longitude;
+      // selectedLGA = info.googleLga;
     });
   }
 
@@ -335,8 +346,9 @@ class _VendorSignupState extends State<VendorSignup> {
                       MainWidget(
                         userLocation: _currentPosition,
                         stationCoordinate: _stationPosition,
-                        height: 310,
+                        height: 305,
                         width: deviceWidth,
+                        getPostalCodeFunc: _getPostalCodeFunc,
                       ),
                       const Spacer(),
                       ElevatedButton(
@@ -369,6 +381,9 @@ class _VendorSignupState extends State<VendorSignup> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
+                          setState(() {
+                            _isConfirmAddress = true;
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 55),
@@ -599,13 +614,13 @@ class _VendorSignupState extends State<VendorSignup> {
                                           selectedLGA = newValue;
                                           _lgaController.text = newValue!;
                                           // Find the selected LGA and set its latitude and longitude
-                                          final selectedLGAData =
-                                              lgas.firstWhere((lga) =>
-                                                  lga['name'] == newValue);
-                                          lgaLatitude =
-                                              selectedLGAData['latitude'];
-                                          lgaLongitude =
-                                              selectedLGAData['longitude'];
+                                          // final selectedLGAData =
+                                          //     lgas.firstWhere((lga) =>
+                                          //         lga['name'] == newValue);
+                                          // lgaLatitude =
+                                          //     selectedLGAData['latitude'];
+                                          // lgaLongitude =
+                                          //     selectedLGAData['longitude'];
                                         });
                                       },
                                       items: lgas
@@ -757,11 +772,7 @@ class _VendorSignupState extends State<VendorSignup> {
                       ElevatedButton(
                         onPressed: () {
                           if (_isAgreeTermsCondition && !isLoading) {
-                            if (_isConfirmAddress) {
-                              _validateInputs();
-                            } else if (!_isConfirmAddress) {
-                              _showModalPopup();
-                            }
+                            _validateInputs();
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -922,7 +933,11 @@ class _VendorSignupState extends State<VendorSignup> {
     });
 
     if (_errors.values.every((error) => error == null)) {
-      handleSignUp();
+      if (_isConfirmAddress) {
+        handleSignUp();
+      } else if (!_isConfirmAddress) {
+        _showModalPopup();
+      }
     }
   }
 
@@ -944,6 +959,7 @@ class MainWidget extends StatefulWidget {
   final LatLng? stationCoordinate;
   final double width;
   final double height;
+  final ValueChanged<PostalCodeInfo> getPostalCodeFunc;
 
   const MainWidget({
     super.key,
@@ -951,6 +967,7 @@ class MainWidget extends StatefulWidget {
     required this.stationCoordinate,
     required this.height,
     required this.width,
+    required this.getPostalCodeFunc,
   });
 
   @override
@@ -1033,7 +1050,17 @@ class _MainWidgetState extends State<MainWidget> {
                 zoom: 15.0,
               ),
               markers: _markers.values.toSet(),
-              onTap: (LatLng coordinates) {
+              onTap: (LatLng coordinates) async {
+                List<Placemark> placemarks = await placemarkFromCoordinates(
+                    coordinates.latitude, coordinates.longitude);
+                Placemark place = placemarks[0];
+                widget.getPostalCodeFunc(PostalCodeInfo(
+                  postalCode: int.parse(place.postalCode.toString()),
+                  latitude: coordinates.latitude.toString(),
+                  longitude: coordinates.longitude.toString(),
+                  googleLga: place.subAdministrativeArea.toString(),
+                ));
+
                 setState(() {
                   // Remove the old marker and add a new one with the updated position
                   if (_markers.isNotEmpty) {

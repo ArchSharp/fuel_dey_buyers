@@ -347,13 +347,21 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
     final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
       //print("all vendors: ${data['body']}");
-      store.dispatch(GetAllVendors(data['body']));
-      result = Tuple2(1, data['message']);
+      // Assuming data['body'] is a List<dynamic> where each item is a Map<String, dynamic>
+      if (data['message'] != "Vendors fetched empty") {
+        final List<Vendor> vendors = (data['body'] as List<dynamic>)
+            .map((item) => Vendor.fromJson(item as Map<String, dynamic>))
+            .toList();
+        store.dispatch(GetAllVendors(vendors));
+        result = Tuple2(1, data['message']);
+      } else if (data['message'] == "Vendors fetched empty") {
+        result = Tuple2(2, data['body']);
+      }
     } else {
       // Handle errors
       // print('Request failed with status: ${response.statusCode}');
-      print('check error: $data');
-      result = const Tuple2(2, "No Vendors");
+      print('check error: $data ${response.data['message']}');
+      result = const Tuple2(3, "No Vendors");
     }
   } catch (e) {
     print('Error: $e');
@@ -581,8 +589,7 @@ void logoutFn() {
   }
 }
 
-Future<Map<String, String>> fetchTravelDetails(
-    LatLng origin, LatLng destination,
+Future<TravelDetails> fetchTravelDetails(LatLng origin, LatLng destination,
     {String travelMode = "driving"}) async {
   final from = '${origin.latitude},${origin.longitude}';
   final to = '${destination.latitude},${destination.longitude}';
@@ -603,10 +610,10 @@ Future<Map<String, String>> fetchTravelDetails(
     final duration = distanceMatrixResponse.rows[0].elements[0].duration.text;
 
     // Return the results as a map
-    return {
-      'distance': distance,
-      'duration': duration,
-    };
+    return TravelDetails(
+      distance: distance,
+      time: duration,
+    );
   } else {
     throw Exception('Failed to load travel details');
   }

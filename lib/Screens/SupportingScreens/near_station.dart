@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/helpers.dart';
+import 'package:fuel_dey_buyers/Model/user.dart';
 
 class NearStation extends StatefulWidget {
   final String estimatedTime;
   final String distance;
   final ValueChanged<int> onIndexChanged;
-  final Function(dynamic) onTappedChanged;
-  final dynamic vendor;
+  final Function(Vendor) onTappedChanged;
+  final Vendor vendor;
 
   const NearStation({
     super.key,
@@ -29,9 +30,9 @@ class _NearStationState extends State<NearStation> {
   void initState() {
     super.initState();
     var vendor = widget.vendor;
-    if (vendor['isdiesel'] == true ||
-        vendor['isgas'] == true ||
-        vendor['ispetrol'] == true) {
+    if (vendor.isDiesel == true ||
+        vendor.isGas == true ||
+        vendor.isPetrol == true) {
       isFuelAvailable = true;
     }
 
@@ -42,7 +43,7 @@ class _NearStationState extends State<NearStation> {
   @override
   Widget build(BuildContext context) {
     stationAddress =
-        "${capitalize(widget.vendor['address'])} ${widget.vendor['lga']} ${widget.vendor['state']}";
+        "${capitalize(widget.vendor.address)} ${widget.vendor.lga} ${widget.vendor.state}";
 
     if (stationAddress.length > 23) {
       stationAddress = "${stationAddress.substring(0, 23)}...";
@@ -128,7 +129,7 @@ class _NearStationState extends State<NearStation> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                capitalize(widget.vendor['stationname']),
+                capitalize(widget.vendor.stationName),
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,

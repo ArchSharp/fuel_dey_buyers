@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -34,13 +36,16 @@ class MainHome extends StatefulWidget {
 }
 
 class _MainHomeState extends State<MainHome> {
+  StreamSubscription<Position>? _positionStreamSubscription;
   Position? _currentPosition;
   Placemark? _userPlace;
   bool? _hasPermission;
   // String? _address;
   int _homeIndex = 0;
   bool? isLoading;
-  var tappedStation;
+  Vendor? tappedStation;
+  bool isDrawPolyline = false;
+  String noVendorsMessage = "";
 
   void _updateHomeIndex(int newIndex) {
     setState(() {
@@ -52,14 +57,20 @@ class _MainHomeState extends State<MainHome> {
 
       if (newIndex == 3) {
         widget.onIndexChanged(1);
+      } else if (newIndex == 0) {
+        setState(() {
+          isDrawPolyline = false;
+          print("changed polylie");
+        });
       }
       _homeIndex = newIndex;
     });
   }
 
-  void _updateTappedStation(var station) {
+  void _updateTappedStation(Vendor station) {
     setState(() {
       tappedStation = station;
+      isDrawPolyline = isDrawPolyline == false ? true : false;
     });
   }
 
@@ -74,6 +85,8 @@ class _MainHomeState extends State<MainHome> {
   void initState() {
     super.initState();
     _checkPermission();
+    _fetchLocationUpdates();
+
     _scrollableController.addListener(() {
       _heightPercentageNotifier.value = _scrollableController.size;
       // _searchController.text = _scrollableController.size.toString();
@@ -86,6 +99,7 @@ class _MainHomeState extends State<MainHome> {
     _scrollableController.removeListener(() {});
     _scrollableController.dispose();
     _heightPercentageNotifier.dispose();
+    _positionStreamSubscription?.cancel();
     super.dispose();
   }
 
@@ -135,6 +149,7 @@ class _MainHomeState extends State<MainHome> {
         lga: place.subAdministrativeArea!.replaceAll("/", "-"),
         latitude: position.latitude.toString(),
         longitude: position.longitude.toString(),
+        postalcode: int.parse(place.postalCode.toString()),
       );
 
       handleGetAllVendors(payload);
@@ -167,10 +182,13 @@ class _MainHomeState extends State<MainHome> {
     }
 
     // Start listening for location changes
-    Geolocator.getPositionStream(
-      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+    _positionStreamSubscription = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 5,
+      ),
     ).listen((Position? position) {
-      if (position != null) {
+      if (position != null && mounted) {
         setState(() {
           _currentPosition = position;
         });
@@ -196,6 +214,11 @@ class _MainHomeState extends State<MainHome> {
       } else {
         // Failed sign-up
         if (mounted) {
+          if (result.item1 == 2) {
+            setState(() {
+              noVendorsMessage = result.item2;
+            });
+          }
           myNotificationBar(context, result.item2, "error");
         }
       }
@@ -221,173 +244,181 @@ class _MainHomeState extends State<MainHome> {
     // }
 
     return StoreConnector<AppState, dynamic>(
-        converter: (store) => store, //store.state.user
-        builder: (context, state /*user*/) {
-          var fname = store.state.user['firstname'];
-          var imageUrl = store.state.user['imageurl'];
-          String commuterImage =
-              "https://drive.google.com/thumbnail?id=$imageUrl";
-          var allvendors = store.state.allVendors;
-          return Stack(
-            children: [
-              MainWidget(
-                onIndexChangedFunc: _updateHomeIndex,
-                allvendors: allvendors,
-                userPlace: _userPlace,
-                userLocation: _currentPosition,
-              ),
-              if (_homeIndex == 0)
-                Positioned(
-                  top: 0, //mtop,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(0),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Hello $fname",
-                              style: const TextStyle(
-                                  color: Color(0xFF2C2D2F),
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.circle,
-                                  color: Color(0xFFA9E27C),
-                                  size: 10,
-                                ),
-                                const SizedBox(width: 10),
-                                if (_hasPermission == true &&
-                                    _currentPosition == null)
-                                  const SizedBox(
-                                    width: 10,
-                                    height: 10,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 1,
-                                    ),
-                                  ),
-                                if (_hasPermission == true &&
-                                    _currentPosition != null)
-                                  Text(
-                                    _userPlace != null
-                                        ? _userPlace!.subAdministrativeArea!
-                                        : "",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                      color: Color(0xFF2C2D2F),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            widget.onIndexChanged(3);
-                          },
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Colors.grey[300],
-                            backgroundImage: imageUrl == null || imageUrl == ""
-                                ? const AssetImage('assets/images/commuter.png')
-                                : NetworkImage(commuterImage) as ImageProvider,
+      converter: (store) => store, //store.state.user
+      builder: (context, state /*user*/) {
+        var fname = store.state.user['firstname'];
+        var imageUrl = store.state.user['imageurl'];
+        String commuterImage =
+            "https://drive.google.com/thumbnail?id=$imageUrl";
+        var allvendors = store.state.allVendors;
+        return Stack(
+          children: [
+            MainWidget(
+              tappedStation: tappedStation,
+              isDrawPolyline: isDrawPolyline,
+              onIndexChangedFunc: _updateHomeIndex,
+              allvendors: allvendors,
+              userPlace: _userPlace,
+              userLocation: _currentPosition,
+            ),
+            if (_homeIndex == 0)
+              Positioned(
+                top: 0, //mtop,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Hello $fname",
+                            style: const TextStyle(
+                                color: Color(0xFF2C2D2F),
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
                           ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.circle,
+                                color: Color(0xFFA9E27C),
+                                size: 10,
+                              ),
+                              const SizedBox(width: 10),
+                              if (_hasPermission == true &&
+                                  _currentPosition == null)
+                                const SizedBox(
+                                  width: 10,
+                                  height: 10,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1,
+                                  ),
+                                ),
+                              if (_hasPermission == true &&
+                                  _currentPosition != null)
+                                Text(
+                                  _userPlace != null
+                                      ? "${_userPlace!.subAdministrativeArea!} lat: ${_currentPosition?.latitude}, long: ${_currentPosition?.longitude}"
+                                      : "",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    color: Color(0xFF2C2D2F),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          widget.onIndexChanged(3);
+                        },
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Colors.grey[300],
+                          backgroundImage: imageUrl == null || imageUrl == ""
+                              ? const AssetImage('assets/images/commuter.png')
+                              : NetworkImage(commuterImage) as ImageProvider,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              if (_homeIndex != 0)
-                Positioned(
-                  top: mtop * 0.3,
-                  left: 20,
-                  right: 20,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: TextField(
-                      controller: _searchController,
+              ),
+            if (_homeIndex != 0)
+              Positioned(
+                top: mtop * 0.3,
+                left: 20,
+                right: 20,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    controller: _searchController,
 
-                      // focusNode: _searchFocusNode,
-                      onTap: () {
-                        Navigator.of(context).pushNamed(Search.routeName,
-                            arguments: 'Passing data from SignIn');
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'e.g Oando...',
-                        border: InputBorder.none,
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () {},
-                        ),
+                    // focusNode: _searchFocusNode,
+                    onTap: () {
+                      Navigator.of(context).pushNamed(Search.routeName,
+                          arguments: 'Passing data from SignIn');
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'e.g Oando...',
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {},
                       ),
                     ),
                   ),
                 ),
-              // const Spacer(),
-              _homeIndex == 0
-                  ? AllNearFuelStations(
-                      onIndexChangedFunc: _updateHomeIndex,
-                      onTappedChangedFunc: _updateTappedStation,
-                    )
-                  : _homeIndex == 1
-                      ? OnTappedStation(
-                          stationName: capitalize(tappedStation['stationname']),
-                          location:
-                              "${capitalize(tappedStation['address'])} ${tappedStation['lga']} ${tappedStation['state']}",
-                          phone: tappedStation['phonenumber'],
-                          estimatedTime: '8 mins',
-                          distance: '2 km',
-                          icon: Icons.access_time_outlined,
-                          isFuelAvailable: true,
-                          onIndexChangedFunc: _updateHomeIndex,
-                          vendor: tappedStation,
-                        )
-                      : Directions(
-                          onIndexChangedFunc: _updateHomeIndex,
-                          stationname: capitalize(tappedStation['stationname']),
-                        ),
-            ],
-          );
-        });
+              ),
+            // const Spacer(),
+            _homeIndex == 0
+                ? AllNearFuelStations(
+                    onIndexChangedFunc: _updateHomeIndex,
+                    onTappedChangedFunc: _updateTappedStation,
+                    userCoordinates: _currentPosition,
+                    noVendorsMessage: noVendorsMessage,
+                  )
+                : _homeIndex == 1
+                    ? OnTappedStation(
+                        userCoordinates: _currentPosition,
+                        stationName: capitalize(tappedStation!.stationName),
+                        location:
+                            "${capitalize(tappedStation!.address)} ${tappedStation!.lga} ${tappedStation!.state}",
+                        phone: tappedStation!.phoneNumber,
+                        icon: Icons.access_time_outlined,
+                        isFuelAvailable: true,
+                        onIndexChangedFunc: _updateHomeIndex,
+                        vendor: tappedStation!,
+                      )
+                    : Directions(
+                        vendor: tappedStation!,
+                        userCoordinates: _currentPosition,
+                        onIndexChangedFunc: _updateHomeIndex,
+                        stationname: capitalize(tappedStation!.stationName),
+                      ),
+          ],
+        );
+      },
+    );
   }
 }
 
 class MainWidget extends StatefulWidget {
   final ValueChanged<int> onIndexChangedFunc;
-  final List<dynamic> allvendors;
+  final List<Vendor> allvendors;
   final Position? userLocation;
   final Placemark? userPlace;
+  final bool? isDrawPolyline;
+  final Vendor? tappedStation;
 
   const MainWidget({
     super.key,
@@ -395,6 +426,8 @@ class MainWidget extends StatefulWidget {
     required this.allvendors,
     required this.userLocation,
     required this.userPlace,
+    required this.isDrawPolyline,
+    required this.tappedStation,
   });
 
   @override
@@ -408,6 +441,7 @@ class _MainWidgetState extends State<MainWidget> {
   Map<PolylineId, Polyline> polylines = {};
   bool markersAdded = false; // Flag to check if markers are added
   bool isLocationChanged = false;
+  double zoom = 15.0;
 
   @override
   void initState() {
@@ -424,8 +458,8 @@ class _MainWidgetState extends State<MainWidget> {
     // Check if allvendors list has changed
     if (widget.allvendors != oldWidget.allvendors &&
         widget.allvendors.isNotEmpty) {
-      List<Vendor> vendors = parseVendors(widget.allvendors);
-      _addVendorsMarkers(vendors); // Update markers
+      // List<Vendor> vendors = parseVendors(widget.allvendors);
+      _addVendorsMarkers(widget.allvendors); // Update markers
       setState(() {
         isLocationChanged = true;
       });
@@ -438,10 +472,18 @@ class _MainWidgetState extends State<MainWidget> {
       _addUserMarker();
     }
 
-    if (widget.allvendors.isNotEmpty && widget.userLocation?.latitude != null) {
-      print(
-          "Calling polyline function: ${widget.userLocation?.latitude}, ${widget.allvendors[0]['latitude']}");
-      _drawDirectionPolyLines();
+    if (widget.allvendors.isNotEmpty &&
+        widget.userLocation?.latitude != null &&
+        oldWidget.isDrawPolyline != widget.isDrawPolyline &&
+        widget.tappedStation?.address != "") {
+      // print("shouldDrawPolyline ${widget.isDrawPolyline}");
+      if (widget.isDrawPolyline == true) {
+        // print("Calling polyline function");
+        _drawDirectionPolyLines();
+      } else if (widget.isDrawPolyline == false) {
+        // print("Deleting polyline");
+        polylines = {};
+      }
     }
   }
 
@@ -453,8 +495,8 @@ class _MainWidgetState extends State<MainWidget> {
       }
 
       if (widget.allvendors.isNotEmpty) {
-        List<Vendor> vendors = parseVendors(widget.allvendors);
-        _addVendorsMarkers(vendors);
+        // List<Vendor> vendors = parseVendors(widget.allvendors);
+        // _addVendorsMarkers(vendors);
       }
 
       markersAdded = true; // Mark as added after setting markers
@@ -467,8 +509,8 @@ class _MainWidgetState extends State<MainWidget> {
 
     // Ensure markers are added once the map is created
     if (widget.allvendors.isNotEmpty) {
-      List<Vendor> vendors = parseVendors(widget.allvendors);
-      _addVendorsMarkers(vendors);
+      // List<Vendor> vendors = parseVendors(widget.allvendors);
+      _addVendorsMarkers(widget.allvendors);
     }
   }
 
@@ -495,7 +537,7 @@ class _MainWidgetState extends State<MainWidget> {
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
                 target: _nigeriaCoordinate,
-                zoom: widget.allvendors.isEmpty ? 7.5 : 15.0,
+                zoom: widget.allvendors.isEmpty ? 7.5 : zoom,
               ),
               markers: _markers.values.toSet(),
               polylines: Set<Polyline>.of(polylines.values),
@@ -512,7 +554,7 @@ class _MainWidgetState extends State<MainWidget> {
 
   void _addUserMarker() {
     // print("check: ${widget.userLocation?.latitude}");
-    if (widget.userLocation?.latitude != null) {
+    if (widget.userLocation?.latitude != null && widget.userPlace != null) {
       LatLng userLocation =
           LatLng(widget.userLocation!.latitude, widget.userLocation!.longitude);
       Marker userMarker = Marker(
@@ -529,6 +571,19 @@ class _MainWidgetState extends State<MainWidget> {
       setState(() {
         _markers[store.state.user['id'].toString()] = userMarker;
       });
+
+      // Center the map on the user's current position  // Rotate the map based on the heading
+      print("heading: ${widget.userLocation!.heading}");
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(
+                widget.userLocation!.latitude, widget.userLocation!.longitude),
+            zoom: zoom,
+            bearing: widget.userLocation!.heading,
+          ),
+        ),
+      );
     }
   }
 
@@ -560,7 +615,7 @@ class _MainWidgetState extends State<MainWidget> {
 
       mapController.animateCamera(
         CameraUpdate.newLatLngZoom(
-            LatLng(vendors[0].latitude, vendors[0].longitude), 15.0),
+            LatLng(vendors[0].latitude, vendors[0].longitude), zoom),
       );
     });
   }
@@ -586,25 +641,10 @@ class _MainWidgetState extends State<MainWidget> {
             widget.userLocation!.longitude,
           ),
           destination: PointLatLng(
-            double.parse(widget.allvendors[0]['latitude']),
-            double.parse(widget.allvendors[0]['longitude']),
+            double.parse(widget.tappedStation!.latitude.toString()),
+            double.parse(widget.tappedStation!.longitude.toString()),
           ),
         ));
-
-    LatLng origin = LatLng(
-      widget.userLocation!.latitude,
-      widget.userLocation!.longitude,
-    );
-
-    LatLng destination = LatLng(
-      double.parse(widget.allvendors[0]['latitude']),
-      double.parse(widget.allvendors[0]['longitude']),
-    );
-
-// Fetch travel details using the origin and destination
-    final travelDetails = await fetchTravelDetails(origin, destination);
-    print('Distance: ${travelDetails['distance']}');
-    print('Duration: ${travelDetails['duration']}');
 
     if (result.points.isNotEmpty) {
       return result.points
