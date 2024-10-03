@@ -9,13 +9,6 @@ https://www.quora.com/Why-does-the-Uber-app-pinpoint-the-wrong-location-on-its-m
 https://www.youtube.com/watch?v=EYcslTjRqCY
 https://www.youtube.com/watch?v=PkvW5WoUonQ
 
-
-
-
- 
-
-
-
 I added below to build.graddle file that is directly inside android folder in order to build the apk by running "flutter build apk"
 
 buildscript {
