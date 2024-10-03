@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fuel_dey_buyers/API/utils.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_forgotpassword.dart';
@@ -30,6 +31,7 @@ void main() async {
   store.dispatch(LogOut());
 
   await dotenv.load(fileName: ".env");
+  setupDioInterceptors();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

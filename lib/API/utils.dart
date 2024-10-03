@@ -15,7 +15,7 @@ Dio dio = Dio(BaseOptions(
 void setupDioInterceptors() {
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {
-      String? token = store.state.userToken["accesstoken"];
+      String? token = await store.state.userToken["accesstoken"];
 
       // Set the token in the headers
       if (token != null) {

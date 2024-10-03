@@ -60,7 +60,7 @@ class _MainHomeState extends State<MainHome> {
       } else if (newIndex == 0) {
         setState(() {
           isDrawPolyline = false;
-          print("changed polylie");
+          print("changed polyline");
         });
       }
       _homeIndex = newIndex;
@@ -314,7 +314,7 @@ class _MainHomeState extends State<MainHome> {
                                   _currentPosition != null)
                                 Text(
                                   _userPlace != null
-                                      ? "${_userPlace!.subAdministrativeArea!} lat: ${_currentPosition?.latitude}, long: ${_currentPosition?.longitude}"
+                                      ? _userPlace!.subAdministrativeArea!
                                       : "",
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
@@ -470,6 +470,13 @@ class _MainWidgetState extends State<MainWidget> {
         widget.userLocation?.latitude != null) {
       // print("user location changed");
       _addUserMarker();
+      if (widget.isDrawPolyline == true) {
+        // print("Calling polyline function");
+        _drawDirectionPolyLines();
+      } else if (widget.isDrawPolyline == false) {
+        // print("Deleting polyline");
+        polylines = {};
+      }
     }
 
     if (widget.allvendors.isNotEmpty &&
@@ -573,7 +580,7 @@ class _MainWidgetState extends State<MainWidget> {
       });
 
       // Center the map on the user's current position  // Rotate the map based on the heading
-      print("heading: ${widget.userLocation!.heading}");
+      // print("heading: ${widget.userLocation!.heading}");
       mapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(

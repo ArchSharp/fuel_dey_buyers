@@ -340,13 +340,15 @@ Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
 Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
   String path = '/api/CommuterGetAllVendors';
 
+  print("Calling get all vendors function");
+
   var result = const Tuple2(0, "");
   try {
     Response response = await dio.post(path, data: payload.toJson());
 
     final Map<String, dynamic> data = response.data;
     if (response.statusCode == 200) {
-      //print("all vendors: ${data['body']}");
+      print("all vendors: ${data['body']}");
       // Assuming data['body'] is a List<dynamic> where each item is a Map<String, dynamic>
       if (data['message'] != "Vendors fetched empty") {
         final List<Vendor> vendors = (data['body'] as List<dynamic>)
