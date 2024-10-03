@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/API/helpers.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
+import 'package:fuel_dey_buyers/ReduxState/actions.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -288,6 +290,34 @@ class _MainVendorSettingsState extends State<MainVendorSettings> {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 12),
+                  GestureDetector(
+                    onTap: () {
+                      store.dispatch(LogOut());
+                      Navigator.popAndPushNamed(
+                          context, VendorSignin.routeName);
+                    },
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.settings_outlined,
+                          size: 24,
+                          color: Color(0xFF2C2D2F),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          "Log Out",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF2C2D2F),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 15),
                   const Align(

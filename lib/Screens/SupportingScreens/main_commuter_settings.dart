@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
+import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -338,6 +340,34 @@ class _MainCommuterSettingsState extends State<MainCommuterSettings> {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 15),
+                  GestureDetector(
+                    onTap: () {
+                      store.dispatch(LogOut());
+                      Navigator.popAndPushNamed(
+                          context, CommuterSignin.routeName);
+                    },
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.logout_rounded,
+                          size: 24,
+                          color: Color(0xFF2C2D2F),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          "Log Out",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF2C2D2F),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 15),
                   const Align(
