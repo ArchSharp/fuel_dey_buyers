@@ -57,15 +57,15 @@ class _AllNearFuelStationsState extends State<AllNearFuelStations> {
           widget.userCoordinates!.latitude, widget.userCoordinates!.longitude);
       LatLng destination = LatLng(vendor.latitude, vendor.longitude);
 
-      print(
-          'origin: ${origin.latitude} destination ${vendor.latitude} id: ${vendor.id}');
+      // print(
+      //     'origin: ${origin.latitude} destination ${vendor.latitude} id: ${vendor.id}');
       // Fetch travel details using the origin and destination
       final travelDetails = await fetchTravelDetails(origin, destination);
 
       String? estimatedTime = travelDetails.time;
       String? distance = travelDetails.distance;
-      print('Near Station Distance: $distance');
-      print('Near Station Duration: $estimatedTime');
+      // print('Near Station Distance: $distance');
+      // print('Near Station Duration: $estimatedTime');
 
       return Padding(
         padding: const EdgeInsets.only(bottom: 15.0),
