@@ -44,7 +44,7 @@ void setupDioInterceptors() {
         Tuple2<int, String> newToken = await getNewToken(false);
         String newAccessToken = newToken.item2;
 
-        print("newtoken is gotten: $newAccessToken");
+        // print("newtoken is gotten: $newAccessToken");
 
         var requestOptions = response.requestOptions;
 

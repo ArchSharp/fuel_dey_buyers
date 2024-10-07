@@ -359,8 +359,8 @@ Future<Tuple2<int, String>> getNewToken(isVendor) async {
       // print("new token: $data");
       result = Tuple2(1, data['access_token']);
       var usertoken = store.state.userToken;
-      print(
-          "old token: ${usertoken["accesstoken"]} new token: ${data['access_token']}");
+      // print(
+      //     "old token: ${usertoken["accesstoken"]} new token: ${data['access_token']}");
       usertoken["accesstoken"] = data['access_token'];
       store.dispatch(SaveUserToken(usertoken));
     } else {
