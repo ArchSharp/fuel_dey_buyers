@@ -356,8 +356,13 @@ Future<Tuple2<int, String>> getNewToken(isVendor) async {
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
-      print("new token: $data");
-      result = Tuple2(1, data['body']);
+      // print("new token: $data");
+      result = Tuple2(1, data['access_token']);
+      var usertoken = store.state.userToken;
+      print(
+          "old token: ${usertoken["accesstoken"]} new token: ${data['access_token']}");
+      usertoken["accesstoken"] = data['access_token'];
+      store.dispatch(SaveUserToken(usertoken));
     } else {
       print(
           'Request failed with status: ${response.statusCode} response payload: $data');

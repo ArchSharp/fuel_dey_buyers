@@ -37,33 +37,38 @@ void setupDioInterceptors() {
       if (response.statusCode == 401 ||
           response.statusMessage == "Unauthorized") {
         // Notify user that the token has expired
-        print('Token has expired, please sign in to continue');
+        print(
+            'Token has expired, attempting to refresh token and retry request.');
 
         // Optionally, you could refresh the token and retry the request
         Tuple2<int, String> newToken = await getNewToken(false);
-        print("newtoken is gotten: ${newToken.item2}");
-        // error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
-        // return dio.request(error.requestOptions.path, options: error.requestOptions);
+        String newAccessToken = newToken.item2;
+
+        print("newtoken is gotten: $newAccessToken");
+
+        var requestOptions = response.requestOptions;
+
+        // Set the new token in the headers
+        requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+
+        // Clone the request with the updated token and send it again
+        final retryResponse = await dio.request(
+          requestOptions.path,
+          options: Options(
+            method: requestOptions.method,
+            headers: requestOptions.headers,
+          ),
+          data: requestOptions.data,
+          queryParameters: requestOptions.queryParameters,
+        );
+
+        return handler.resolve(retryResponse); // Return the retry response
       }
-      // Handle the response here if needed
+
       return handler.next(response); // Continue to response
     },
     onError: (DioException error, handler) async {
-      // Handle 401 (Unauthorized) errors
-      if (error.response?.statusCode == 401) {
-        // Notify user that the token has expired
-        print('Token has expired, please sign in to continue');
-
-        // Show an alert or redirect to login page
-        // For example, using a Flutter state management solution:
-        // context.read<UserProvider>().setShowAlert('Token has expired, please sign in to continue');
-        // context.read<UserProvider>().setIsAuth(false);
-
-        // Optionally, you could refresh the token and retry the request
-        // final newToken = await refreshToken();
-        // error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
-        // return dio.request(error.requestOptions.path, options: error.requestOptions);
-      }
+      print("interceptor error: ${error.response?.statusCode}");
 
       return handler.next(error); // Continue with the error
     },
