@@ -88,7 +88,7 @@ class _MainVendorHomeState extends State<MainVendorHome> {
       ispetrol: _isPetrol,
     );
 
-    print("isdiesel: ${userPayload.isdiesel}");
+    // print("isdiesel: ${userPayload.isdiesel}");
 
     try {
       // print("payload: ${userPayload.email}");
@@ -322,19 +322,35 @@ class _MainVendorHomeState extends State<MainVendorHome> {
                   _validateInputs();
                 },
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(116, 40),
+                  minimumSize: const Size(131, 40),
                   backgroundColor: const Color(0xFFECB920),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                child: const Text(
-                  "Update Changes",
-                  style: TextStyle(
-                    color: Color(0xFF2C2D2F),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      "Update Changes",
+                      style: TextStyle(
+                        color: Color(0xFF2C2D2F),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    if (isLoading)
+                      const SizedBox(
+                        width: 15,
+                        height: 15,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Color(0xFF2C2D2F),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),

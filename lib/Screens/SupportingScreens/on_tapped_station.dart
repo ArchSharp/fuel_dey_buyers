@@ -41,7 +41,7 @@ class OnTappedStation extends StatefulWidget {
 class _OnTappedStationState extends State<OnTappedStation> {
   bool showOpenCloseTime = false;
   bool showAllReview = false;
-  bool? isLoading;
+  bool isLoading = false;
   String fiveStarNum = "";
   String fourStarNum = "";
   String threeStarNum = "";
@@ -939,6 +939,15 @@ class _OnTappedStationState extends State<OnTappedStation> {
                                       handleRateVendor(payload);
                                     },
                                   ),
+                                  if (isLoading) const SizedBox(width: 5),
+                                  if (isLoading)
+                                    const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.orange,
+                                      ),
+                                    ),
                                 ],
                               ),
                               const SizedBox(height: 5),

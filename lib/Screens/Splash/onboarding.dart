@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
@@ -28,7 +30,8 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  bool? _hasPermission;
+  bool _hasPermission = false;
+  bool _isFetchedLocation = false;
 
   final List<OnboardingContent> _contents = [
     OnboardingContent(
@@ -58,7 +61,7 @@ class _OnboardingState extends State<Onboarding> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? permissionGranted = prefs.getBool('location_permission_granted');
 
-    print(permissionGranted);
+    print("permissionGranted: $permissionGranted");
     if (permissionGranted == null) {
       // First time asking for permission
       _showPermissionDialog();
@@ -70,7 +73,6 @@ class _OnboardingState extends State<Onboarding> {
   }
 
   Future<void> _getCurrentLocation() async {
-    print("here-4");
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     List<Placemark> placemarks =
@@ -84,8 +86,70 @@ class _OnboardingState extends State<Onboarding> {
     if (mounted) {
       print("address: $address");
       // print("place: $place");
+      setState(() {
+        _isFetchedLocation = true;
+      });
 
       store.dispatch(SaveUserLocation(position));
+    }
+  }
+
+  void _showFetchLocationDialog() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return UnconstrainedBox(
+          constrainedAxis: Axis.horizontal,
+          child: SizedBox(
+            width: 200,
+            child: Dialog(
+              backgroundColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: Container(
+                color: Colors.white,
+                height: 200,
+                padding: const EdgeInsets.all(12),
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: CircularProgressIndicator(
+                        color: Colors.orange,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    SizedBox(
+                      width: 150,
+                      child: Text(
+                        "Please wait while we fetch your location!.",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    await _getCurrentLocation();
+
+    // Close the progress dialog and show the map
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).pop();
     }
   }
 
@@ -114,7 +178,9 @@ class _OnboardingState extends State<Onboarding> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextButton(
-                onPressed: () => _onPermissionGranted(),
+                onPressed: () {
+                  _onPermissionGranted();
+                },
                 child: const Text('Yes'),
               ),
               TextButton(
@@ -144,17 +210,18 @@ class _OnboardingState extends State<Onboarding> {
     PermissionStatus permissionStatus = await Permission.location.request();
     bool isGranted = permissionStatus == PermissionStatus.granted;
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('location_permission_granted', isGranted);
+    if (isGranted) {
+      print("Accepted permission: $isGranted");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('location_permission_granted', isGranted);
 
-    setState(() {
-      _hasPermission = isGranted;
-    });
+      setState(() {
+        _hasPermission = isGranted;
+      });
 
-    await _getCurrentLocation();
-
-    if (mounted) {
-      Navigator.of(context).pop();
+      if (mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
     }
   }
 
@@ -282,11 +349,16 @@ class _OnboardingState extends State<Onboarding> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    if (_hasPermission == true) {
+                                    if (_hasPermission == true &&
+                                        _isFetchedLocation == true) {
                                       Navigator.pushReplacementNamed(
                                           context, Welcome.routeName);
-                                    } else {
+                                    } else if (_hasPermission == false &&
+                                        _isFetchedLocation == false) {
                                       _showPermissionDialog();
+                                    } else if (_hasPermission == true &&
+                                        _isFetchedLocation == false) {
+                                      _showFetchLocationDialog();
                                     }
                                   },
                                   child: const Text(
@@ -330,11 +402,16 @@ class _OnboardingState extends State<Onboarding> {
                             )
                           : ElevatedButton(
                               onPressed: () {
-                                if (_hasPermission == true) {
+                                if (_hasPermission == true &&
+                                    _isFetchedLocation == true) {
                                   Navigator.pushReplacementNamed(
                                       context, Welcome.routeName);
-                                } else {
+                                } else if (_hasPermission == false &&
+                                    _isFetchedLocation == false) {
                                   _showPermissionDialog();
+                                } else if (_hasPermission == true &&
+                                    _isFetchedLocation == false) {
+                                  _showFetchLocationDialog();
                                 }
                               },
                               style: ElevatedButton.styleFrom(

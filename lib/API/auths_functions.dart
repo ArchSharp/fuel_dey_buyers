@@ -337,6 +337,38 @@ Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
   return result;
 }
 
+Future<Tuple2<int, String>> getNewToken(isVendor) async {
+  String type =
+      isVendor == true ? 'GetNewAccessToken' : 'CommuterGetNewAccessToken';
+  String apiUrl =
+      '$baseUrl/api/$type?refresh_token=${store.state.userToken["refreshtoken"]}';
+
+  // print(apiUrl);
+
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+  };
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.get(Uri.parse(apiUrl),
+        headers: headers); //.timeout(const Duration(seconds: 10));
+
+    final Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      print("new token: $data");
+      result = Tuple2(1, data['body']);
+    } else {
+      print(
+          'Request failed with status: ${response.statusCode} response payload: $data');
+    }
+  } catch (e) {
+    print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
 Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
   String path = '/api/CommuterGetAllVendors';
 
@@ -556,6 +588,8 @@ Future<Tuple2<int, String>> uploadImgToDrive(UploadImagePayload payload) async {
           await MultipartFile.fromFile(payload.file.path, filename: fileName),
     });
 
+    // print("response: ${formData.fields[1]}");
+
     Response response = await dio.post(
       path,
       data: formData,
@@ -566,6 +600,7 @@ Future<Tuple2<int, String>> uploadImgToDrive(UploadImagePayload payload) async {
       ),
     );
 
+    // print("response: ${response.data}");
     final Map<String, dynamic> data = response.data;
 
     if (response.statusCode == 200) {

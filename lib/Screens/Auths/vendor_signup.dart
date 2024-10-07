@@ -255,6 +255,7 @@ class _VendorSignupState extends State<VendorSignup> {
   void _showModalPopup() async {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return UnconstrainedBox(
           constrainedAxis: Axis.horizontal,
@@ -316,6 +317,7 @@ class _VendorSignupState extends State<VendorSignup> {
     if (mounted) {
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           double deviceWidth = MediaQuery.of(context).size.width * 0.95;
 
