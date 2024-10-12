@@ -23,3 +23,5 @@ buildscript {
         // Add other classpath dependencies here if needed
     }
 }
+
+https://developers.google.com/maps/documentation/javascript/style-reference

@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
-import 'package:path/path.dart';
 import 'package:tuple/tuple.dart';
 
 String baseURL = dotenv.env['BASE_URL']!;

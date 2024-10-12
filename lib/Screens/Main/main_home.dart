@@ -512,6 +512,7 @@ class _MainWidgetState extends State<MainWidget> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    _setMapStyle(controller);
     // _addUserMarker();
 
     // Ensure markers are added once the map is created
@@ -519,6 +520,24 @@ class _MainWidgetState extends State<MainWidget> {
       // List<Vendor> vendors = parseVendors(widget.allvendors);
       _addVendorsMarkers(widget.allvendors);
     }
+  }
+
+  String style = '''[
+      {
+        "featureType": "poi",
+        "stylers": [
+          {"visibility": "off"}
+        ]
+      },
+      {
+        "featureType": "transit",
+        "stylers": [
+          {"visibility": "off"}
+        ]
+      }
+    ]''';
+  void _setMapStyle(GoogleMapController controller) async {
+    // await controller.setMapStyle(style);
   }
 
   @override
@@ -541,6 +560,8 @@ class _MainWidgetState extends State<MainWidget> {
         child: StatefulBuilder(
           builder: (context, setState) {
             return GoogleMap(
+              style: style,
+              buildingsEnabled: false,
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
                 target: _nigeriaCoordinate,
