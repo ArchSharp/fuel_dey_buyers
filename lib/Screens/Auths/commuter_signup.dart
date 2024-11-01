@@ -49,13 +49,19 @@ class _CommuterSignupState extends State<CommuterSignup> {
 
     // Create an instance of UserPayload
     CommuterPayload userPayload = CommuterPayload(
-      email: _emailController.text,
-      password: _passwordController.text,
-      firstname: _firstNameController.text,
-      lastname: _lastNameController.text,
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+      firstname: _firstNameController.text.trim(),
+      lastname: _lastNameController.text.trim(),
       // middlename: mname,
-      phonenumber: "+234${_phoneController.text}",
+      phonenumber: "+234${_phoneController.text.trim()}",
     );
+
+    if (userPayload.password.length < 8) {
+      myNotificationBar(
+          context, "Password should be at least 8 characters", "error");
+      return;
+    }
 
     try {
       store.dispatch(InitialiseEmail(userPayload.email));

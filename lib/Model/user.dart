@@ -315,7 +315,7 @@ class Vendor {
   final int gasPrice;
   final bool isDiesel;
   final int dieselPrice;
-  final int averageRating;
+  final double averageRating;
   final int totalRaters;
   final int commuterRating;
   final List<RatingCount> ratingCount;
@@ -366,7 +366,7 @@ class Vendor {
       gasPrice: json['gasprice'] as int,
       isDiesel: json['isdiesel'] as bool,
       dieselPrice: json['dieselprice'] as int,
-      averageRating: json['averagerating'] as int,
+      averageRating: (json['averagerating'] as num).toDouble(),
       totalRaters: json['totalrater'] as int,
       commuterRating: json['commuterrating'] as int,
       ratingCount: (json['ratingcount'] as List)

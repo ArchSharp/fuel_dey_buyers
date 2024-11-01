@@ -391,9 +391,11 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
         final List<Vendor> vendors = (data['body'] as List<dynamic>)
             .map((item) => Vendor.fromJson(item as Map<String, dynamic>))
             .toList();
+
         store.dispatch(GetAllVendors(vendors));
         result = Tuple2(1, data['message']);
       } else if (data['message'] == "Vendors fetched empty") {
+        print("vendors is not empty");
         result = Tuple2(2, data['body']);
       }
     } else {

@@ -63,17 +63,23 @@ class _VendorSignupState extends State<VendorSignup> {
 
     // Create an instance of UserPayload
     VendorSignUpPayload userPayload = VendorSignUpPayload(
-      stationname: _stationNameController.text,
-      address: _addressController.text,
-      latitude: lgaLatitude!,
-      longitude: lgaLongitude!,
+      stationname: _stationNameController.text.trim(),
+      address: _addressController.text.trim(),
+      latitude: lgaLatitude!.trim(),
+      longitude: lgaLongitude!.trim(),
       postalcode: postalcode!,
-      state: selectedState!,
-      lga: selectedLGA!.replaceAll("/", "-"),
-      email: _emailController.text,
-      phonenumber: "+234${_phoneController.text}",
-      password: _passwordController.text,
+      state: selectedState!.trim(),
+      lga: selectedLGA!.replaceAll("/", "-").trim(),
+      email: _emailController.text.trim(),
+      phonenumber: "+234${_phoneController.text.trim()}",
+      password: _passwordController.text.trim(),
     );
+
+    if (userPayload.password.length < 8) {
+      myNotificationBar(
+          context, "Password should be at least 8 characters", "error");
+      return;
+    }
 
     try {
       store.dispatch(InitialiseEmail(userPayload.email));
