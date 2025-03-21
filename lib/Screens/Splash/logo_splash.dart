@@ -1,9 +1,76 @@
-import 'package:flutter/material.dart';
-import 'package:fuel_dey_buyers/Screens/Splash/onboarding.dart';
+import 'dart:convert';
 
-class LogoSplash extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
+import 'package:fuel_dey_buyers/ReduxState/actions.dart';
+import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Main/home.dart';
+import 'package:fuel_dey_buyers/Screens/Main/vendor_home.dart';
+import 'package:fuel_dey_buyers/Screens/Splash/onboarding.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class LogoSplash extends StatefulWidget {
   const LogoSplash({super.key});
   static const routeName = '/logo-splash';
+
+  @override
+  State<LogoSplash> createState() => _LogoSplashState();
+}
+
+class _LogoSplashState extends State<LogoSplash> {
+  bool firstLoad = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _navigateAfterSplash();
+  }
+
+  Future<void> _navigateAfterSplash() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? lastLogin = prefs.getString('lastLoginTime');
+    String? userType = prefs.getString('userType');
+    String? userTokenStr = prefs.getString('userToken');
+    String? userDataStr = prefs.getString('userData');
+
+    await Future.delayed(const Duration(seconds: 3)); // Simulate splash delay
+
+    if (lastLogin != null) {
+      DateTime lastLoginTime = DateTime.parse(lastLogin);
+      DateTime now = DateTime.now();
+      Duration difference = now.difference(lastLoginTime);
+
+      if (difference.inDays >= 10) {
+        setState(() {
+          firstLoad = false;
+        });
+
+        logoutFn();
+      } else {
+        store.dispatch(UpdateLastLoginTime(lastLoginTime));
+        if (userDataStr != null && userTokenStr != null) {
+          Map<String, dynamic> userData = jsonDecode(userDataStr);
+          Map<String, dynamic> userToken = jsonDecode(userTokenStr);
+          store.dispatch(UpdateUserAction(userData));
+          store.dispatch(SaveUserToken(userToken));
+        }
+        if (userType == 'vendor') {
+          _redirectTo(VendorHome.routeName);
+        } else if (userType == 'commuter') {
+          _redirectTo(Home.routeName);
+        }
+      }
+    } else {
+      // _redirectTo(Onboarding.routeName);
+      setState(() {
+        firstLoad = false;
+      });
+    }
+  }
+
+  void _redirectTo(String route) {
+    Navigator.pushReplacementNamed(context, route);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +98,7 @@ class LogoSplash extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 50),
                 child: ElevatedButton(
                   onPressed: () {
+                    if (firstLoad) return;
                     Navigator.pushReplacementNamed(
                         context, Onboarding.routeName);
                   },
@@ -41,13 +109,29 @@ class LogoSplash extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                  child: const Text(
-                    "Explore",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (firstLoad)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          ),
+                        )
+                      else
+                        const Text(
+                          "Explore",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
-import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
@@ -344,7 +343,7 @@ class _MainCommuterSettingsState extends State<MainCommuterSettings> {
                   const SizedBox(height: 15),
                   GestureDetector(
                     onTap: () {
-                      store.dispatch(LogOut());
+                      logoutFn();
                       Navigator.popAndPushNamed(
                           context, CommuterSignin.routeName);
                     },

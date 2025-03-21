@@ -30,6 +30,14 @@ AppState userReducer(AppState state, dynamic action) {
     return state..userLocation = action.userLocation;
   }
 
+  if (action is UpdateLastLoginTime) {
+    return state..lastLoginTime = action.lastLoginTime;
+  }
+
+  if (action is UpdateUserType) {
+    return state..userType = action.userType;
+  }
+
   if (action is LogOut) {
     return AppState(
       email: "",
@@ -38,6 +46,8 @@ AppState userReducer(AppState state, dynamic action) {
       userWallet: {},
       allVendors: [],
       allVendorReviews: [],
+      lastLoginTime: DateTime.now(),
+      userType: "",
       userLocation: Position(
         latitude: 0.0,
         longitude: 0.0,

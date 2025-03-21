@@ -11,6 +11,8 @@ class AppState {
   late List<Vendor> allVendors;
   late List<dynamic> allVendorReviews;
   late Position userLocation;
+  late DateTime lastLoginTime;
+  late String userType;
 
   AppState({
     required this.email,
@@ -20,6 +22,8 @@ class AppState {
     required this.allVendors,
     required this.allVendorReviews,
     required this.userLocation,
+    required this.lastLoginTime,
+    required this.userType,
   });
 }
 
@@ -36,6 +40,8 @@ final Store<AppState> store = Store<AppState>(
     userWallet: {},
     allVendors: [],
     allVendorReviews: [],
+    lastLoginTime: DateTime.now(),
+    userType: '',
     userLocation: Position(
       latitude: 0.0,
       longitude: 0.0,

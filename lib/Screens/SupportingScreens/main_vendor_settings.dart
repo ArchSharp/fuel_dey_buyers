@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/API/helpers.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
-import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
 import 'package:image_picker/image_picker.dart';
@@ -294,7 +293,7 @@ class _MainVendorSettingsState extends State<MainVendorSettings> {
                   const SizedBox(height: 12),
                   GestureDetector(
                     onTap: () {
-                      store.dispatch(LogOut());
+                      logoutFn();
                       Navigator.popAndPushNamed(
                           context, VendorSignin.routeName);
                     },

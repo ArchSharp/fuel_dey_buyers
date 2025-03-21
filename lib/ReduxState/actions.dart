@@ -46,3 +46,13 @@ class SaveUserLocation {
 
   SaveUserLocation(this.userLocation);
 }
+
+class UpdateLastLoginTime {
+  final DateTime lastLoginTime;
+  UpdateLastLoginTime(this.lastLoginTime);
+}
+
+class UpdateUserType {
+  final String userType;
+  UpdateUserType(this.userType);
+}

@@ -8,6 +8,7 @@ import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
 
 String? baseUrl = dotenv.env['BASE_URL'];
@@ -34,6 +35,18 @@ Future<Tuple2<int, String>> signInVendorFn(UserSignInPayload payload) async {
       store.dispatch(UpdateUserAction(data['body']));
       store.dispatch(SaveUserToken(data["extrainfo"]));
       result = const Tuple2(1, "Login success");
+      // Save last login time
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      DateTime now = DateTime.now();
+
+      // Save last login time in local storage
+      await prefs.setString('lastLoginTime', now.toIso8601String());
+      await prefs.setString('userType', "vendor");
+      await prefs.setString('userToken', jsonEncode(data["extrainfo"]));
+      await prefs.setString('userData', jsonEncode(data['body']));
+
+      // Save last login time in Redux state
+      store.dispatch(UpdateLastLoginTime(now));
     } else {
       // Handle errors
       print(
@@ -75,6 +88,20 @@ Future<Tuple2<int, String>> signInCommuterFn(UserSignInPayload payload) async {
       store.dispatch(UpdateUserAction(data['body']));
       store.dispatch(SaveUserToken(data["extrainfo"]));
       result = const Tuple2(1, "Login success");
+
+      // Save last login time
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      DateTime now = DateTime.now();
+
+      // Save last login time in local storage
+      await prefs.setString('lastLoginTime', now.toIso8601String());
+      await prefs.setString('userType', "commuter");
+      await prefs.setString('userToken', jsonEncode(data["extrainfo"]));
+      await prefs.setString('userData', jsonEncode(data['body']));
+      print("lastLoginTime from signin: ${now.toIso8601String()}");
+
+      // Save last login time in Redux state
+      store.dispatch(UpdateLastLoginTime(now));
     } else {
       // Handle errors
       print(
@@ -625,8 +652,16 @@ Future<Tuple2<int, String>> uploadImgToDrive(UploadImagePayload payload) async {
   return result;
 }
 
-void logoutFn() {
+Future<void> logoutFn() async {
   try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // 🔥 Remove stored user data
+    await prefs.remove('lastLoginTime');
+    await prefs.remove('userType');
+    await prefs.remove('userToken');
+    await prefs.remove('userData');
+
     store.dispatch(LogOut());
   } catch (e) {
     print('Error: $e');
