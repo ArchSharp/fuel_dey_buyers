@@ -83,10 +83,10 @@ class Welcome extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            "Sign Up as a Commuter",
+                            "Sign Up / Sign In as a Commuter",
                             style: TextStyle(
                               color: Color(0xFF2C2D2F),
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -134,10 +134,10 @@ class Welcome extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            "Sign Up as a Vendor",
+                            "Sign Up / Sign In as a Vendor",
                             style: TextStyle(
                               color: Color(0xFF2C2D2F),
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
                           ),

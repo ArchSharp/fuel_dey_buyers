@@ -263,7 +263,7 @@ class _TermsConditionsState extends State<TermsConditions> {
               ),
               SizedBox(width: 5),
               Text(
-                "These Terms are governed by the laws of Fuel Dey.",
+                "These Terms are governed by the laws of Fuel Que.",
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                   fontSize: 10,
@@ -282,7 +282,7 @@ class _TermsConditionsState extends State<TermsConditions> {
               ),
               SizedBox(width: 5),
               Text(
-                "Disputes shall be resolved in the courts of Fuel Dey.",
+                "Disputes shall be resolved in the courts of Fuel Que.",
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                   fontSize: 10,

@@ -3,12 +3,14 @@ import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Model/user.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
 // import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_forgotpassword.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_verify_email.dart';
 import 'package:fuel_dey_buyers/Screens/Main/vendor_home.dart';
 import 'package:fuel_dey_buyers/Screens/Notifications/my_notification_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
 
 class VendorSignin extends StatefulWidget {
@@ -70,6 +72,11 @@ class _VendorSigninState extends State<VendorSignin> {
       Tuple2<int, String> result = await signInVendorFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? isRegistered = prefs.getString('isRegistered');
+          if (isRegistered == null) {
+            await prefs.setString('isRegistered', 'true');
+          }
           if (mounted) {
             myNotificationBar(context, result.item2, "success");
             Navigator.popAndPushNamed(context, VendorHome.routeName);
@@ -301,6 +308,30 @@ class _VendorSigninState extends State<VendorSignin> {
                   ),
                 ),
                 const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      'Did you forgot your account type?',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).popAndPushNamed(
+                            CommuterSignin.routeName,
+                            arguments: 'Passing data from SignIn');
+                      },
+                      child: const Text(
+                        "Commuter Sign In",
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Row(

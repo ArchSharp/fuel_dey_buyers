@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path/path.dart';
 import 'package:dio/dio.dart';
@@ -16,7 +17,7 @@ String? googleMapsApiKey = dotenv.env['GOOGLE_MAP_API_KEY'];
 String? matrixBaseUrl = dotenv.env['GOOGLE_MATRIX_BASE_URL'];
 
 Future<Tuple2<int, String>> signInVendorFn(UserSignInPayload payload) async {
-  String apiUrl = '$baseUrl/api/SignInVendor';
+  String apiUrl = '$baseUrl/SignInVendor';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
@@ -69,11 +70,13 @@ Future<Tuple2<int, String>> signInVendorFn(UserSignInPayload payload) async {
 }
 
 Future<Tuple2<int, String>> signInCommuterFn(UserSignInPayload payload) async {
-  String apiUrl = '$baseUrl/api/SignInCommuter';
+  String apiUrl = '$baseUrl/SignInCommuter';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
   };
+
+  debugPrint("Request URL: $apiUrl");
 
   var result = const Tuple2(0, "");
   try {
@@ -124,7 +127,7 @@ Future<Tuple2<int, String>> signInCommuterFn(UserSignInPayload payload) async {
 }
 
 Future<Tuple2<int, String>> signupCommuterFn(CommuterPayload payload) async {
-  String apiUrl = '$baseUrl/api/NewCommuter';
+  String apiUrl = '$baseUrl/NewCommuter';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
@@ -164,7 +167,7 @@ Future<Tuple2<int, String>> signupCommuterFn(CommuterPayload payload) async {
 }
 
 Future<Tuple2<int, String>> signupVendorFn(VendorSignUpPayload payload) async {
-  String apiUrl = '$baseUrl/api/NewVendor';
+  String apiUrl = '$baseUrl/NewVendor';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
@@ -202,8 +205,8 @@ Future<Tuple2<int, String>> signupVendorFn(VendorSignUpPayload payload) async {
 }
 
 Future<Tuple2<int, String>> verifyEmailFn(email, otp, isVendor) async {
-  String apiUrl = '$baseUrl/api/CommuterVerifyEmail';
-  if (isVendor == true) apiUrl = '$baseUrl/api/VendorVerifyEmail';
+  String apiUrl = '$baseUrl/CommuterVerifyEmail';
+  if (isVendor == true) apiUrl = '$baseUrl/VendorVerifyEmail';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
@@ -240,8 +243,8 @@ Future<Tuple2<int, String>> verifyEmailFn(email, otp, isVendor) async {
 }
 
 Future<Tuple2<int, String>> resendVerifyEmailFn(email, isVendor) async {
-  String apiUrl = '$baseUrl/api/CommuterResendVerifyEmail';
-  if (isVendor == true) apiUrl = '$baseUrl/api/VendorResendVerifyEmail';
+  String apiUrl = '$baseUrl/CommuterResendVerifyEmail';
+  if (isVendor == true) apiUrl = '$baseUrl/VendorResendVerifyEmail';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
@@ -280,7 +283,7 @@ Future<Tuple2<int, String>> resendVerifyEmailFn(email, isVendor) async {
 Future<Tuple2<int, String>> forgotPasswordFn(email, isVendor) async {
   String type =
       isVendor == true ? 'VendorForgotPassword' : 'CommuterForgotPassword';
-  String apiUrl = '$baseUrl/api/$type?email=$email';
+  String apiUrl = '$baseUrl/$type?email=$email';
 
   // print(apiUrl);
 
@@ -319,7 +322,7 @@ Future<Tuple2<int, String>> forgotPasswordFn(email, isVendor) async {
 Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword, isVendor) async {
   String type =
       isVendor == true ? 'VendorResetPassword' : 'CommuterResetPassword';
-  String apiUrl = '$baseUrl/api/$type';
+  String apiUrl = '$baseUrl/$type';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer ${store.state.userToken["accesstoken"]}",
@@ -368,7 +371,7 @@ Future<Tuple2<int, String>> getNewToken(isVendor) async {
   String type =
       isVendor == true ? 'GetNewAccessToken' : 'CommuterGetNewAccessToken';
   String apiUrl =
-      '$baseUrl/api/$type?refresh_token=${store.state.userToken["refreshtoken"]}';
+      '$baseUrl/$type?refresh_token=${store.state.userToken["refreshtoken"]}';
 
   // print(apiUrl);
 
@@ -402,7 +405,7 @@ Future<Tuple2<int, String>> getNewToken(isVendor) async {
 }
 
 Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
-  String path = '/api/CommuterGetAllVendors';
+  String path = '/CommuterGetAllVendors';
 
   // print("Calling get all vendors function");
 
@@ -440,7 +443,7 @@ Future<Tuple2<int, String>> getAllVendors(GetAllVendorsPayload payload) async {
 
 Future<Tuple2<int, String>> getAllVendorReviewsById(
     VendorReviewsPayload payload) async {
-  String path = '/api/GetAllVendorReviewsById?vendorId=${payload.vendorId}';
+  String path = '/GetAllVendorReviewsById?vendorId=${payload.vendorId}';
 
   var result = const Tuple2(0, "");
   try {
@@ -473,7 +476,7 @@ Future<Tuple2<int, String>> getAllVendorReviewsById(
 }
 
 Future<Tuple2<int, String>> updateVendor(UpdateVendorPayload payload) async {
-  String path = '/api/UpdateVendorById?vendorId=${payload.vendorId}';
+  String path = '/UpdateVendorById?vendorId=${payload.vendorId}';
 
   var result = const Tuple2(0, "");
   try {
@@ -506,7 +509,7 @@ Future<Tuple2<int, String>> updateVendor(UpdateVendorPayload payload) async {
 }
 
 Future<Tuple2<int, String>> getVendorById(String vendorId) async {
-  String path = '/api/GetVendorById?vendorId=$vendorId';
+  String path = '/GetVendorById?vendorId=$vendorId';
 
   var result = const Tuple2(0, "");
   try {
@@ -538,7 +541,7 @@ Future<Tuple2<int, String>> getVendorById(String vendorId) async {
 }
 
 Future<Tuple2<int, String>> getCommuterById(String commuterId) async {
-  String path = '/api/GetCommuterById?commuterId=$commuterId';
+  String path = '/GetCommuterById?commuterId=$commuterId';
 
   var result = const Tuple2(0, "");
   try {
@@ -570,7 +573,7 @@ Future<Tuple2<int, String>> getCommuterById(String commuterId) async {
 }
 
 Future<Tuple2<int, String>> rateVendor(RateVendorPayload payload) async {
-  String path = '/api/CommuterRateVendor';
+  String path = '/CommuterRateVendor';
 
   var result = const Tuple2(0, "");
   try {
@@ -609,7 +612,7 @@ Future<Tuple2<int, String>> rateVendor(RateVendorPayload payload) async {
 
 Future<Tuple2<int, String>> uploadImgToDrive(UploadImagePayload payload) async {
   String path =
-      '/api/UploadFileToGoogleDrive?userId=${payload.userId}&isVendor=${payload.isVendor}';
+      '/UploadFileToGoogleDrive?userId=${payload.userId}&isVendor=${payload.isVendor}';
   var result = const Tuple2(0, "");
 
   try {
@@ -658,7 +661,7 @@ Future<void> logoutFn() async {
 
     // 🔥 Remove stored user data
     await prefs.remove('lastLoginTime');
-    await prefs.remove('userType');
+    // await prefs.remove('userType');
     await prefs.remove('userToken');
     await prefs.remove('userData');
 

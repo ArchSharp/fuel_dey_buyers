@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/commuter_signin.dart';
+import 'package:fuel_dey_buyers/Screens/Auths/vendor_signin.dart';
 import 'package:fuel_dey_buyers/Screens/Main/home.dart';
 import 'package:fuel_dey_buyers/Screens/Main/vendor_home.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/onboarding.dart';
@@ -32,6 +34,7 @@ class _LogoSplashState extends State<LogoSplash> {
     String? userType = prefs.getString('userType');
     String? userTokenStr = prefs.getString('userToken');
     String? userDataStr = prefs.getString('userData');
+    String? isRegistered = prefs.getString('isRegistered');
 
     await Future.delayed(const Duration(seconds: 3)); // Simulate splash delay
 
@@ -40,7 +43,7 @@ class _LogoSplashState extends State<LogoSplash> {
       DateTime now = DateTime.now();
       Duration difference = now.difference(lastLoginTime);
 
-      if (difference.inDays >= 10) {
+      if (difference.inDays >= 90) {
         setState(() {
           firstLoad = false;
         });
@@ -61,10 +64,19 @@ class _LogoSplashState extends State<LogoSplash> {
         }
       }
     } else {
+      debugPrint("User is not logged in $userType $isRegistered");
       // _redirectTo(Onboarding.routeName);
-      setState(() {
-        firstLoad = false;
-      });
+      if (isRegistered == "true") {
+        if (userType == 'vendor') {
+          _redirectTo(VendorSignin.routeName);
+        } else if (userType == 'commuter') {
+          _redirectTo(CommuterSignin.routeName);
+        }
+      } else {
+        setState(() {
+          firstLoad = false;
+        });
+      }
     }
   }
 
