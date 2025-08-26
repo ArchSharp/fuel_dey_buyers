@@ -124,13 +124,13 @@ class _MainHomeState extends State<MainHome> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
 
     Placemark place = placemarks[0];
-    // String address =
-    //     "${place.street} ${place.locality} state ${place.country}, postal code ${place.postalCode}";
+    String address =
+        "${place.street} ${place.locality} state ${place.country}, postal code ${place.postalCode}";
 
     //print("Placemarks: " + placemarks.toString());
     if (mounted) {
-      // print("address: $address");
-      // print("place: $place");
+      print("address: $address");
+      print("place: $place");
       setState(() {
         _currentPosition = position;
         // _address = address;

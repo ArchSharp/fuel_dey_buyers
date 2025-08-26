@@ -73,24 +73,48 @@ class _OnboardingState extends State<Onboarding> {
   }
 
   Future<void> _getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
 
-    Placemark place = placemarks[0];
-    String address =
-        "${place.street} ${place.locality} state ${place.country}, postal code ${place.postalCode}";
+      List<Placemark> placemarks = [];
+      try {
+        // placemarks = await placemarkFromCoordinates(
+        //   position.latitude,
+        //   position.longitude,
+        // );
 
-    //print("Placemarks: " + placemarks.toString());
-    if (mounted) {
-      print("address: $address");
-      // print("place: $place");
-      setState(() {
-        _isFetchedLocation = true;
-      });
+        placemarks = await placemarkFromCoordinates(
+          position.latitude,
+          position.longitude,
+        ).timeout(const Duration(seconds: 20), onTimeout: () {
+          throw Exception("Reverse geocoding timed out");
+        });
+      } catch (e) {
+        debugPrint("Reverse geocoding failed: $e");
+      }
 
-      store.dispatch(SaveUserLocation(position));
+      String address = placemarks.isNotEmpty
+          ? "${placemarks[0].street} ${placemarks[0].locality} ${placemarks[0].country}"
+          : "Unknown location";
+
+      if (mounted) {
+        debugPrint("address: $address");
+        setState(() {
+          _isFetchedLocation = true;
+        });
+
+        store.dispatch(SaveUserLocation(position));
+
+        if (_hasPermission == true &&
+            _isFetchedLocation == true &&
+            address != "Unknown location") {
+          Navigator.pushReplacementNamed(context, Welcome.routeName);
+        }
+      }
+    } catch (e) {
+      debugPrint("Error getting location: $e");
     }
   }
 
