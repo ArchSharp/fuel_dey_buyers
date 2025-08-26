@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path/path.dart';
 import 'package:dio/dio.dart';
@@ -699,4 +700,34 @@ Future<TravelDetails> fetchTravelDetails(LatLng origin, LatLng destination,
   } else {
     throw Exception('Failed to load travel details');
   }
+}
+
+/// Set system UI colors independently for status bar and navigation bar.
+void setSystemUIColors({
+  required Color statusBarColor,
+  Brightness? statusBarIconBrightness,
+  required Color navBarColor,
+  Brightness? navBarIconBrightness,
+}) {
+  // Auto brightness for status bar if not provided
+  final sbBrightness = statusBarIconBrightness ??
+      (statusBarColor.computeLuminance() > 0.5
+          ? Brightness.dark
+          : Brightness.light);
+
+  // Auto brightness for navigation bar if not provided
+  final nbBrightness = navBarIconBrightness ??
+      (navBarColor.computeLuminance() > 0.5
+          ? Brightness.dark
+          : Brightness.light);
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: statusBarColor,
+      statusBarIconBrightness: sbBrightness,
+      statusBarBrightness: sbBrightness, // iOS
+      systemNavigationBarColor: navBarColor,
+      systemNavigationBarIconBrightness: nbBrightness,
+    ),
+  );
 }

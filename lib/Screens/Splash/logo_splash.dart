@@ -25,6 +25,13 @@ class _LogoSplashState extends State<LogoSplash> {
   @override
   void initState() {
     super.initState();
+
+    setSystemUIColors(
+      statusBarColor: Colors.white,
+      navBarColor: Colors.white,
+      navBarIconBrightness: Brightness.light,
+    );
+
     _navigateAfterSplash();
   }
 

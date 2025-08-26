@@ -122,6 +122,12 @@ class _VendorSignupState extends State<VendorSignup> {
     _initializeTextControllers();
     loadNigeriaData();
     _checkPermission();
+
+    setSystemUIColors(
+      statusBarColor: Colors.white,
+      navBarColor: Colors.white,
+      navBarIconBrightness: Brightness.light,
+    );
   }
 
   final TextEditingController _stationNameController = TextEditingController();

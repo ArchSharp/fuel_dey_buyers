@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/API/utils.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
@@ -52,10 +53,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    setSystemUIColors(
       statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-    ));
+      navBarColor: Colors.white,
+      navBarIconBrightness: Brightness.light,
+    );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

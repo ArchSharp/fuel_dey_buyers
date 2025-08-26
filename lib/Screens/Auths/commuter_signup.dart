@@ -104,6 +104,12 @@ class _CommuterSignupState extends State<CommuterSignup> {
     super.initState();
     // Initialize the text controller with the initial date
     _initializeTextControllers();
+
+    setSystemUIColors(
+      statusBarColor: Colors.white,
+      navBarColor: Colors.white,
+      navBarIconBrightness: Brightness.light,
+    );
   }
 
   void _initializeTextControllers() {

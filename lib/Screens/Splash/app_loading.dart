@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/logo_splash.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -11,7 +13,16 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
+    super.initState();
     // You can perform any initialization tasks here
+
+    setSystemUIColors(
+      statusBarColor: Colors.white,
+      navBarColor: Colors.white,
+      navBarIconBrightness: Brightness.light,
+    );
+
+    resetRegistered();
 
     // Example: Delay for 3 seconds and then navigate to the next screen
     Future.delayed(const Duration(seconds: 3), () {
@@ -19,8 +30,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
         Navigator.pushReplacementNamed(context, LogoSplash.routeName);
       }
     });
+  }
 
-    super.initState();
+  Future<void> resetRegistered() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? isRegistered = prefs.getString('isRegistered');
+    if (isRegistered != "true") {
+      await prefs.remove('isRegistered');
+    }
   }
 
   @override

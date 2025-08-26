@@ -146,6 +146,12 @@ class _VendorSigninState extends State<VendorSignin> {
     // Initialize the text controller with the initial date
     _emailController.addListener(_updateKeyboardType);
     _initializeTextControllers();
+
+    setSystemUIColors(
+      statusBarColor: Colors.white,
+      navBarColor: Colors.white,
+      navBarIconBrightness: Brightness.light,
+    );
   }
 
   void _initializeTextControllers() {

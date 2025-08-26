@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/commuter_signup.dart';
 import 'package:fuel_dey_buyers/Screens/Auths/vendor_signup.dart';
 
@@ -8,6 +9,14 @@ class Welcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setSystemUIColors(
+        statusBarColor: Colors.white,
+        navBarColor: const Color(0XFFECB920),
+        navBarIconBrightness: Brightness.light,
+      );
+    });
+
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
 

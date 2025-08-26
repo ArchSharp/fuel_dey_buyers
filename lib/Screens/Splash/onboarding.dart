@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fuel_dey_buyers/API/auths_functions.dart';
 import 'package:fuel_dey_buyers/ReduxState/actions.dart';
 import 'package:fuel_dey_buyers/ReduxState/store.dart';
 import 'package:fuel_dey_buyers/Screens/Splash/welcome.dart';
@@ -55,6 +56,12 @@ class _OnboardingState extends State<Onboarding> {
   void initState() {
     super.initState();
     _checkPermission();
+
+    setSystemUIColors(
+      statusBarColor: Colors.white,
+      navBarColor: const Color(0XFFECB920),
+      navBarIconBrightness: Brightness.light,
+    );
   }
 
   Future<void> _checkPermission() async {
