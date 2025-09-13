@@ -57,9 +57,12 @@ class _CommuterSignupState extends State<CommuterSignup> {
       phonenumber: "+234${_phoneController.text.trim()}",
     );
 
-    if (userPayload.password.length < 8) {
+    bool isPasswordLengthOk =
+        userPayload.password.length >= 8 && userPayload.password.length <= 16;
+
+    if (!isPasswordLengthOk) {
       myNotificationBar(
-          context, "Password should be at least 8 characters", "error");
+          context, "Password should be between 8 and 16 characters", "error");
       return;
     }
 
